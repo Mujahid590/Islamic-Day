@@ -1,0 +1,862 @@
+﻿/* ========== বাংলা ফন্ট ========== */
+@font-face {
+    font-family: 'Kalpurush';
+    src: url('https://raw.githubusercontent.com/me-shaon/bangla-fonts/main/Kalpurush/Kalpurush.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Kalpurush';
+    src: url('https://raw.githubusercontent.com/me-shaon/bangla-fonts/main/Kalpurush/Kalpurush-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========== আরবি ফন্ট ========== */
+@font-face {
+    font-family: 'Uthman Taha Naskh';
+    src: url('https://raw.githubusercontent.com/mustafa0x/qpc-fonts/f93bf5f3/various-woff2/UthmanTN1%20Ver10.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========== CSS ভেরিয়েবল ========== */
+:root {
+    --primary: #2a9d6e;
+    --primary-dark: #1e5a3a;
+    --primary-light: #e8f5e9;
+    --white: #ffffff;
+    --gray-light: #f8fafc;
+    --gray: #e2e8f0;
+    --text-dark: #1e293b;
+    --text-gray: #64748b;
+    --text-light: #94a3b8;
+    --gold: #d4af37;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --orange: #f59e0b;
+    --cyan: #06b6d4;
+    --yellow: #eab308;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --bg: #f0fdf4;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+}
+
+body.dark-mode {
+    --primary: #22c55e;
+    --primary-dark: #16a34a;
+    --primary-light: #166534;
+    --white: #1e293b;
+    --gray-light: #0f172a;
+    --gray: #334155;
+    --text-dark: #f1f5f9;
+    --text-gray: #94a3b8;
+    --text-light: #64748b;
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --border: #334155;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kalpurush', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+/* ========== অ্যাপ কন্টেইনার ========== */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== নেভিগেশন বার ========== */
+.top-navbar {
+    background: var(--card-bg);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: 65px;
+    min-height: 65px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 1.8rem;
+    color: var(--primary);
+    font-family: 'Uthman Taha Naskh', serif;
+}
+
+.nav-brand h1 {
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--gray-light);
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+}
+
+.nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 12px;
+    border-radius: 40px;
+    color: var(--text-gray);
+    font-size: 0.7rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    min-width: 55px;
+}
+
+.nav-link i {
+    font-size: 1.1rem;
+}
+
+.nav-link span {
+    font-size: 0.6rem;
+}
+
+.nav-link.active {
+    background: var(--primary);
+    color: white;
+}
+
+.nav-link:hover:not(.active) {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gray-light);
+    border: none;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* ========== সেটিংস প্যানেল ========== */
+.settings-panel {
+    position: fixed;
+    top: 70px;
+    right: -320px;
+    width: 280px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    z-index: 200;
+    transition: right 0.3s ease;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+}
+
+.settings-panel.open {
+    right: 15px;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-header h3 {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.close-settings {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--text-gray);
+}
+
+.settings-body {
+    padding: 1rem;
+}
+
+.setting-item {
+    margin-bottom: 1.2rem;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
+
+.theme-controls, .reminder-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.theme-btn, .reminder-btn, .reset-stars-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--gray-light);
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.theme-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.reminder-btn, .reset-stars-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+/* ========== মূল কন্টেন্ট ========== */
+.main-content {
+    flex: 1;
+    padding: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ========== হিরো সেকশন ========== */
+.hero-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1.8rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: var(--radius);
+    color: white;
+}
+
+.hero-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-section h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+}
+
+.hero-section p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.today-date {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 30px;
+}
+
+/* ========== অর্জন সেকশন ========== */
+.achievement-section {
+    margin-bottom: 1.5rem;
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.achievement-card {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.achievement-card i {
+    font-size: 2.5rem;
+}
+
+.achievement-content h3 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.achievement-content p {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+/* ========== প্রোগ্রেস বার ========== */
+.progress-section {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+}
+
+.progress-bar-container {
+    background: var(--gray);
+    border-radius: 30px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--primary), #fbbf24);
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    transition: width 0.5s ease;
+}
+
+/* ========== ইনফো কার্ড ========== */
+.info-card-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-card {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.info-card i {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 0.7rem;
+    color: var(--text-gray);
+    display: block;
+}
+
+.time-display {
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.next-prayer-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.next-prayer-info strong {
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+.countdown-timer {
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: monospace;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+}
+
+/* ========== সেকশন টাইটেল ========== */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.5rem 0 1rem;
+}
+
+.section-title i {
+    font-size: 1.2rem;
+    color: var(--gold);
+}
+
+.section-title h2 {
+    font-size: 1.1rem;
+}
+
+/* ========== নামাজের তালিকা ========== */
+.prayer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prayer-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+
+.prayer-card:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow);
+}
+
+.prayer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 2;
+}
+
+.prayer-icon {
+    width: 55px;
+    height: 55px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prayer-icon i {
+    font-size: 1.4rem;
+}
+
+.prayer-card.fajr .prayer-icon i { color: #8b5cf6; }
+.prayer-card.dhuhr .prayer-icon i { color: #3b82f6; }
+.prayer-card.asr .prayer-icon i { color: #f59e0b; }
+.prayer-card.maghrib .prayer-icon i { color: #ef4444; }
+.prayer-card.isha .prayer-icon i { color: #06b6d4; }
+
+.prayer-details {
+    flex: 1;
+}
+
+.prayer-name {
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.prayer-name-bn {
+    color: var(--text-dark);
+}
+
+.prayer-name-ar {
+    font-family: 'Uthman Taha Naskh', serif;
+    font-size: 0.8rem;
+    color: var(--primary);
+}
+
+.prayer-times {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.prayer-times span {
+    font-size: 0.7rem;
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* স্টার বাটন */
+.star-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #cbd5e1;
+    transition: all 0.2s;
+    padding: 5px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.star-btn.active {
+    color: #fbbf24;
+}
+
+.star-btn:hover {
+    transform: scale(1.15);
+}
+
+/* স্ট্যাটাস ব্যাজ */
+.status-badge {
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 75px;
+    text-align: center;
+}
+
+.status-ended {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-active {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.status-upcoming {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-completed {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+body.dark-mode .status-ended {
+    background: #7f1a1a;
+    color: #fca5a5;
+}
+
+body.dark-mode .status-active {
+    background: #1e3a5f;
+    color: #60a5fa;
+}
+
+body.dark-mode .status-upcoming {
+    background: #14532d;
+    color: #4ade80;
+}
+
+body.dark-mode .status-completed {
+    background: #78350f;
+    color: #fbbf24;
+}
+
+/* ========== গুরুত্ব সেকশন ========== */
+.importance-section {
+    margin-top: 1.5rem;
+}
+
+.importance-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.importance-card i {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.importance-card p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.importance-card span {
+    font-size: 0.65rem;
+    color: var(--text-gray);
+}
+
+/* ========== লিজেন্ড ========== */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    background: var(--card-bg);
+    border-radius: 40px;
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+    border: 1px solid var(--border);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.legend-dot.ended { background: #ef4444; }
+.legend-dot.active { background: #3b82f6; }
+.legend-dot.upcoming { background: #22c55e; }
+.legend-dot.completed { background: #fbbf24; }
+
+/* ========== টোস্ট ========== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    z-index: 1000;
+    font-size: 0.8rem;
+    animation: fadeInUp 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========== রেস্পন্সিভ ========== */
+@media (max-width: 900px) {
+    .top-navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+    }
+    
+    .nav-brand {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .info-card-row {
+        flex-direction: column;
+    }
+    
+    .prayer-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .prayer-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .prayer-times {
+        justify-content: center;
+    }
+    
+    .star-btn, .status-badge {
+        align-self: center;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 650px) {
+    .nav-link {
+        min-width: 45px;
+        padding: 5px 8px;
+    }
+    
+    .nav-link i {
+        font-size: 1rem;
+    }
+    
+    .nav-link span {
+        font-size: 0.55rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 1rem;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.1rem;
+    }
+    
+    .hero-icon {
+        font-size: 2rem;
+    }
+    
+    .prayer-name {
+        font-size: 0.9rem;
+    }
+    
+    .prayer-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .prayer-icon i {
+        font-size: 1.1rem;
+    }
+    
+    .star-btn {
+        font-size: 1.3rem;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .legend {
+        gap: 0.8rem;
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .nav-link {
+        min-width: 38px;
+        padding: 4px 5px;
+    }
+    
+    .nav-link i {
+        font-size: 0.85rem;
+    }
+    
+    .nav-link span {
+        font-size: 0.45rem;
+    }
+}
+
+@media (max-width: 300px) {
+    .nav-link {
+        min-width: 32px;
+        padding: 3px 4px;
+    }
+    
+    .nav-link i {
+        font-size: 0.75rem;
+    }
+    
+    .nav-link span {
+        font-size: 0.4rem;
+    }
+    
+    .hero-section h1 {
+        font-size: 0.9rem;
+    }
+    
+    .time-display, .countdown-timer {
+        font-size: 0.7rem;
+    }
+}

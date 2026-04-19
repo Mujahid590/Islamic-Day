@@ -1,0 +1,224 @@
+﻿/* css/tasbih.css */
+.tasbih-container {
+    padding: 20px;
+}
+
+.tasbih-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.tasbih-icon {
+    width: 70px;
+    height: 70px;
+    background: #2f5846;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+}
+
+.tasbih-icon i {
+    font-size: 35px;
+    color: #ffffff;
+}
+
+.tasbih-counter {
+    font-size: 64px;
+    font-weight: 700;
+    color: #2d5a4a;
+    margin-bottom: 10px;
+    transition: transform 0.2s;
+}
+
+.tasbih-text {
+    font-size: 18px;
+    color: #7f8c8d;
+    margin-bottom: 25px;
+}
+
+.tasbih-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.tasbih-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+
+.count-btn {
+    background: #2f5846;
+    color: white;
+    flex: 2;
+    justify-content: center;
+}
+
+.count-btn:active {
+    transform: scale(0.96);
+    background: #1a3a2a;
+}
+
+.reset-btn {
+    background: #e8f0e8;
+    color: #2d5a4a;
+    flex: 1;
+    justify-content: center;
+}
+
+.reset-btn:active {
+    transform: scale(0.96);
+    background: #d0e0d0;
+}
+
+/* তাসবিহের ধাপসমূহ */
+.tasbih-steps {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.step-item {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+}
+
+.step-item.completed {
+    background: #2f5846;
+}
+
+.step-item.completed .step-count,
+.step-item.completed .step-text,
+.step-item.completed .step-target {
+    color: white;
+}
+
+.step-count {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d5a4a;
+    margin-bottom: 5px;
+}
+
+.step-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2d5a4a;
+    margin-bottom: 5px;
+}
+
+.step-target {
+    font-size: 10px;
+    color: #7f8c8d;
+}
+
+/* দ্রুত তাসবিহ বাটন */
+.quick-tasbih {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.quick-btn {
+    background: #e8f0e8;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #2d5a4a;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.quick-btn:active {
+    transform: scale(0.94);
+    background: #d0e0d0;
+}
+
+/* ডার্ক মোড */
+body.dark-mode .tasbih-card,
+body.dark-mode .step-item {
+    background: #2a3a2f;
+}
+
+body.dark-mode .tasbih-counter {
+    color: #e8f0e8;
+}
+
+body.dark-mode .tasbih-text {
+    color: #a8c4a8;
+}
+
+body.dark-mode .reset-btn {
+    background: #1a3a2a;
+    color: #c8e6d9;
+}
+
+body.dark-mode .quick-btn {
+    background: #1a3a2a;
+    color: #c8e6d9;
+}
+
+body.dark-mode .step-count {
+    color: #e8f0e8;
+}
+
+body.dark-mode .step-text {
+    color: #c8e6d9;
+}
+
+body.dark-mode .step-target {
+    color: #a8c4a8;
+}
+
+/* মোবাইল রেস্পন্সিভ */
+@media (max-width: 480px) {
+    .tasbih-container {
+        padding: 16px;
+    }
+    
+    .tasbih-counter {
+        font-size: 52px;
+    }
+    
+    .tasbih-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .step-count {
+        font-size: 20px;
+    }
+    
+    .step-text {
+        font-size: 10px;
+    }
+    
+    .quick-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+}

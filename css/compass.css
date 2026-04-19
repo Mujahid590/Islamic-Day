@@ -1,0 +1,100 @@
+﻿.qibla-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.compass-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+#compassCanvas {
+    width: 260px;
+    height: 260px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+
+.info-item {
+    background: var(--card-bg);
+    padding: 0.8rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid var(--border);
+}
+
+.info-item i {
+    font-size: 1.2rem;
+    color: var(--primary);
+    width: 30px;
+    text-align: center;
+}
+
+.info-item div {
+    flex: 1;
+}
+
+.info-item span {
+    font-size: 0.7rem;
+    color: var(--text-gray);
+    display: block;
+}
+
+.info-item strong {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: scale(0.98);
+}
+
+.info-note {
+    margin-top: 1rem;
+    padding: 0.6rem;
+    background: var(--primary-light);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+@media (max-width: 480px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .compass-wrapper {
+        padding: 0.5rem;
+    }
+    
+    #compassCanvas {
+        width: 220px;
+        height: 220px;
+    }
+}
