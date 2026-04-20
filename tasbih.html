@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>ইসলামিক অ্যাপস | তাসবিহ কাউন্টার</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/tasbih.css">
@@ -17,7 +16,7 @@
 <nav class="top-navbar">
     <div class="nav-brand">
         <div class="brand-logo">
-            <img src="image/Logo.png" alt="Logo" class="brand-logo-img" onerror="this.src='https://placehold.co/38x38?text=LOGO'">
+            <img src="image/Logo.png" alt="Logo" class="brand-logo-img" onerror="this.src='https://placehold.co/40x40/064e3b/ffffff?text=☪'">
         </div>
         <h1>ইসলামিক অ্যাপস</h1>
     </div>
@@ -35,8 +34,9 @@
 
 <!-- মোবাইল কন্টেইনার -->
 <div class="mobile-container" id="mobileContainer">
-    <!-- মসজিদের ছবি হেডার -->
-    <div class="mosque-header">
+
+    <!-- তাসবিহ হেডার -->
+    <div class="mosque-header tasbih-header">
         <div class="mosque-overlay"></div>
         <div class="header-content">
             <button class="mobile-settings-btn" id="mobileSettingsBtn">
@@ -44,19 +44,21 @@
             </button>
             <div class="welcome-section">
                 <h2>দৈনিক তাসবিহ</h2>
-                <p>আল্লাহর জিকির করুন</p>
+                <p>আল্লাহর জিকির করুন প্রতিদিন</p>
             </div>
         </div>
     </div>
 
-    <!-- তাসবিহ কাউন্টার কার্ড -->
+    <!-- তাসবিহ মেইন UI -->
     <div class="tasbih-container">
+
+        <!-- মেইন কাউন্টার কার্ড -->
         <div class="tasbih-card">
             <div class="tasbih-icon">
                 <i class="fas fa-praying-hands"></i>
             </div>
             <div class="tasbih-counter" id="counter">0</div>
-            <div class="tasbih-text">তাসবিহ</div>
+            <div class="tasbih-text">তাসবিহ গণনা</div>
             <div class="tasbih-buttons">
                 <button class="tasbih-btn reset-btn" id="resetBtn">
                     <i class="fas fa-undo-alt"></i>
@@ -69,9 +71,9 @@
             </div>
         </div>
 
-        <!-- তাসবিহের ধাপসমূহ -->
+        <!-- তাসবিহ ধাপসমূহ -->
         <div class="tasbih-steps">
-            <div class="step-item" id="step1">
+            <div class="step-item active-step" id="step1">
                 <div class="step-count" id="step1Count">0</div>
                 <div class="step-text">সুবহানাল্লাহ</div>
                 <div class="step-target">৩৩ বার</div>
@@ -88,29 +90,30 @@
             </div>
         </div>
 
-        <!-- দ্রুত তাসবিহ বাটন -->
+        <!-- দ্রুত তাসবিহ -->
         <div class="quick-tasbih">
             <button class="quick-btn" data-value="سبحان الله">সুবহানাল্লাহ</button>
             <button class="quick-btn" data-value="الحمد لله">আলহামদুলিল্লাহ</button>
             <button class="quick-btn" data-value="الله أكبر">আল্লাহু আকবার</button>
             <button class="quick-btn" data-value="لا إله إلا الله">লা ইলাহা ইল্লাল্লাহ</button>
         </div>
+
     </div>
 </div>
 
-<!-- মোবাইল বটম নেভিগেশন বার -->
+<!-- মোবাইল বটম নেভ -->
 <div class="bottom-nav-mobile">
     <a href="profile.html" class="bottom-nav-item" data-page="profile">
-        <img src="image/profile.png" alt="প্রোফাইল" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=👤'">
+        <img src="image/profile.png" alt="প্রোফাইল" class="bottom-nav-img" onerror="this.src='https://placehold.co/26x26/ffffff/ffffff?text=👤'">
     </a>
     <a href="tasbih.html" class="bottom-nav-item home-center active" data-page="tasbih">
-        <img src="image/tasbih.png" alt="তাসবিহ" class="bottom-nav-img" onerror="this.src='https://placehold.co/35x35?text=📿'">
+        <img src="image/tasbih.png" alt="তাসবিহ" class="bottom-nav-img" onerror="this.src='https://placehold.co/32x32/ffffff/ffffff?text=📿'">
     </a>
     <a href="index.html" class="bottom-nav-item" data-page="home">
-        <img src="image/Logo.png" alt="হোম" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=🏠'">
+        <img src="image/Logo.png" alt="হোম" class="bottom-nav-img" onerror="this.src='https://placehold.co/26x26/ffffff/ffffff?text=🏠'">
     </a>
     <a href="quran.html" class="bottom-nav-item" data-page="quran">
-        <img src="image/quran.png" alt="কুরআন" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=📖'">
+        <img src="image/quran.png" alt="কুরআন" class="bottom-nav-img" onerror="this.src='https://placehold.co/26x26/ffffff/ffffff?text=📖'">
     </a>
     <a href="#" class="bottom-nav-item" id="mobileMoreBtn" data-page="more">
         <i class="fas fa-ellipsis-h bottom-nav-icon"></i>
@@ -136,6 +139,7 @@
 
 <div class="overlay" id="overlay"></div>
 
+<!-- মোর মেনু -->
 <div class="more-menu-panel" id="moreMenuPanel">
     <div class="more-menu-header">
         <h3><i class="fas fa-list"></i> অন্যান্য সেবা</h3>
@@ -143,39 +147,28 @@
     </div>
     <div class="more-menu-items">
         <a href="asmaul_husna.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=⭐'"></div>
-            <span>আসমা-উল-হুসনা</span>
-            <i class="fas fa-chevron-right"></i>
+            <div class="menu-icon-wrapper"><img src="image/asmaul_husna.png" alt="" class="menu-icon-img" onerror="this.src='https://placehold.co/24x24/ffffff/ffffff?text=⭐'"></div>
+            <span>আসমা-উল-হুসনা</span><i class="fas fa-chevron-right"></i>
         </a>
         <a href="compass.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/compass.png" alt="কিবলা কম্পাস" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=🧭'"></div>
-            <span>কিবলা কম্পাস</span>
-            <i class="fas fa-chevron-right"></i>
+            <div class="menu-icon-wrapper"><img src="image/compass.png" alt="" class="menu-icon-img" onerror="this.src='https://placehold.co/24x24/ffffff/ffffff?text=🧭'"></div>
+            <span>কিবলা কম্পাস</span><i class="fas fa-chevron-right"></i>
         </a>
         <a href="calendar.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/calendar.png" alt="ইসলামিক ক্যালেন্ডার" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📅'"></div>
-            <span>ইসলামিক ক্যালেন্ডার</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="mosque_finder.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/mosque.png" alt="মসজিদ ফাইন্ডার" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=🕌'"></div>
-            <span>মসজিদ ফাইন্ডার</span>
-            <i class="fas fa-chevron-right"></i>
+            <div class="menu-icon-wrapper"><img src="image/calendar.png" alt="" class="menu-icon-img" onerror="this.src='https://placehold.co/24x24/ffffff/ffffff?text=📅'"></div>
+            <span>ইসলামিক ক্যালেন্ডার</span><i class="fas fa-chevron-right"></i>
         </a>
         <a href="hadith.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/hadith.png" alt="হাদিস" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📚'"></div>
-            <span>হাদিস শরীফ</span>
-            <i class="fas fa-chevron-right"></i>
+            <div class="menu-icon-wrapper"><img src="image/hadith.png" alt="" class="menu-icon-img" onerror="this.src='https://placehold.co/24x24/ffffff/ffffff?text=📚'"></div>
+            <span>হাদিস শরীফ</span><i class="fas fa-chevron-right"></i>
         </a>
         <a href="ablution.html" class="more-menu-item">
             <div class="menu-icon-wrapper"><i class="fas fa-hand-holding-water"></i></div>
-            <span>ওজু শিক্ষা</span>
-            <i class="fas fa-chevron-right"></i>
+            <span>ওজু শিক্ষা</span><i class="fas fa-chevron-right"></i>
         </a>
         <a href="tasbih.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/tasbih.png" alt="তাসবিহ" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📿'"></div>
-            <span>তাসবিহ</span>
-            <i class="fas fa-chevron-right"></i>
+            <div class="menu-icon-wrapper"><img src="image/tasbih.png" alt="" class="menu-icon-img" onerror="this.src='https://placehold.co/24x24/ffffff/ffffff?text=📿'"></div>
+            <span>তাসবিহ</span><i class="fas fa-chevron-right"></i>
         </a>
     </div>
 </div>

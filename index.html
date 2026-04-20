@@ -2,106 +2,151 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>নামাজের সময় - ঢাকা</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="main-content">
 
-  <!-- HEADER -->
+  <!-- ══════════════ HEADER ══════════════ -->
   <div class="header">
     <div class="header-top">
       <div class="date-left">
-        <span>১৫ শাওয়াল ১৪৪৬</span>
-        20 April 2026
+        <span id="hijriDate">লোড হচ্ছে...</span>
+        <span id="gregorianDate" class="greg-date">লোড হচ্ছে...</span>
       </div>
-      <div style="flex:1; text-align:center;">
-        <button class="bell-btn" title="Notification" id="notificationBtn">
-          <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        </button>
-      </div>
-      <div class="location">
-        <strong>📍 Dhaka</strong><br>
-        <span style="font-size:11px;opacity:.8;">Bangladesh</span>
-      </div>
+      <button class="settings-btn" id="settingsBtn" aria-label="সেটিংস">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94
+            0-.33-.02-.64-.06-.94l2.02-1.58c.18-.14.23-.38.12-.56
+            l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96
+            c-.5-.38-1.06-.68-1.66-.88L14.45 3.5
+            c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34
+            l-.3 2.52c-.6.2-1.16.5-1.66.88l-2.38-.96
+            c-.2-.08-.44-.01-.56.18L3.08 9.36
+            c-.12.19-.07.42.12.56l2.02 1.58
+            c-.04.3-.06.61-.06.94 0 .33.02.64.06.94
+            l-2.02 1.58c-.18.14-.23.38-.12.56l1.89 3.28
+            c.12.19.36.26.56.18l2.38-.96
+            c.5.38 1.06.68 1.66.88l.3 2.52
+            c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34
+            l.3-2.52c.6-.2 1.16-.5 1.66-.88l2.38.96
+            c.2.08.44.01.56-.18l1.89-3.28
+            c.12-.19.07-.42-.12-.56l-2.02-1.58z
+            M12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+        </svg>
+      </button>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+    <div class="header-body">
       <div class="prayer-info">
         <div class="now-label">এখন চলছে</div>
-        <div class="prayer-name" id="currentPrayerName">আসর</div>
-        <div class="prayer-time" id="currentPrayerTimeDisplay">4:31 <sub>PM</sub></div>
-        <div class="remaining" id="remainingTimeDisplay">⏱ ১ ঘণ্টা ৯ মিনিট বাকি</div>
-        <div class="sehri-iftar" style="margin-top:12px;">
-          <div class="si-item">🌙 সেহরি: <strong id="sehriVal">4:16 AM</strong></div>
-          <div class="si-item">🌅 ইফতার: <strong id="iftarVal">6:21 PM</strong></div>
+        <div class="prayer-name" id="currentPrayerName">--</div>
+        <div class="prayer-time" id="currentPrayerTimeDisplay">--:-- <sub>--</sub></div>
+        <div class="remaining" id="remainingTimeDisplay">⏱ গণনা করা হচ্ছে...</div>
+
+        <div class="sehri-iftar">
+          <div class="si-item">🌙 সেহরি<strong id="sehriVal">--:--</strong></div>
+          <div class="si-divider"></div>
+          <div class="si-item">🌅 ইফতার<strong id="iftarVal">--:--</strong></div>
         </div>
       </div>
 
-      <!-- MOSQUE IMAGE -->
       <div class="mosque-wrap">
-        <img src="image/mosjid.jpg" alt="মসজিদ" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20140%22%3E%3Crect%20width%3D%22120%22%20height%3D%22140%22%20fill%3D%22%234a90c4%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2270%22%20fill%3D%22white%22%20font-size%3D%2212%22%3EMosque%3C%2Ftext%3E%3C%2Fsvg%3E'">
+        <img src="image/mosjid.jpg" alt="মসজিদ"
+          onerror="this.src='data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 120 140%22%3E%3Crect width%3D%22120%22 height%3D%22140%22 fill%3D%22%234a90c4%22 rx%3D%2216%22%2F%3E%3Ctext x%3D%2230%22 y%3D%2280%22 fill%3D%22white%22 font-size%3D%2240%22%3E🕌%3C%2Ftext%3E%3C%2Fsvg%3E'">
       </div>
     </div>
   </div>
+  <!-- ══════════ END HEADER ══════════ -->
 
-  <!-- QUICK ACTIONS -->
-  <div class="section" style="margin-top:18px;">
+
+  <!-- ══════════ QUICK ACTIONS ══════════ -->
+  <div class="section">
+    <div class="section-label">দ্রুত অ্যাকশন</div>
     <div class="grid-8">
       <div class="icon-btn" data-name="নামাজের সময়">
-        <div class="icon-box"><img src="image/salah.png" alt="নামাজ"></div>
+        <div class="icon-box">
+          <img src="image/salah.png" alt="নামাজ"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>🕌</span>'">
+        </div>
         <span class="icon-label">নামাজের<br>সময়</span>
       </div>
       <div class="icon-btn" data-name="আল-কুরআন">
-        <div class="icon-box"><img src="image/quran.png" alt="কুরআন"></div>
+        <div class="icon-box">
+          <img src="image/quran.png" alt="কুরআন"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>📖</span>'">
+        </div>
         <span class="icon-label">আল-কুরআন</span>
       </div>
-      <div class="icon-btn" data-name="কিবলা">
-        <div class="icon-box"><img src="image/compass.png" alt="কিবলা"></div>
-        <span class="icon-label">কিবলা</span>
-      </div>
       <div class="icon-btn" data-name="হাদিস">
-        <div class="icon-box"><img src="image/hadith.png" alt="হাদিস"></div>
+        <div class="icon-box">
+          <img src="image/hadith.png" alt="হাদিস"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>📚</span>'">
+        </div>
         <span class="icon-label">হাদিস</span>
       </div>
+      <div class="icon-btn kibla-btn" data-name="কিবলা">
+        <div class="icon-box">
+          <img src="image/compass.png" alt="কিবলা"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>🧭</span>'">
+        </div>
+        <span class="icon-label">কিবলা</span>
+      </div>
       <div class="icon-btn" data-name="তাসবিহ">
-        <div class="icon-box"><img src="image/tasbih.png" alt="তাসবিহ"></div>
+        <div class="icon-box">
+          <img src="image/tasbih.png" alt="তাসবিহ"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>📿</span>'">
+        </div>
         <span class="icon-label">তাসবিহ</span>
       </div>
-      <div class="icon-btn" data-name="কমিউনিটি">
-        <div class="icon-box"><img src="image/asmaul_husna.png" alt="কমিউনিটি"></div>
-        <span class="icon-label">কমিউনিটি</span>
+      <div class="icon-btn" data-name="আসমাউল হুসনা">
+        <div class="icon-box">
+          <img src="image/asmaul_husna.png" alt="আসমাউল হুসনা"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>✨</span>'">
+        </div>
+        <span class="icon-label">আসমাউল<br>হুসনা</span>
       </div>
       <div class="icon-btn" data-name="দোয়া">
-        <div class="icon-box"><img src="image/calendar.png" alt="দোয়া"></div>
+        <div class="icon-box">
+          <img src="image/calendar.png" alt="দোয়া"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>🤲</span>'">
+        </div>
         <span class="icon-label">দোয়া</span>
       </div>
       <div class="icon-btn" data-name="দান করুন">
-        <div class="icon-box"><img src="image/Clock.png" alt="দান"></div>
+        <div class="icon-box">
+          <img src="image/Clock.png" alt="দান"
+            onerror="this.outerHTML='<span class=\'icon-emoji\'>💝</span>'">
+        </div>
         <span class="icon-label">দান করুন</span>
       </div>
     </div>
   </div>
+  <!-- ══════════ END QUICK ACTIONS ══════════ -->
 
-  <!-- PRAYER TRACKER -->
+
+  <!-- ══════════ PRAYER TRACKER ══════════ -->
   <div class="tracker-card">
     <h3>নামাজ ট্র্যাকার</h3>
     <div class="prayer-pills" id="prayerPillsContainer">
-      <div class="pill done" data-prayer="ফজর">ফজর<span class="check">✓</span></div>
-      <div class="pill done" data-prayer="জোহর">জোহর<span class="check">✓</span></div>
-      <div class="pill active" data-prayer="আসর">আসর<span class="check">⏱</span></div>
-      <div class="pill missed" data-prayer="মাগরিব">মাগরিব<span class="check">!</span></div>
-      <div class="pill pending" data-prayer="ইশা">ইশা<span class="check">—</span></div>
+      <div class="pill" data-prayer="ফজর">ফজর<span class="check">—</span></div>
+      <div class="pill" data-prayer="জোহর">জোহর<span class="check">—</span></div>
+      <div class="pill" data-prayer="আসর">আসর<span class="check">—</span></div>
+      <div class="pill" data-prayer="মাগরিব">মাগরিব<span class="check">—</span></div>
+      <div class="pill" data-prayer="ইশা">ইশা<span class="check">—</span></div>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar" id="pbar"></div>
     </div>
-    <div class="progress-label" id="progressPercentLabel">৬০% সম্পন্ন</div>
+    <div class="progress-label" id="progressPercentLabel">০% সম্পন্ন</div>
   </div>
+  <!-- ══════════ END TRACKER ══════════ -->
 
-  <!-- DAILY HADITH -->
+
+  <!-- ══════════ DAILY HADITH ══════════ -->
   <div class="hadith-card">
     <div class="quote-icon">"</div>
     <h3>📜 দৈনিক হাদিস</h3>
@@ -111,32 +156,88 @@
     </div>
     <span class="source">📗 সূত্র: বুখারী</span>
   </div>
+  <!-- ══════════ END HADITH ══════════ -->
 
+</div><!-- end .main-content -->
+
+
+<!-- ══════════════ SETTINGS MODAL ══════════════ -->
+<div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true">
+  <div class="settings-content">
+    <div class="settings-header">
+      <h3>⚙️ সেটিংস</h3>
+      <button class="close-settings" id="closeSettingsBtn" aria-label="বন্ধ করুন">&times;</button>
+    </div>
+    <div class="settings-body">
+
+      <div class="setting-item">
+        <label>🔔 নোটিফিকেশন</label>
+        <button class="notification-toggle" id="modalNotificationToggle">
+          নোটিফিকেশন চালু করুন
+        </button>
+      </div>
+
+      <div class="setting-item">
+        <label>🌙 থিম</label>
+        <div class="darkmode-options">
+          <button class="darkmode-option" data-mode="light">☀️ লাইট</button>
+          <button class="darkmode-option" data-mode="dark">🌙 ডার্ক</button>
+          <button class="darkmode-option" data-mode="system">📱 সিস্টেম</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label>📍 অবস্থান</label>
+        <div class="location-info">
+          <strong id="modalCityName">ঢাকা</strong>
+          <span id="modalCountryName">বাংলাদেশ</span>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label>🕌 মসজিদ পরিবর্তন</label>
+        <select id="mosqueSelect">
+          <option value="Dhaka">বায়তুল মোকাররম, ঢাকা</option>
+          <option value="Chittagong">হযরত শাহজালাল, চট্টগ্রাম</option>
+          <option value="Rajshahi">রাজশাহী কেন্দ্রীয় মসজিদ</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
 </div>
+<!-- ══════════ END SETTINGS MODAL ══════════ -->
 
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <div class="nav-item active" data-nav="home">
-    <img class="nav-icon" src="image/home.png" alt="হোম">
-    <span class="nav-label">হোম</span>
-  </div>
-  <div class="nav-item" data-nav="namaz">
-    <img class="nav-icon" src="image/mosque.png" alt="নামাজ">
-    <span class="nav-label">নামাজ</span>
-  </div>
-  <div class="nav-item" data-nav="quran">
-    <img class="nav-icon" src="image/quran.png" alt="কুরআন">
-    <span class="nav-label">কুরআন</span>
-  </div>
+
+<!-- ══════════════ BOTTOM NAV ══════════════ -->
+<nav class="bottom-nav" role="navigation">
   <div class="nav-item" data-nav="tasbih">
-    <img class="nav-icon" src="image/tasbih.png" alt="তাসবিহ">
+    <img class="nav-icon" src="image/tasbih.png" alt="তাসবিহ"
+      onerror="this.outerHTML='<span class=\'nav-emoji\'>📿</span>'">
     <span class="nav-label">তাসবিহ</span>
   </div>
+  <div class="nav-item" data-nav="quran">
+    <img class="nav-icon" src="image/quran.png" alt="কুরআন"
+      onerror="this.outerHTML='<span class=\'nav-emoji\'>📖</span>'">
+    <span class="nav-label">কুরআন</span>
+  </div>
+  <div class="nav-item active" data-nav="home">
+    <img class="nav-icon" src="image/home.png" alt="হোম"
+      onerror="this.outerHTML='<span class=\'nav-emoji\'>🏠</span>'">
+    <span class="nav-label">হোম</span>
+  </div>
+  <div class="nav-item" data-nav="hadith">
+    <img class="nav-icon" src="image/hadith.png" alt="হাদিস"
+      onerror="this.outerHTML='<span class=\'nav-emoji\'>📚</span>'">
+    <span class="nav-label">হাদিস</span>
+  </div>
   <div class="nav-item" data-nav="profile">
-    <img class="nav-icon" src="image/profile.png" alt="প্রোফাইল">
+    <img class="nav-icon" src="image/profile.png" alt="প্রোফাইল"
+      onerror="this.outerHTML='<span class=\'nav-emoji\'>👤</span>'">
     <span class="nav-label">প্রোফাইল</span>
   </div>
-</div>
+</nav>
+<!-- ══════════ END BOTTOM NAV ══════════ -->
 
 <script src="js/main.js"></script>
 </body>
