@@ -1,256 +1,244 @@
-// js/main.js
-let prayerTimesData = null;
-let touchStartX = 0;
-let touchEndX = 0;
-
+// Prayer times for Dhaka
 const prayers = [
-    { id: "Fajr", nameBn: "ফজর" },
-    { id: "Dhuhr", nameBn: "যোহর" },
-    { id: "Asr", nameBn: "আসর" },
-    { id: "Maghrib", nameBn: "মাগরিব" },
-    { id: "Isha", nameBn: "এশা" }
+  { name: "ফজর", time: [4, 16], done: true },
+  { name: "জোহর", time: [12, 10], done: true },
+  { name: "আসর",  time: [15, 31], done: false },
+  { name: "মাগরিব", time: [18, 21], done: false },
+  { name: "ইশা",  time: [19, 45], done: false }
 ];
 
-function navigateToPage(url) {
-    window.location.href = url;
-}
+// Function to update clock and remaining time
+function updateClockAndRemaining() {
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const totalMins = h * 60 + m;
 
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const swipeDistance = touchEndX - touchStartX;
-    
-    if (Math.abs(swipeDistance) < swipeThreshold) return;
-    
-    if (swipeDistance > 0) {
-        navigateToPage('tasbih.html');
-    } else {
-        navigateToPage('quran.html');
+  let currentPrayer = null;
+  let nextPrayer = null;
+
+  for (let i = 0; i < prayers.length; i++) {
+    const pMins = prayers[i].time[0] * 60 + prayers[i].time[1];
+    if (totalMins >= pMins) currentPrayer = prayers[i];
+    if (!nextPrayer && totalMins < pMins) nextPrayer = prayers[i];
+  }
+  if (!nextPrayer) nextPrayer = prayers[0];
+
+  if (currentPrayer) {
+    const currentPrayerNameEl = document.getElementById('currentPrayerName');
+    const currentPrayerTimeDisplayEl = document.getElementById('currentPrayerTimeDisplay');
+    if (currentPrayerNameEl) currentPrayerNameEl.innerText = currentPrayer.name;
+    if (currentPrayerTimeDisplayEl) {
+      const hour = currentPrayer.time[0];
+      const minute = currentPrayer.time[1];
+      const suffix = hour >= 12 ? 'PM' : 'AM';
+      const dispHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+      currentPrayerTimeDisplayEl.innerHTML = `${dispHour}:${minute.toString().padStart(2, '0')} <sub>${suffix}</sub>`;
     }
-}
+  }
 
-function getCurrentTimeFormatted() {
-    const now = new Date();
-    let hours = now.getHours(), minutes = now.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-}
-
-function getCurrentDateFormatted() {
-    return new Date().toLocaleDateString('bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-function timeToMinutes(timeStr) {
-    let clean = timeStr.split(' ')[0];
-    let [h, m] = clean.split(':').map(Number);
-    if (timeStr.includes('PM') && h !== 12) h += 12;
-    if (timeStr.includes('AM') && h === 12) h = 0;
-    return h * 60 + m;
-}
-
-function getCurrentMinutes() {
-    const now = new Date();
-    return now.getHours() * 60 + now.getMinutes();
-}
-
-async function fetchPrayerTimes() {
-    const today = new Date();
-    const lat = 23.8103, lon = 90.4125;
-    const url = `https://api.aladhan.com/v1/calendar/${today.getFullYear()}/${today.getMonth() + 1}?latitude=${lat}&longitude=${lon}&method=2`;
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data && data.data) {
-            prayerTimesData = data.data[today.getDate() - 1].timings;
-            updateNamazInfo();
-            return true;
-        }
-    } catch (e) {
-        console.error(e);
-        const prayerNameElem = document.getElementById('currentPrayerName');
-        const prayerInfoElem = document.getElementById('prayerTimeInfo');
-        if (prayerNameElem) prayerNameElem.innerText = 'নামাজ';
-        if (prayerInfoElem) prayerInfoElem.innerHTML = 'সময় লোড করা যায়নি';
+  if (nextPrayer) {
+    const nextMins = nextPrayer.time[0] * 60 + nextPrayer.time[1];
+    let diff = nextMins - totalMins;
+    if (diff < 0) diff += 24 * 60;
+    const rh = Math.floor(diff / 60);
+    const rm = diff % 60;
+    const remainingDisplayEl = document.getElementById('remainingTimeDisplay');
+    if (remainingDisplayEl) {
+      remainingDisplayEl.innerHTML = `⏱ ${rh > 0 ? rh + ' ঘণ্টা ' : ''}${rm} মিনিট বাকি`;
     }
-    return false;
+  }
 }
 
-function updateNamazInfo() {
-    if (!prayerTimesData) return;
-    const nowMins = getCurrentMinutes();
-    const times = [];
-    
-    const prayerOrder = [
-        { id: "Fajr", name: "ফজর" },
-        { id: "Dhuhr", name: "যোহর" },
-        { id: "Asr", name: "আসর" },
-        { id: "Maghrib", name: "মাগরিব" },
-        { id: "Isha", name: "এশা" }
-    ];
-    
-    for (let p of prayerOrder) {
-        if (prayerTimesData[p.id]) {
-            times.push({ name: p.name, mins: timeToMinutes(prayerTimesData[p.id]) });
-        }
-    }
-    times.sort((a, b) => a.mins - b.mins);
-
-    let current = null;
-    let next = null;
-    
-    for (let i = 0; i < times.length; i++) {
-        if (nowMins < times[i].mins) {
-            next = times[i];
-            current = i > 0 ? times[i - 1] : times[times.length - 1];
-            break;
-        }
-    }
-    if (!next) {
-        current = times[times.length - 1];
-        next = times[0];
-    }
-
-    const prayerNameElem = document.getElementById('currentPrayerName');
-    const prayerInfoElem = document.getElementById('prayerTimeInfo');
-    
-    if (prayerNameElem) prayerNameElem.innerText = current ? current.name : 'নামাজ';
-    
-    if (next && prayerInfoElem) {
-        let diffToNext = next.mins - nowMins;
-        if (diffToNext < 0) diffToNext += 24 * 60;
-        let hoursToNext = Math.floor(diffToNext / 60);
-        let minutesToNext = diffToNext % 60;
-        
-        if (current && current.mins) {
-            let currentEndDiff = current.mins - nowMins;
-            if (currentEndDiff < 0) currentEndDiff += 24 * 60;
-            
-            // চলমান নামাজ শেষ হতে যত সময় বাকি
-            if (currentEndDiff > 0 && currentEndDiff <= 60) {
-                prayerInfoElem.innerHTML = `${current.name} শেষ হতে ${currentEndDiff} মিনিট বাকি`;
-            } else if (currentEndDiff > 0 && currentEndDiff <= 120) {
-                let ch = Math.floor(currentEndDiff / 60);
-                let cm = currentEndDiff % 60;
-                prayerInfoElem.innerHTML = `${current.name} শেষ হতে ${ch} ঘণ্টা ${cm} মিনিট বাকি`;
-            } else {
-                prayerInfoElem.innerHTML = `${next.name} শুরু হতে ${hoursToNext > 0 ? hoursToNext + ' ঘণ্টা ' : ''}${minutesToNext} মিনিট বাকি`;
-            }
-        } else {
-            prayerInfoElem.innerHTML = `${next.name} শুরু হতে ${hoursToNext > 0 ? hoursToNext + ' ঘণ্টা ' : ''}${minutesToNext} মিনিট বাকি`;
-        }
-    }
+// Function to update progress bar
+function updateProgress() {
+  const pills = document.querySelectorAll('.pill');
+  let completed = 0;
+  pills.forEach(pill => {
+    if (pill.classList.contains('done')) completed++;
+  });
+  const percent = (completed / 5) * 100;
+  const pbar = document.getElementById('pbar');
+  const progressLabel = document.getElementById('progressPercentLabel');
+  if (pbar) pbar.style.width = percent + '%';
+  if (progressLabel) progressLabel.innerHTML = `${Math.round(percent)}% সম্পন্ন`;
 }
 
-function updateCurrentTime() {
-    const timeDisplay = document.getElementById('currentTimeDisplay');
-    const dateDisplay = document.getElementById('currentDate');
-    if (timeDisplay) timeDisplay.innerHTML = getCurrentTimeFormatted();
-    if (dateDisplay) dateDisplay.innerHTML = getCurrentDateFormatted();
-}
-
-function initTheme() {
-    const saved = localStorage.getItem('islamicAppTheme');
-    if (saved === 'dark') document.body.classList.add('dark-mode');
-    const themeBtns = document.querySelectorAll('.theme-btn');
-    themeBtns.forEach(btn => {
-        const isDark = btn.dataset.theme === 'dark';
-        const shouldBeActive = (isDark && saved === 'dark') || (!isDark && saved !== 'dark');
-        if (shouldBeActive) btn.classList.add('active');
-        else btn.classList.remove('active');
-        
-        btn.addEventListener('click', () => {
-            const theme = btn.dataset.theme;
-            if (theme === 'dark') document.body.classList.add('dark-mode');
-            else document.body.classList.remove('dark-mode');
-            localStorage.setItem('islamicAppTheme', theme);
-            themeBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
+// Function to attach pill click events
+function attachPillEvents() {
+  const pills = document.querySelectorAll('.pill');
+  pills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (pill.classList.contains('active')) return;
+      if (pill.classList.contains('done')) {
+        pill.classList.remove('done');
+        pill.classList.add('pending');
+        const checkSpan = pill.querySelector('.check');
+        if (checkSpan) checkSpan.innerHTML = '—';
+      } else if (pill.classList.contains('pending') || pill.classList.contains('missed')) {
+        pill.classList.remove('pending', 'missed');
+        pill.classList.add('done');
+        const checkSpan = pill.querySelector('.check');
+        if (checkSpan) checkSpan.innerHTML = '✓';
+      }
+      updateProgress();
     });
+  });
 }
 
-function togglePanel(panelId, show) {
-    const panel = document.getElementById(panelId);
-    const overlay = document.getElementById('overlay');
-    if (!panel || !overlay) return;
-    if (show) {
-        panel.classList.add('open');
-        overlay.classList.add('active');
-    } else {
-        panel.classList.remove('open');
-        overlay.classList.remove('active');
-    }
+// Toast notification function
+function showToast(msg) {
+  let toast = document.createElement('div');
+  toast.innerText = msg;
+  toast.style.position = 'fixed';
+  toast.style.bottom = '80px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.backgroundColor = 'rgba(0,0,0,0.85)';
+  toast.style.color = '#fff';
+  toast.style.padding = '10px 20px';
+  toast.style.borderRadius = '40px';
+  toast.style.fontSize = '13px';
+  toast.style.zIndex = '9999';
+  toast.style.fontWeight = '500';
+  toast.style.fontFamily = "'Poppins', sans-serif";
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.25s';
+    setTimeout(() => toast.remove(), 300);
+  }, 1500);
 }
 
-function setActiveNavItem() {
-    const currentPath = window.location.pathname;
-    const navItems = document.querySelectorAll('.bottom-nav-item');
-    
-    navItems.forEach(item => {
-        const href = item.getAttribute('href');
-        if (href && href !== '#') {
-            if (currentPath.includes(href)) {
-                item.classList.add('active');
-            } else {
-                item.classList.remove('active');
-            }
-        }
+// Dark mode toggle functionality
+function initDarkMode() {
+  const savedTheme = localStorage.getItem('deenTheme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+  }
+  
+  // Create dark mode toggle button in bottom nav or somewhere
+  const darkModeBtn = document.createElement('div');
+  darkModeBtn.className = 'nav-item';
+  darkModeBtn.setAttribute('data-nav', 'darkmode');
+  darkModeBtn.innerHTML = `
+    <span class="nav-icon" id="darkModeIcon">🌙</span>
+    <span class="nav-label">ডার্ক</span>
+  `;
+  
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (bottomNav && !document.querySelector('[data-nav="darkmode"]')) {
+    bottomNav.appendChild(darkModeBtn);
+  }
+  
+  const darkModeToggle = document.getElementById('darkModeIcon') || darkModeBtn;
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('deenTheme', isDark ? 'dark' : 'light');
+      const iconSpan = document.querySelector('#darkModeIcon');
+      if (iconSpan) {
+        iconSpan.innerHTML = isDark ? '☀️' : '🌙';
+      }
+      const labelSpan = darkModeBtn.querySelector('.nav-label');
+      if (labelSpan) {
+        labelSpan.innerHTML = isDark ? 'লাইট' : 'ডার্ক';
+      }
+      showToast(isDark ? '🌙 ডার্ক মোড সক্রিয়' : '☀️ লাইট মোড সক্রিয়');
     });
+  }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    updateCurrentTime();
-    setInterval(updateCurrentTime, 1000);
-    await fetchPrayerTimes();
-    setInterval(() => { if (prayerTimesData) updateNamazInfo(); }, 60000);
-    
-    setActiveNavItem();
-
-    const settingsBtn = document.getElementById('settingsBtn');
-    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-    if (settingsBtn) settingsBtn.addEventListener('click', () => togglePanel('settingsPanel', true));
-    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => togglePanel('settingsPanel', false));
-
-    const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
-    if (mobileSettingsBtn) mobileSettingsBtn.addEventListener('click', () => togglePanel('settingsPanel', true));
-
-    const mobileMoreBtn = document.getElementById('mobileMoreBtn');
-    const desktopMoreBtn = document.getElementById('desktopMoreBtn');
-    const closeMoreMenuBtn = document.getElementById('closeMoreMenuBtn');
-    
-    if (mobileMoreBtn) {
-        mobileMoreBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            togglePanel('moreMenuPanel', true);
-        });
+// Add dark mode styles dynamically
+function addDarkModeStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.dark {
+      background: #0F172A;
     }
-    if (desktopMoreBtn) {
-        desktopMoreBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            togglePanel('moreMenuPanel', true);
-        });
+    body.dark .tracker-card,
+    body.dark .bottom-nav {
+      background: #1F2937;
     }
-    if (closeMoreMenuBtn) closeMoreMenuBtn.addEventListener('click', () => togglePanel('moreMenuPanel', false));
-
-    const overlay = document.getElementById('overlay');
-    if (overlay) {
-        overlay.addEventListener('click', () => {
-            togglePanel('settingsPanel', false);
-            togglePanel('moreMenuPanel', false);
-        });
+    body.dark .tracker-card h3,
+    body.dark .progress-label {
+      color: #9CA3AF;
     }
-
-    const container = document.querySelector('.mobile-container');
-    if (container && window.innerWidth <= 768) {
-        container.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, false);
-        
-        container.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, false);
+    body.dark .pill.pending {
+      background: #374151;
+      color: #9CA3AF;
+      border-color: #4B5563;
     }
+    body.dark .hadith-card {
+      background: linear-gradient(135deg, #1F2937, #111827);
+      border-left-color: #4a90c4;
+    }
+    body.dark .hadith-card .hadith-text {
+      color: #E5E7EB;
+    }
+    body.dark .hadith-card .narrator,
+    body.dark .hadith-card .source {
+      color: #9CA3AF;
+    }
+    body.dark .icon-btn .icon-box {
+      background: #1F2937;
+    }
+    body.dark .icon-btn .icon-label {
+      color: #9CA3AF;
+    }
+    body.dark .nav-item.active {
+      background: rgba(74,144,196,0.2);
+    }
+    body.dark .nav-item .nav-label {
+      color: #9CA3AF;
+    }
+    body.dark .nav-item.active .nav-label {
+      color: #4a90c4;
+    }
+  `;
+  document.head.appendChild(style);
+}
 
-    initTheme();
+// Initialize all event listeners
+function initEventListeners() {
+  // Icon buttons click
+  const iconBtns = document.querySelectorAll('.icon-btn');
+  iconBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-name') || 'বৈশিষ্ট্য';
+      showToast(`✨ ${name} শীঘ্রই আসছে ✨`);
+    });
+  });
+  
+  // Bottom nav items click (excluding dark mode which is handled separately)
+  const navItems = document.querySelectorAll('.nav-item:not([data-nav="darkmode"])');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const label = item.querySelector('.nav-label')?.innerText || 'পৃষ্ঠা';
+      showToast(`🔹 ${label} বিভাগ শীঘ্রই আসছে`);
+    });
+  });
+  
+  // Bell notification button
+  const bellBtn = document.getElementById('notificationBtn');
+  if (bellBtn) {
+    bellBtn.addEventListener('click', () => {
+      showToast('🔔 নোটিফিকেশন সেটিংস শীঘ্রই আসছে');
+    });
+  }
+}
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  updateClockAndRemaining();
+  setInterval(updateClockAndRemaining, 30000);
+  attachPillEvents();
+  updateProgress();
+  addDarkModeStyles();
+  initDarkMode();
+  initEventListeners();
 });

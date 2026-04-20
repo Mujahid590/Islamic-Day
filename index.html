@@ -1,185 +1,141 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>ইসলামিক অ্যাপস | ইসলামিক টুলস</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>নামাজের সময় - ঢাকা</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="main-content">
 
-<!-- ডেস্কটপ টপ নেভবার -->
-<nav class="top-navbar">
-    <div class="nav-brand">
-        <div class="brand-logo">
-            <img src="image/Logo.png" alt="Logo" class="brand-logo-img" onerror="this.src='https://placehold.co/38x38?text=LOGO'">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="date-left">
+        <span>১৫ শাওয়াল ১৪৪৬</span>
+        20 April 2026
+      </div>
+      <div style="flex:1; text-align:center;">
+        <button class="bell-btn" title="Notification" id="notificationBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        </button>
+      </div>
+      <div class="location">
+        <strong>📍 Dhaka</strong><br>
+        <span style="font-size:11px;opacity:.8;">Bangladesh</span>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div class="prayer-info">
+        <div class="now-label">এখন চলছে</div>
+        <div class="prayer-name" id="currentPrayerName">আসর</div>
+        <div class="prayer-time" id="currentPrayerTimeDisplay">4:31 <sub>PM</sub></div>
+        <div class="remaining" id="remainingTimeDisplay">⏱ ১ ঘণ্টা ৯ মিনিট বাকি</div>
+        <div class="sehri-iftar" style="margin-top:12px;">
+          <div class="si-item">🌙 সেহরি: <strong id="sehriVal">4:16 AM</strong></div>
+          <div class="si-item">🌅 ইফতার: <strong id="iftarVal">6:21 PM</strong></div>
         </div>
-        <h1>ইসলামিক অ্যাপস</h1>
-    </div>
-    <div class="nav-links desktop-nav">
-        <a href="index.html" class="nav-link active"><i class="fas fa-home"></i></a>
-        <a href="salah.html" class="nav-link"><i class="fas fa-mosque"></i></a>
-        <a href="quran.html" class="nav-link"><i class="fas fa-quran"></i></a>
-        <a href="profile.html" class="nav-link"><i class="fas fa-user"></i></a>
-        <a href="#" class="nav-link" id="desktopMoreBtn"><i class="fas fa-ellipsis-h"></i></a>
-    </div>
-    <div class="nav-actions">
-        <button class="settings-btn" id="settingsBtn"><i class="fas fa-cog"></i></button>
-    </div>
-</nav>
+      </div>
 
-<!-- মোবাইল কন্টেইনার -->
-<div class="mobile-container">
-    <!-- মসজিদের ছবি হেডার -->
-    <div class="mosque-header">
-        <div class="mosque-overlay"></div>
-        <div class="header-content">
-            <button class="mobile-settings-btn" id="mobileSettingsBtn">
-                <i class="fas fa-cog"></i>
-            </button>
-            <div class="welcome-section">
-                <div class="brand-icon">
-                    <img src="image/Logo.png" alt="Logo" class="brand-icon-img" onerror="this.src='https://placehold.co/80x80?text=LOGO'">
-                </div>
-                <h2>আসসালামু আলাইকুম</h2>
-                <p>ইসলামিক অ্যাপসে আপনাকে স্বাগতম</p>
-            </div>
-        </div>
+      <!-- MOSQUE IMAGE -->
+      <div class="mosque-wrap">
+        <img src="image/mosjid.jpg" alt="মসজিদ" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20140%22%3E%3Crect%20width%3D%22120%22%20height%3D%22140%22%20fill%3D%22%234a90c4%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2270%22%20fill%3D%22white%22%20font-size%3D%2212%22%3EMosque%3C%2Ftext%3E%3C%2Fsvg%3E'">
+      </div>
     </div>
+  </div>
 
-    <!-- কার্ড সেকশন - দুই কার্ড একই সাইজ -->
-    <div class="cards-section">
-        <!-- সময় ও তারিখ কার্ড -->
-        <div class="info-card time-card">
-            <div class="card-icon"><img src="image/clock.png" alt="ঘড়ি" class="card-icon-img" onerror="this.src='https://placehold.co/48x48?text=🕐'"></div>
-            <div class="card-content">
-                <div class="card-value" id="currentTimeDisplay">--:-- --</div>
-                <div class="card-sub" id="currentDate">লোড হচ্ছে</div>
-            </div>
-        </div>
-        
-        <!-- নামাজের তথ্য কার্ড -->
-        <a href="salah.html" class="info-card-link">
-            <div class="info-card prayer-card">
-                <div class="card-icon"><img src="image/salah.png" alt="নামাজ" class="card-icon-img" onerror="this.src='https://placehold.co/48x48?text=🕌'"></div>
-                <div class="card-content">
-                    <div class="card-value" id="currentPrayerName">লোড হচ্ছে</div>
-                    <div class="card-sub" id="prayerTimeInfo">লোড হচ্ছে</div>
-                </div>
-            </div>
-        </a>
+  <!-- QUICK ACTIONS -->
+  <div class="section" style="margin-top:18px;">
+    <div class="grid-8">
+      <div class="icon-btn" data-name="নামাজের সময়">
+        <div class="icon-box"><img src="image/salah.png" alt="নামাজ"></div>
+        <span class="icon-label">নামাজের<br>সময়</span>
+      </div>
+      <div class="icon-btn" data-name="আল-কুরআন">
+        <div class="icon-box"><img src="image/quran.png" alt="কুরআন"></div>
+        <span class="icon-label">আল-কুরআন</span>
+      </div>
+      <div class="icon-btn" data-name="কিবলা">
+        <div class="icon-box"><img src="image/compass.png" alt="কিবলা"></div>
+        <span class="icon-label">কিবলা</span>
+      </div>
+      <div class="icon-btn" data-name="হাদিস">
+        <div class="icon-box"><img src="image/hadith.png" alt="হাদিস"></div>
+        <span class="icon-label">হাদিস</span>
+      </div>
+      <div class="icon-btn" data-name="তাসবিহ">
+        <div class="icon-box"><img src="image/tasbih.png" alt="তাসবিহ"></div>
+        <span class="icon-label">তাসবিহ</span>
+      </div>
+      <div class="icon-btn" data-name="কমিউনিটি">
+        <div class="icon-box"><img src="image/asmaul_husna.png" alt="কমিউনিটি"></div>
+        <span class="icon-label">কমিউনিটি</span>
+      </div>
+      <div class="icon-btn" data-name="দোয়া">
+        <div class="icon-box"><img src="image/calendar.png" alt="দোয়া"></div>
+        <span class="icon-label">দোয়া</span>
+      </div>
+      <div class="icon-btn" data-name="দান করুন">
+        <div class="icon-box"><img src="image/Clock.png" alt="দান"></div>
+        <span class="icon-label">দান করুন</span>
+      </div>
     </div>
+  </div>
 
-    <!-- ইসলামিক টুলস -->
-    <div class="section-title">
-        <h3><i class="fas fa-tools"></i> ইসলামিক টুলস</h3>
+  <!-- PRAYER TRACKER -->
+  <div class="tracker-card">
+    <h3>নামাজ ট্র্যাকার</h3>
+    <div class="prayer-pills" id="prayerPillsContainer">
+      <div class="pill done" data-prayer="ফজর">ফজর<span class="check">✓</span></div>
+      <div class="pill done" data-prayer="জোহর">জোহর<span class="check">✓</span></div>
+      <div class="pill active" data-prayer="আসর">আসর<span class="check">⏱</span></div>
+      <div class="pill missed" data-prayer="মাগরিব">মাগরিব<span class="check">!</span></div>
+      <div class="pill pending" data-prayer="ইশা">ইশা<span class="check">—</span></div>
     </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="pbar"></div>
+    </div>
+    <div class="progress-label" id="progressPercentLabel">৬০% সম্পন্ন</div>
+  </div>
 
-    <div class="feature-grid">
-        <a href="quran.html" class="feature-item">
-            <div class="icon-circle"><img src="image/quran.png" alt="কুরআন" class="icon-img" onerror="this.src='https://placehold.co/50x50?text=📖'"></div>
-            <span>আল কুরআন</span>
-        </a>
-        <a href="hadith.html" class="feature-item">
-            <div class="icon-circle"><img src="image/hadith.png" alt="হাদিস" class="icon-img" onerror="this.src='https://placehold.co/50x50?text=📚'"></div>
-            <span>হাদিস</span>
-        </a>
-        <a href="asmaul_husna.html" class="feature-item">
-            <div class="icon-circle"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা" class="icon-img" onerror="this.src='https://placehold.co/50x50?text=⭐'"></div>
-            <span>আসমা-উল-হুসনা</span>
-        </a>
+  <!-- DAILY HADITH -->
+  <div class="hadith-card">
+    <div class="quote-icon">"</div>
+    <h3>📜 দৈনিক হাদিস</h3>
+    <div class="narrator">আবু জামরা আদ-দাবী (রা.) থেকে বর্ণিত:</div>
+    <div class="hadith-text">
+      আমি ইবনে আব্বাস (রা.)-এর সাথে মক্কায় বসতাম। একবার আমার জ্বর হলো, তখন তিনি বললেন, "জমজমের পানি দিয়ে তোমার জ্বর ঠান্ডা করো। কারণ রাসূলুল্লাহ (ﷺ) বলেছেন, জ্বর জাহান্নামের আগুনের তাপ থেকে হয়। তাই পানি বা জমজমের পানি দিয়ে তা ঠান্ডা করো।"
     </div>
+    <span class="source">📗 সূত্র: বুখারী</span>
+  </div>
+
 </div>
 
-<!-- মোবাইল বটম নেভিগেশন বার -->
-<div class="bottom-nav-mobile">
-    <a href="profile.html" class="bottom-nav-item" data-page="profile">
-        <img src="image/profile.png" alt="প্রোফাইল" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=👤'">
-    </a>
-    <a href="tasbih.html" class="bottom-nav-item" data-page="tasbih">
-        <img src="image/tasbih.png" alt="তাসবিহ" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=📿'">
-    </a>
-    <a href="index.html" class="bottom-nav-item home-center active" data-page="home">
-        <img src="image/Logo.png" alt="হোম" class="bottom-nav-img" onerror="this.src='https://placehold.co/35x35?text=🏠'">
-    </a>
-    <a href="quran.html" class="bottom-nav-item" data-page="quran">
-        <img src="image/quran.png" alt="কুরআন" class="bottom-nav-img" onerror="this.src='https://placehold.co/30x30?text=📖'">
-    </a>
-    <a href="#" class="bottom-nav-item" id="mobileMoreBtn" data-page="more">
-        <i class="fas fa-ellipsis-h bottom-nav-icon"></i>
-    </a>
-</div>
-
-<!-- সোয়াইপ নেভিগেশন নির্দেশক -->
-<div class="swipe-indicator">
-    <span><i class="fas fa-arrow-left"></i> বামে সোয়াইপ (কুরআন) <i class="fas fa-arrow-right"></i> ডানে সোয়াইপ (তাসবিহ)</span>
-</div>
-
-<!-- সেটিংস প্যানেল -->
-<div class="settings-panel" id="settingsPanel">
-    <div class="settings-header">
-        <h3><i class="fas fa-sliders-h"></i> সেটিংস</h3>
-        <button class="close-settings" id="closeSettingsBtn">&times;</button>
-    </div>
-    <div class="settings-body">
-        <div class="setting-item">
-            <label><i class="fas fa-palette"></i> থিম নির্বাচন করুন</label>
-            <div class="theme-controls">
-                <button class="theme-btn active" data-theme="light"><i class="fas fa-sun"></i> মিল্কি মোড</button>
-                <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i> নাইট মোড</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay" id="overlay"></div>
-
-<div class="more-menu-panel" id="moreMenuPanel">
-    <div class="more-menu-header">
-        <h3><i class="fas fa-list"></i> অন্যান্য সেবা</h3>
-        <button class="close-more-menu" id="closeMoreMenuBtn">&times;</button>
-    </div>
-    <div class="more-menu-items">
-        <a href="asmaul_husna.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=⭐'"></div>
-            <span>আসমা-উল-হুসনা</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="compass.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/compass.png" alt="কিবলা কম্পাস" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=🧭'"></div>
-            <span>কিবলা কম্পাস</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="calendar.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/calendar.png" alt="ইসলামিক ক্যালেন্ডার" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📅'"></div>
-            <span>ইসলামিক ক্যালেন্ডার</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="mosque_finder.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/mosque.png" alt="মসজিদ ফাইন্ডার" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=🕌'"></div>
-            <span>মসজিদ ফাইন্ডার</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="hadith.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/hadith.png" alt="হাদিস" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📚'"></div>
-            <span>হাদিস শরীফ</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="ablution.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><i class="fas fa-hand-holding-water"></i></div>
-            <span>ওজু শিক্ষা</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="tasbih.html" class="more-menu-item">
-            <div class="menu-icon-wrapper"><img src="image/tasbih.png" alt="তাসবিহ" class="menu-icon-img" onerror="this.src='https://placehold.co/30x30?text=📿'"></div>
-            <span>তাসবিহ</span>
-            <i class="fas fa-chevron-right"></i>
-        </a>
-    </div>
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" data-nav="home">
+    <img class="nav-icon" src="image/home.png" alt="হোম">
+    <span class="nav-label">হোম</span>
+  </div>
+  <div class="nav-item" data-nav="namaz">
+    <img class="nav-icon" src="image/mosque.png" alt="নামাজ">
+    <span class="nav-label">নামাজ</span>
+  </div>
+  <div class="nav-item" data-nav="quran">
+    <img class="nav-icon" src="image/quran.png" alt="কুরআন">
+    <span class="nav-label">কুরআন</span>
+  </div>
+  <div class="nav-item" data-nav="tasbih">
+    <img class="nav-icon" src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-label">তাসবিহ</span>
+  </div>
+  <div class="nav-item" data-nav="profile">
+    <img class="nav-icon" src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-label">প্রোফাইল</span>
+  </div>
 </div>
 
 <script src="js/main.js"></script>
