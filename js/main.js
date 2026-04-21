@@ -1,352 +1,344 @@
 // js/main.js
-let prayerTimes = [];
-let currentPrayerIndex = -1;
+// ========== PRAYER TIMES CONFIGURATION ==========
+const prayerNames = ["ফজর", "জোহর", "আসর", "মাগরিব", "ইশা"];
+const prayerKeys  = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+const prayerIcons = ["🌄", "☀️", "🌤️", "🌙", "🌌"];
 
-const defaultPrayerTimesData = {
-  timings: {
-    Fajr: "04:16",
-    Dhuhr: "12:10",
-    Asr: "15:31",
-    Maghrib: "18:21",
-    Isha: "19:45"
-  }
-};
+let prayerTimeList        = [];
+let currentPrayerInterval = null;
+let weeklyData            = {};
+let recordModalDateKey    = null;
 
-// Prayer name mapping: API index → Bangla name (must match pill data-prayer)
-const PRAYER_NAMES_BN = ["ফজর", "জোহর", "আসর", "মাগরিব", "ইশা"];
-const PRAYER_KEYS     = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+// ========== DATE HELPERS ==========
+function formatDateKey(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth()+1).padStart(2,'0');
+    const d = String(date.getDate()).padStart(2,'0');
+    return `${y}-${m}-${d}`;
+}
+
+function getWeekStart(date) {
+    const d = new Date(date);
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate() - d.getDay());
+    return d;
+}
+
+function getWeekDates() {
+    const start = getWeekStart(new Date());
+    return Array.from({length:7}, (_,i) => {
+        const d = new Date(start);
+        d.setDate(start.getDate()+i);
+        return d;
+    });
+}
+
+// ========== LOCAL STORAGE ==========
+function loadWeeklyData() {
+    const saved = localStorage.getItem('weeklyPrayerTracker_v2');
+    if (saved) { try { weeklyData = JSON.parse(saved); } catch { weeklyData={}; } }
+    else weeklyData = {};
+    // অটো রিসেট: পুরনো সপ্তাহ মুছে ফেলো
+    const weekStartKey = formatDateKey(getWeekStart(new Date()));
+    const cleaned = {};
+    for (const [key, val] of Object.entries(weeklyData)) {
+        if (key >= weekStartKey) cleaned[key] = val;
+    }
+    weeklyData = cleaned;
+    saveWeeklyData();
+}
+
+function saveWeeklyData() {
+    localStorage.setItem('weeklyPrayerTracker_v2', JSON.stringify(weeklyData));
+}
+
+function getDayPrayers(dateKey) {
+    if (!weeklyData[dateKey]) {
+        weeklyData[dateKey] = {};
+        prayerNames.forEach(p => weeklyData[dateKey][p] = 'pending');
+        saveWeeklyData();
+    }
+    return weeklyData[dateKey];
+}
+
+function updatePrayerStatus(dateKey, prayerName, status) {
+    if (!weeklyData[dateKey]) getDayPrayers(dateKey);
+    weeklyData[dateKey][prayerName] = status;
+    saveWeeklyData();
+    renderWeeklyCalendar();
+    renderTodayCircles();
+    if (recordModalDateKey === dateKey) renderRecordModal(dateKey);
+}
+
+// ========== WEEKLY CALENDAR STRIP ==========
+function renderWeeklyCalendar() {
+    const container = document.getElementById('weekDaysStrip');
+    const rangeElem  = document.getElementById('weekCalRange');
+    if (!container) return;
+    const weekDates = getWeekDates();
+    const todayStr  = formatDateKey(new Date());
+    const dayNames  = ['রবি','সোম','মঙ্গ','বুধ','বৃহ','শুক্র','শনি'];
+    if (rangeElem) {
+        const s=weekDates[0], e=weekDates[6];
+        rangeElem.textContent = `${s.getDate()}/${s.getMonth()+1} – ${e.getDate()}/${e.getMonth()+1}`;
+    }
+    container.innerHTML = weekDates.map(date => {
+        const dk        = formatDateKey(date);
+        const prayers   = weeklyData[dk] || {};
+        const completed = Object.values(prayers).filter(s=>s==='completed').length;
+        const isToday   = dk===todayStr;
+        const isFuture  = dk>todayStr;
+        const pct       = completed>0 ? Math.round((completed/5)*100) : 0;
+        const dots = prayerNames.map(p => {
+            const st = prayers[p]||'pending';
+            return `<span class="cal-dot ${st}"></span>`;
+        }).join('');
+        return `
+        <div class="cal-day${isToday?' cal-today':''}${isFuture?' cal-future':''}" data-date="${dk}">
+            <div class="cal-day-name">${dayNames[date.getDay()]}</div>
+            <div class="cal-day-num">${date.getDate()}</div>
+            <div class="cal-dots">${dots}</div>
+            <div class="cal-pct">${isFuture?'–':pct+'%'}</div>
+        </div>`;
+    }).join('');
+    container.querySelectorAll('.cal-day').forEach(card => {
+        card.addEventListener('click', () => openRecordModal(card.dataset.date));
+    });
+}
+
+// ========== RECORD MODAL ==========
+function openRecordModal(dateKey) {
+    recordModalDateKey = dateKey;
+    renderRecordModal(dateKey);
+    document.getElementById('recordModal').classList.add('show');
+}
+
+function closeRecordModal() {
+    const m = document.getElementById('recordModal');
+    if (m) m.classList.remove('show');
+    recordModalDateKey = null;
+}
+
+function renderRecordModal(dateKey) {
+    const prayers   = getDayPrayers(dateKey);
+    const date      = new Date(dateKey+'T00:00:00');
+    const dayNames  = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+    const monthNames= ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+    const todayStr  = formatDateKey(new Date());
+    const isFuture  = dateKey>todayStr;
+    const dayNameEl = document.getElementById('recordModalDayName');
+    const countEl   = document.getElementById('recordModalCount');
+    const listEl    = document.getElementById('recordPrayerList');
+    if (dayNameEl) dayNameEl.textContent = `${dayNames[date.getDay()]}, ${date.getDate()} ${monthNames[date.getMonth()]}`;
+    const done = Object.values(prayers).filter(s=>s==='completed').length;
+    if (countEl) countEl.textContent = `${done}/৫ সম্পন্ন`;
+    if (!listEl) return;
+    listEl.innerHTML = prayerNames.map((prayer,idx) => {
+        const status = prayers[prayer]||'pending';
+        return `
+        <div class="record-prayer-row">
+            <div class="record-prayer-left">
+                <span class="record-prayer-icon">${prayerIcons[idx]}</span>
+                <span class="record-prayer-name">${prayer}</span>
+            </div>
+            <div class="record-btns">
+                <button class="rec-btn rbtn-done${status==='completed'?' active-done':''}" data-prayer="${prayer}" data-val="completed" ${isFuture?'disabled':''}>✓ আদায়</button>
+                <button class="rec-btn rbtn-miss${status==='missed'?' active-missed':''}" data-prayer="${prayer}" data-val="missed" ${isFuture?'disabled':''}>✗ কাযা</button>
+                <button class="rec-btn rbtn-pend${status==='pending'?' active-pending':''}" data-prayer="${prayer}" data-val="pending" ${isFuture?'disabled':''}>○ বাকি</button>
+            </div>
+        </div>`;
+    }).join('');
+    listEl.querySelectorAll('.rec-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            updatePrayerStatus(dateKey, btn.dataset.prayer, btn.dataset.val);
+        });
+    });
+}
+
+// ========== TODAY CIRCLES ==========
+function renderTodayCircles() {
+    const todayKey = formatDateKey(new Date());
+    const prayers  = getDayPrayers(todayKey);
+    let done = 0;
+    prayerNames.forEach((prayer, idx) => {
+        const status = prayers[prayer]||'pending';
+        if (status==='completed') done++;
+        const btn = document.querySelector(`.circle-btn[data-prayer-index="${idx}"]`);
+        if (btn) btn.className = `circle-btn ${status}`;
+    });
+    const totalEl = document.getElementById('trackerTotalCount');
+    const fillBar = document.getElementById('progressFillBar');
+    if (totalEl) totalEl.innerHTML = `${done}/৫ (${Math.round(done/5*100)}%)`;
+    if (fillBar) fillBar.style.width = `${(done/5)*100}%`;
+}
+
+// ========== LEGACY STUBS ==========
+function updatePrayerSummary() {}
+function renderWeeklyView() { renderWeeklyCalendar(); }
+function renderSelectedDay() {}
+
+// ========== PRAYER TIME API ==========
+function timeToMinutes(t) {
+    if (!t) return 0;
+    const s = t.trim();
+    if (s.includes("AM")||s.includes("PM")) {
+        const m = s.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (m) {
+            let h=parseInt(m[1]),mn=parseInt(m[2]);
+            const p=m[3].toUpperCase();
+            if(p==="PM"&&h!==12)h+=12;
+            if(p==="AM"&&h===12)h=0;
+            return h*60+mn;
+        }
+    }
+    const p=s.split(":");
+    if(p.length>=2)return parseInt(p[0])*60+parseInt(p[1]);
+    return 0;
+}
+
+function formatTimeDisplay(t) {
+    if(!t)return"--:--";
+    if(t.includes("AM")||t.includes("PM"))return t;
+    const p=t.split(":");
+    if(p.length>=2){
+        const h=parseInt(p[0]),m=parseInt(p[1]);
+        const period=h>=12?"PM":"AM";
+        const dh=h%12===0?12:h%12;
+        return `${dh}:${m.toString().padStart(2,"0")} ${period}`;
+    }
+    return t;
+}
+
+const fallbackTimings={Fajr:"04:11",Dhuhr:"11:58",Asr:"15:31",Maghrib:"18:22",Isha:"19:46"};
 
 async function fetchPrayerTimes() {
-  try {
-    showLoading(true);
-    const response = await fetch(
-      'https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=4'
-    );
-    const data = await response.json();
-
-    if (data.code === 200 && data.data) {
-      const timings = data.data.timings;
-      const date    = data.data.date;
-
-      // ── Hijri & Gregorian date ──────────────────────────────────────────────
-      document.getElementById('hijriDate').innerText =
-        `${date.hijri.day} ${date.hijri.month.en} ${date.hijri.year}`;
-      document.getElementById('gregorianDate').innerText =
-        `${date.gregorian.day} ${date.gregorian.month.en} ${date.gregorian.year}`;
-
-      // ── Build prayer times array ────────────────────────────────────────────
-      prayerTimes = PRAYER_KEYS.map((key, i) => ({
-        name: PRAYER_NAMES_BN[i],
-        time: parseTimeToMinutes(timings[key]),
-        rawTime: timings[key]
-      }));
-
-      // ── Sehri / Iftar ───────────────────────────────────────────────────────
-      document.getElementById('sehriVal').innerText  = formatTimeDisplay(timings.Fajr);
-      document.getElementById('iftarVal').innerText  = formatTimeDisplay(timings.Maghrib);
-
-      // ── City name in settings modal ─────────────────────────────────────────
-      // API returns city inside meta, not data.data.city
-      const cityEl = document.getElementById('modalCityName');
-      if (cityEl) {
-        const cityName =
-          (data.data.meta && data.data.meta.latitude)
-            ? 'ঢাকা'          // aladhan doesn't return Bengali city; keep default
-            : 'ঢাকা';
-        cityEl.innerText = cityName;
-      }
+    try {
+        const res=await fetch("https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=4");
+        const data=await res.json();
+        if(data.code===200&&data.data){
+            const timings=data.data.timings,hijri=data.data.date.hijri,greg=data.data.date.gregorian;
+            const hEl=document.getElementById("hijriDateText");
+            if(hEl)hEl.innerText=`${hijri.day} ${hijri.month.en} ${hijri.year}`;
+            const gEl=document.getElementById("gregDateText");
+            if(gEl)gEl.innerText=`${greg.day} ${greg.month.en} ${greg.year}`;
+            const sEl=document.getElementById("sehriTimeVal");
+            if(sEl)sEl.innerText=formatTimeDisplay(timings.Fajr);
+            const iEl=document.getElementById("iftarTimeVal");
+            if(iEl)iEl.innerText=formatTimeDisplay(timings.Maghrib);
+            prayerTimeList=prayerKeys.map((key,idx)=>({name:prayerNames[idx],minutes:timeToMinutes(timings[key]),rawTime:timings[key]}));
+        } else throw new Error();
+    } catch {
+        prayerTimeList=prayerKeys.map((key,idx)=>({name:prayerNames[idx],minutes:timeToMinutes(fallbackTimings[key]),rawTime:fallbackTimings[key]}));
+        const sEl=document.getElementById("sehriTimeVal");if(sEl)sEl.innerText=formatTimeDisplay(fallbackTimings.Fajr);
+        const iEl=document.getElementById("iftarTimeVal");if(iEl)iEl.innerText=formatTimeDisplay(fallbackTimings.Maghrib);
+        showToastMessage("ডিফল্ট সময় দেখানো হচ্ছে");
     }
-  } catch (error) {
-    console.error('API Error:', error);
-    // ── Fallback ────────────────────────────────────────────────────────────
-    prayerTimes = PRAYER_KEYS.map((key, i) => ({
-      name:    PRAYER_NAMES_BN[i],
-      time:    parseTimeToMinutes(defaultPrayerTimesData.timings[key]),
-      rawTime: defaultPrayerTimesData.timings[key]
-    }));
-    document.getElementById('sehriVal').innerText =
-      formatTimeDisplay(defaultPrayerTimesData.timings.Fajr);
-    document.getElementById('iftarVal').innerText =
-      formatTimeDisplay(defaultPrayerTimesData.timings.Maghrib);
-
-    showToast('⚠️ ডিফল্ট সময় ব্যবহার করা হচ্ছে');
-  }
-  showLoading(false);
+    updateCurrentPrayer();
+    if(currentPrayerInterval)clearInterval(currentPrayerInterval);
+    currentPrayerInterval=setInterval(updateCurrentPrayer,1000);
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-function parseTimeToMinutes(timeStr) {
-  if (!timeStr) return 0;
-  if (timeStr.includes('AM') || timeStr.includes('PM')) {
-    const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (m) {
-      let h = parseInt(m[1]), min = parseInt(m[2]);
-      const p = m[3].toUpperCase();
-      if (p === 'PM' && h !== 12) h += 12;
-      if (p === 'AM' && h === 12) h = 0;
-      return h * 60 + min;
+function updateCurrentPrayer() {
+    if(!prayerTimeList.length)return;
+    const now=new Date(),cm=now.getHours()*60+now.getMinutes();
+    const cEl=document.getElementById("currentPrayerTimeDisplay");
+    if(cEl){
+        const h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+        const p=h>=12?"PM":"AM",dh=h%12===0?12:h%12;
+        cEl.innerHTML=`${dh}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} <sub>${p}</sub>`;
     }
-  }
-  const parts = timeStr.split(':');
-  if (parts.length >= 2) {
-    return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-  }
-  return 0;
-}
-
-function formatTimeDisplay(timeStr) {
-  if (!timeStr) return '--:-- --';
-  if (timeStr.includes('AM') || timeStr.includes('PM')) {
-    const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (m) return `${m[1]}:${m[2]} ${m[3]}`;
-    return timeStr;
-  }
-  const parts = timeStr.split(':');
-  if (parts.length >= 2) {
-    let h = parseInt(parts[0]);
-    const min = parseInt(parts[1]);
-    const period = h >= 12 ? 'PM' : 'AM';
-    const dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-    return `${dh}:${min.toString().padStart(2, '0')} ${period}`;
-  }
-  return '--:-- --';
-}
-
-// ── Display update (runs every second) ───────────────────────────────────────
-
-function updateDisplay() {
-  if (prayerTimes.length === 0) return;
-
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-  let current = -1;
-  let next    = -1;
-
-  for (let i = 0; i < prayerTimes.length; i++) {
-    if (currentMinutes >= prayerTimes[i].time) current = i;
-    if (next === -1 && currentMinutes < prayerTimes[i].time) next = i;
-  }
-
-  if (next    === -1) next    = 0;
-  if (current === -1) current = prayerTimes.length - 1;
-
-  currentPrayerIndex = current;
-
-  // ── Current prayer header ─────────────────────────────────────────────────
-  const cp = prayerTimes[current];
-  document.getElementById('currentPrayerName').innerText = cp.name;
-
-  const ph = Math.floor(cp.time / 60);
-  const pm = cp.time % 60;
-  const pp = ph >= 12 ? 'PM' : 'AM';
-  const pd = ph > 12 ? ph - 12 : (ph === 0 ? 12 : ph);
-  document.getElementById('currentPrayerTimeDisplay').innerHTML =
-    `${pd}:${pm.toString().padStart(2, '0')} <sub>${pp}</sub>`;
-
-  // ── Countdown to next prayer ──────────────────────────────────────────────
-  const np = prayerTimes[next];
-  let nextMin = np.time;
-  if (nextMin <= currentMinutes) nextMin += 24 * 60;
-
-  const diff    = nextMin - currentMinutes;
-  const hours   = Math.floor(diff / 60);
-  const minutes = diff % 60;
-  // seconds for more accuracy
-  const seconds = 59 - now.getSeconds();
-
-  const remainingEl = document.getElementById('remainingTimeDisplay');
-  if (hours > 0) {
-    remainingEl.innerHTML =
-      `⏱ ${np.name} পর্যন্ত ${hours} ঘণ্টা ${minutes} মিনিট ${seconds} সেকেন্ড বাকি`;
-  } else {
-    remainingEl.innerHTML =
-      `⏱ ${np.name} পর্যন্ত ${minutes} মিনিট ${seconds} সেকেন্ড বাকি`;
-  }
-
-  updateTrackerActiveState(current);
-}
-
-// ── Pill active state ─────────────────────────────────────────────────────────
-
-function updateTrackerActiveState(currentIndex) {
-  document.querySelectorAll('.pill').forEach((pill, index) => {
-    // Only change 'active' state; never override 'done' or 'missed'
-    if (pill.classList.contains('done') || pill.classList.contains('missed')) return;
-    pill.classList.remove('active', 'pending');
-    pill.classList.add(index === currentIndex ? 'active' : 'pending');
-  });
-}
-
-// ── Progress bar ──────────────────────────────────────────────────────────────
-
-function updateProgress() {
-  const pills = document.querySelectorAll('.pill');
-  let completed = 0;
-  pills.forEach(pill => { if (pill.classList.contains('done')) completed++; });
-  const percent = (completed / 5) * 100;
-  const pbar  = document.getElementById('pbar');
-  const label = document.getElementById('progressPercentLabel');
-  if (pbar)  pbar.style.width = percent + '%';
-  if (label) label.innerText  = `${Math.round(percent)}% সম্পন্ন`;
-}
-
-// ── Pill click events ─────────────────────────────────────────────────────────
-
-function attachPillEvents() {
-  document.querySelectorAll('.pill').forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      e.stopPropagation();
-      // Don't toggle the currently active (in-progress) prayer
-      if (pill.classList.contains('active')) return;
-
-      if (pill.classList.contains('done')) {
-        pill.classList.remove('done');
-        pill.classList.add('pending');
-        pill.querySelector('.check').innerHTML = '—';
-      } else {
-        pill.classList.remove('pending', 'missed');
-        pill.classList.add('done');
-        pill.querySelector('.check').innerHTML = '✓';
-      }
-      updateProgress();
-    });
-  });
-}
-
-// ── Toast ─────────────────────────────────────────────────────────────────────
-
-function showLoading(show) {
-  let loader = document.getElementById('customLoader');
-  if (show) {
-    if (!loader) {
-      loader = document.createElement('div');
-      loader.id = 'customLoader';
-      loader.style.cssText =
-        'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);' +
-        'background:rgba(0,0,0,0.85);color:white;padding:12px 24px;' +
-        'border-radius:40px;z-index:9999;font-size:14px;' +
-        'font-family:Poppins,sans-serif;font-weight:500;';
-      loader.innerText = '⏳ সময় লোড হচ্ছে...';
-      document.body.appendChild(loader);
+    let ci=prayerTimeList.length-1,ni=0;
+    for(let i=0;i<prayerTimeList.length;i++){
+        if(cm>=prayerTimeList[i].minutes)ci=i;
+        if(cm<prayerTimeList[i].minutes){ni=i;break;}
     }
-    loader.style.display = 'block';
-  } else {
-    if (loader) loader.style.display = 'none';
-  }
+    const cur=prayerTimeList[ci],nxt=prayerTimeList[ni];
+    const nEl=document.getElementById("currentPrayerNameUI");if(nEl)nEl.innerText=cur.name;
+    const stEl=document.getElementById("remainingTimeDisplay");if(stEl)stEl.innerHTML=`🕌 শুরুর সময়: ${formatTimeDisplay(cur.rawTime)}`;
+    const enEl=document.getElementById("endTimeDisplay");if(enEl)enEl.innerHTML=`⏰ শেষ সময়: ${formatTimeDisplay(nxt.rawTime)}`;
 }
 
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.innerText = msg;
-  toast.style.cssText =
-    'position:fixed;bottom:88px;left:50%;transform:translateX(-50%);' +
-    'background:rgba(0,0,0,0.85);color:#fff;padding:10px 22px;' +
-    'border-radius:40px;font-size:13px;z-index:9999;' +
-    'font-weight:500;font-family:Poppins,sans-serif;' +
-    'opacity:1;transition:opacity 0.3s;white-space:nowrap;';
-  document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 300);
-  }, 1600);
+// ========== THEME ==========
+function setThemeMode(mode){
+    if(mode==="dark")document.body.classList.add("dark");
+    else if(mode==="light")document.body.classList.remove("dark");
+    else{window.matchMedia("(prefers-color-scheme:dark)").matches?document.body.classList.add("dark"):document.body.classList.remove("dark");}
+    localStorage.setItem("deen_theme",mode);
+    document.querySelectorAll(".theme-btn").forEach(b=>b.classList.toggle("active",b.dataset.theme===mode));
 }
-
-// ── Dark mode ─────────────────────────────────────────────────────────────────
-
-function setTheme(mode) {
-  const body = document.body;
-  if (mode === 'dark') {
-    body.classList.add('dark');
-  } else if (mode === 'light') {
-    body.classList.remove('dark');
-  } else if (mode === 'system') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    prefersDark ? body.classList.add('dark') : body.classList.remove('dark');
-  }
-  localStorage.setItem('deenTheme', mode);
-
-  // Sync buttons
-  document.querySelectorAll('.darkmode-option').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
-  });
-}
-
-function initDarkMode() {
-  const saved = localStorage.getItem('deenTheme') || 'light';
-  setTheme(saved);
-
-  document.querySelectorAll('.darkmode-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.getAttribute('data-mode');
-      setTheme(mode);
-      const msgs = {
-        dark:   '🌙 ডার্ক মোড সক্রিয়',
-        light:  '☀️ লাইট মোড সক্রিয়',
-        system: '📱 সিস্টেম থিম অনুসরণ করা হবে'
-      };
-      showToast(msgs[mode] || '');
+function initTheme(){
+    setThemeMode(localStorage.getItem("deen_theme")||"light");
+    document.querySelectorAll(".theme-btn").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+            setThemeMode(btn.dataset.theme);
+            showToastMessage({dark:"🌙 ডার্ক মোড সক্রিয়",light:"☀️ লাইট মোড সক্রিয়",system:"📱 সিস্টেম থিম"}[btn.dataset.theme]);
+        });
     });
-  });
-
-  // Auto-switch if system mode and OS preference changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (localStorage.getItem('deenTheme') === 'system') setTheme('system');
-  });
+    window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{if(localStorage.getItem("deen_theme")==="system")setThemeMode("system");});
 }
 
-// ── Settings modal ────────────────────────────────────────────────────────────
-
-function initSettingsModal() {
-  const settingsBtn     = document.getElementById('settingsBtn');
-  const settingsModal   = document.getElementById('settingsModal');
-  const closeSettingsBtn= document.getElementById('closeSettingsBtn');
-  const notifToggle     = document.getElementById('modalNotificationToggle');
-  const mosqueSelect    = document.getElementById('mosqueSelect');
-
-  settingsBtn.addEventListener('click', () => settingsModal.classList.add('show'));
-  closeSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('show'));
-  settingsModal.addEventListener('click', e => {
-    if (e.target === settingsModal) settingsModal.classList.remove('show');
-  });
-  notifToggle.addEventListener('click', () =>
-    showToast('🔔 নোটিফিকেশন সেটিংস শীঘ্রই আসছে')
-  );
-  mosqueSelect.addEventListener('change', e =>
-    showToast(`🕌 ${e.target.options[e.target.selectedIndex].text} নির্বাচিত হয়েছে`)
-  );
+// ========== MODAL ==========
+function initModal(){
+    const modal=document.getElementById("settingsModal");
+    const ob=document.getElementById("openSettingsBtn");
+    const cb=document.getElementById("closeModalBtn");
+    if(ob)ob.onclick=()=>modal?.classList.add("show");
+    if(cb)cb.onclick=()=>modal?.classList.remove("show");
+    if(modal)modal.onclick=e=>{if(e.target===modal)modal.classList.remove("show");};
 }
 
-// ── Icon & nav buttons ────────────────────────────────────────────────────────
+// ========== TOAST ==========
+function showToastMessage(msg){
+    document.querySelector(".toast-msg")?.remove();
+    const t=document.createElement("div");
+    t.className="toast-msg";t.innerText=msg;
+    document.body.appendChild(t);
+    setTimeout(()=>t?.parentNode?.removeChild(t),2200);
+}
 
-function initEventListeners() {
-  document.querySelectorAll('.icon-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.getAttribute('data-name') || 'বৈশিষ্ট্য';
-      showToast(`✨ ${name} শীঘ্রই আসছে`);
+// ========== QUICK ACTIONS ==========
+function initQuickActions(){
+    document.querySelectorAll(".action-item").forEach(item=>{
+        item.addEventListener("click",()=>showToastMessage(`✨ ${item.dataset.feature||'বৈশিষ্ট্য'} শীঘ্রই আসছে`));
     });
-  });
-
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      const label = item.querySelector('.nav-label')?.innerText || 'পৃষ্ঠা';
-      showToast(`🔹 ${label} বিভাগ শীঘ্রই আসছে`);
+    const navBtns=document.querySelectorAll(".nav-icon-btn");
+    navBtns.forEach(btn=>{
+        btn.addEventListener("click",()=>{
+            navBtns.forEach(b=>b.classList.remove("active"));
+            btn.classList.add("active");
+            showToastMessage(`🔹 ${btn.querySelector(".nav-text")?.innerText||'পৃষ্ঠা'} শীঘ্রই আসছে`);
+        });
     });
-  });
 }
 
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
+// ========== INIT ==========
+document.addEventListener("DOMContentLoaded",()=>{
+    initTheme();
+    initModal();
+    initQuickActions();
+    loadWeeklyData();
+    renderWeeklyCalendar();
+    renderTodayCircles();
 
-document.addEventListener('DOMContentLoaded', async () => {
-  initDarkMode();         // theme first — avoids flash of wrong mode
-  await fetchPrayerTimes();
-  updateDisplay();
-  updateProgress();
-  attachPillEvents();
-  initSettingsModal();
-  initEventListeners();
-  setInterval(updateDisplay, 1000);
+    // Circle click → toggle status
+    document.querySelectorAll('.circle-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const idx=parseInt(btn.dataset.prayerIndex);
+            const prayer=prayerNames[idx];
+            const today=formatDateKey(new Date());
+            const prayers=getDayPrayers(today);
+            const cur=prayers[prayer]||'pending';
+            const next=cur==='pending'?'completed':cur==='completed'?'missed':'pending';
+            updatePrayerStatus(today,prayer,next);
+            const labels={completed:`✅ ${prayer} আদায়`,missed:`❌ ${prayer} কাযা`,pending:`⭕ ${prayer} বাকি`};
+            showToastMessage(labels[next]);
+        });
+    });
+
+    // Record modal close
+    document.getElementById('recordCloseBtn')?.addEventListener('click',closeRecordModal);
+    document.getElementById('recordModal')?.addEventListener('click',e=>{if(e.target.id==='recordModal')closeRecordModal();});
+
+    fetchPrayerTimes();
 });
