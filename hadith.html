@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>হাদিস - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/hadith.css">
+</head>
+<body>
+
+<div class="hadith-header">
+  <div class="header-row">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <h2>📚 হাদিস শরীফ</h2>
+    <div style="width: 40px;"></div>
+  </div>
+</div>
+
+<div class="hadith-container">
+  <div class="category-tabs" id="categoryTabs">
+    <button class="cat-tab active" data-cat="all">সব</button>
+    <button class="cat-tab" data-cat="iman">ঈমান</button>
+    <button class="cat-tab" data-cat="ibadah">ইবাদত</button>
+    <button class="cat-tab" data-cat="akhlaq">আখলাক</button>
+  </div>
+
+  <div class="hadith-card" id="hadithCard">
+    <div class="hadith-header-info">
+      <span class="hadith-source" id="hadithSource">সহীহ বুখারী</span>
+      <span class="hadith-ref" id="hadithRef">হাদিস নং: --</span>
+    </div>
+    <div class="hadith-arabic" id="hadithArabic">اللهم إني أسألك علماً نافعاً</div>
+    <div class="hadith-translation" id="hadithTranslation">হে আল্লাহ! আমি আপনার কাছে উপকারী জ্ঞান প্রার্থনা করি।</div>
+    <div class="hadith-explanation" id="hadithExplanation">উপকারী জ্ঞান সেই জ্ঞান যা মানুষকে আল্লাহর নিকটবর্তী করে এবং সৎকর্মে উদ্বুদ্ধ করে।</div>
+    <div class="hadith-actions">
+      <button class="share-btn" id="shareHadithBtn">📤 শেয়ার করুন</button>
+      <button class="next-btn" id="nextHadithBtn">পরবর্তী হাদিস →</button>
+    </div>
+  </div>
+
+  <div class="favorite-section">
+    <div class="fav-header">
+      <span>⭐ প্রিয় হাদিস</span>
+      <button id="clearFavBtn">সাফ করুন</button>
+    </div>
+    <div class="fav-list" id="favList"></div>
+  </div>
+</div>
+
+<div class="bottom-navigation">
+  <button class="nav-icon-btn" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn active" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="js/hadith.js"></script>
+</body>
+</html>

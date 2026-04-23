@@ -57,27 +57,52 @@
     const s = remainingSeconds % 60;
     countEl.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 
-    const elapsed = totalSecs > 0 ? (totalSecs - remainingSeconds) / totalSecs : 0;
+    let elapsed = 0;
+    if (totalSecs > 0 && remainingSeconds >= 0) {
+      elapsed = Math.min(1, Math.max(0, (totalSecs - remainingSeconds) / totalSecs));
+    }
     const filledTicks = Math.round(elapsed * TICKS);
 
     tickEls.forEach((tick, i) => {
-      if (i < filledTicks) {
+      if (i < filledTicks && remainingSeconds > 0) {
         tick.setAttribute('stroke', '#27ae60');
         tick.setAttribute('opacity', '0.9');
         tick.setAttribute('stroke-width', '1.6');
       } else {
-        tick.setAttribute('stroke', '#1e4a6a');
+        const isDark = document.body.classList.contains('dark');
+        tick.setAttribute('stroke', isDark ? '#3d5a6c' : '#1e4a6a');
         tick.setAttribute('opacity', '0.55');
         tick.setAttribute('stroke-width', '1.4');
       }
     });
   }
 
+  function updateTickColorsForTheme() {
+    const isDark = document.body.classList.contains('dark');
+    tickEls.forEach(tick => {
+      const currentStroke = tick.getAttribute('stroke');
+      if (currentStroke !== '#27ae60') {
+        tick.setAttribute('stroke', isDark ? '#3d5a6c' : '#1e4a6a');
+      }
+    });
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        updateTickColorsForTheme();
+      }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildTimer();
+    observer.observe(document.body, { attributes: true });
+  });
+
   window._updateCircularTimer = function(remaining, total) {
     updateTimerDisplay(remaining, total);
   };
-
-  document.addEventListener('DOMContentLoaded', buildTimer);
 })();
 
 // ========== PRAYER DATA ==========
@@ -200,54 +225,88 @@ function toArabicNumerals(number) {
   return number.toString().split('').map(digit => arabicNumerals[digit] || digit).join('');
 }
 
-// ========== CALCULATE PRAYER END TIMES ==========
-function calculateEndTime(prayerName, startMinutes, startRawTime, sunriseMinutes, sunsetMinutes, ishaMinutes, midnightMinutes) {
-  let endMinutes = startMinutes;
-  let endRawTime = startRawTime;
+// ========== PRAYER TIME CALCULATIONS (EXACTLY LIKE Muslims Day App) ==========
+function calculatePrayerTimesLikeMuslimsDayApp(apiTimings) {
+  // Get raw times from API
+  const fajrTime = apiTimings.Fajr;
+  const sunriseTime = apiTimings.Sunrise;
+  const dhuhrTime = apiTimings.Dhuhr;
+  const asrTime = apiTimings.Asr;
+  const maghribTime = apiTimings.Maghrib;
+  const ishaTime = apiTimings.Isha;
   
-  switch (prayerName) {
-    case "ফজর":
-      if (sunriseMinutes) {
-        endMinutes = sunriseMinutes;
-        endRawTime = formatTimeFromMinutes(sunriseMinutes);
-      } else {
-        endMinutes = startMinutes + 90;
-        endRawTime = formatTimeFromMinutes(endMinutes);
-      }
-      break;
-    case "যোহর":
-      endMinutes = startMinutes + 180;
-      endRawTime = formatTimeFromMinutes(endMinutes);
-      break;
-    case "আসর":
-      if (sunsetMinutes) {
-        endMinutes = sunsetMinutes;
-        endRawTime = formatTimeFromMinutes(sunsetMinutes);
-      } else {
-        endMinutes = startMinutes + 180;
-        endRawTime = formatTimeFromMinutes(endMinutes);
-      }
-      break;
-    case "মাগরিব":
-      if (ishaMinutes) {
-        endMinutes = ishaMinutes;
-        endRawTime = formatTimeFromMinutes(ishaMinutes);
-      } else {
-        endMinutes = startMinutes + 90;
-        endRawTime = formatTimeFromMinutes(endMinutes);
-      }
-      break;
-    case "ইশা":
-      if (midnightMinutes) {
-        endMinutes = midnightMinutes;
-        endRawTime = formatTimeFromMinutes(midnightMinutes);
-      } else {
-        endMinutes = startMinutes + 120;
-        endRawTime = formatTimeFromMinutes(endMinutes);
-      }
-      break;
-  }
-  return { endMinutes, endRawTime };
+  const fajrMinutes = timeToMinutes(fajrTime);
+  const sunriseMinutes = timeToMinutes(sunriseTime);
+  const dhuhrMinutes = timeToMinutes(dhuhrTime);
+  const asrMinutes = timeToMinutes(asrTime);
+  const maghribMinutes = timeToMinutes(maghribTime);
+  const ishaMinutes = timeToMinutes(ishaTime);
+  
+  // Calculate end times according to Muslims Day App pattern
+  // ফজর শেষ = সূর্যোদয় - 5 minutes (like 5:25 for 5:30 sunrise)
+  const fajrEndMinutes = sunriseMinutes - 5;
+  const fajrEndTime = formatTimeFromMinutes(fajrEndMinutes);
+  
+  // যোহর শেষ = আসর শুরু (11:54 to 4:24)
+  const dhuhrEndMinutes = asrMinutes;
+  const dhuhrEndTime = asrTime;
+  
+  // আসর শেষ = মাগরিব শুরু - 1 minute (4:25 to 6:15)
+  const asrEndMinutes = maghribMinutes - 1;
+  const asrEndTime = formatTimeFromMinutes(asrEndMinutes);
+  
+  // মাগরিব শেষ = ইশা শুরু - 1 minute (6:16 to 7:34)
+  const maghribEndMinutes = ishaMinutes - 1;
+  const maghribEndTime = formatTimeFromMinutes(maghribEndMinutes);
+  
+  // ইশা শেষ = মধ্যরাত (12:00 AM next day)
+  const ishaEndMinutes = 24 * 60; // 12:00 AM = 1440 minutes
+  const ishaEndTime = "12:00 AM";
+  
+  const prayers = [
+    {
+      name: "ফজর",
+      nameEn: "Fajr",
+      startMinutes: fajrMinutes,
+      startRawTime: fajrTime,
+      endMinutes: fajrEndMinutes,
+      endRawTime: fajrEndTime
+    },
+    {
+      name: "যোহর",
+      nameEn: "Dhuhr",
+      startMinutes: dhuhrMinutes,
+      startRawTime: dhuhrTime,
+      endMinutes: dhuhrEndMinutes,
+      endRawTime: dhuhrEndTime
+    },
+    {
+      name: "আসর",
+      nameEn: "Asr",
+      startMinutes: asrMinutes,
+      startRawTime: asrTime,
+      endMinutes: asrEndMinutes,
+      endRawTime: asrEndTime
+    },
+    {
+      name: "মাগরিব",
+      nameEn: "Maghrib",
+      startMinutes: maghribMinutes,
+      startRawTime: maghribTime,
+      endMinutes: maghribEndMinutes,
+      endRawTime: maghribEndTime
+    },
+    {
+      name: "ইশা",
+      nameEn: "Isha",
+      startMinutes: ishaMinutes,
+      startRawTime: ishaTime,
+      endMinutes: ishaEndMinutes,
+      endRawTime: ishaEndTime
+    }
+  ];
+  
+  return prayers;
 }
 
 // ========== GET CURRENT OR NEXT PRAYER ==========
@@ -256,49 +315,49 @@ function getActivePrayerInfo() {
   
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
-  const currentSeconds = now.getSeconds();
   
-  // Check if any prayer is currently active (between start and end time)
+  // Check each prayer for active status
   for (let i = 0; i < prayerTimeList.length; i++) {
     const prayer = prayerTimeList[i];
-    const endTime = prayer.endMinutes;
+    let endMinutes = prayer.endMinutes;
     
-    if (currentMinutes >= prayer.minutes && currentMinutes < endTime) {
-      // Active prayer found
-      let nextPrayer = null;
-      if (i + 1 < prayerTimeList.length) {
-        nextPrayer = prayerTimeList[i + 1];
-      } else {
-        nextPrayer = prayerTimeList[0];
-        nextPrayer = {
-          ...nextPrayer,
-          minutes: nextPrayer.minutes + 1440,
-          endMinutes: nextPrayer.endMinutes + 1440
+    // Handle Isha's end time (next day 12:00 AM)
+    if (prayer.name === "ইশา" && endMinutes === 1440) {
+      // Isha is active from start until midnight
+      if (currentMinutes >= prayer.startMinutes) {
+        return {
+          type: 'active',
+          currentPrayer: prayer,
+          targetPrayer: prayer,
+          targetTime: endMinutes,
+          targetRawTime: prayer.endRawTime,
+          targetName: prayer.name,
+          isEndTime: true
         };
       }
-      
+    }
+    // Normal prayer time check
+    else if (currentMinutes >= prayer.startMinutes && currentMinutes < endMinutes) {
       return {
         type: 'active',
         currentPrayer: prayer,
         targetPrayer: prayer,
-        targetTime: endTime,
+        targetTime: endMinutes,
         targetRawTime: prayer.endRawTime,
         targetName: prayer.name,
-        isEndTime: true,
-        nextPrayer: nextPrayer
+        isEndTime: true
       };
     }
   }
   
-  // No active prayer - find next prayer start time
+  // Find next prayer
   let nextPrayer = null;
   let minDiff = Infinity;
   
   for (let i = 0; i < prayerTimeList.length; i++) {
     const prayer = prayerTimeList[i];
-    let startTime = prayer.minutes;
+    let startTime = prayer.startMinutes;
     
-    // For next day prayers
     if (startTime < currentMinutes) {
       startTime += 1440;
     }
@@ -306,7 +365,7 @@ function getActivePrayerInfo() {
     const diff = startTime - currentMinutes;
     if (diff > 0 && diff < minDiff) {
       minDiff = diff;
-      nextPrayer = { ...prayer, minutes: startTime };
+      nextPrayer = { ...prayer, startMinutes: startTime };
     }
   }
   
@@ -315,8 +374,8 @@ function getActivePrayerInfo() {
       type: 'waiting',
       currentPrayer: null,
       targetPrayer: nextPrayer,
-      targetTime: nextPrayer.minutes,
-      targetRawTime: nextPrayer.rawTime,
+      targetTime: nextPrayer.startMinutes,
+      targetRawTime: nextPrayer.startRawTime,
       targetName: nextPrayer.name,
       isEndTime: false
     };
@@ -348,7 +407,6 @@ function updateEndTimeTimer() {
   
   let targetTotalSeconds = prayerInfo.targetTime * 60;
   
-  // Handle next day target
   if (targetTotalSeconds < currentTotalSeconds) {
     targetTotalSeconds += 24 * 3600;
   }
@@ -356,21 +414,21 @@ function updateEndTimeTimer() {
   let remainingSeconds = targetTotalSeconds - currentTotalSeconds;
   if (remainingSeconds < 0) remainingSeconds = 0;
   
-  // Set timer label top
+  // Set timer label
   if (timerLabelTop) {
     if (prayerInfo.type === 'active') {
-      timerLabelTop.textContent = prayerInfo.targetName;
+      timerLabelTop.textContent = `${prayerInfo.targetName} শেষ`;
     } else {
-      timerLabelTop.textContent = `${prayerInfo.targetName} শুরু`;
+      timerLabelTop.textContent = prayerInfo.targetName;
     }
   }
   
   // Set remaining time display
   if (remainingTimeDisplay) {
     if (prayerInfo.type === 'active') {
-      remainingTimeDisplay.innerHTML = `🕌 শুরু: ${formatTimeDisplay(prayerInfo.currentPrayer.rawTime)}`;
+      remainingTimeDisplay.innerHTML = `🕌 শুরু: ${formatTimeDisplay(prayerInfo.currentPrayer.startRawTime)}`;
     } else {
-      remainingTimeDisplay.innerHTML = `🕌 পরবর্তী: ${formatTimeDisplay(prayerInfo.targetRawTime)}`;
+      remainingTimeDisplay.innerHTML = `🕌 ${prayerInfo.targetName}: ${formatTimeDisplay(prayerInfo.targetRawTime)}`;
     }
   }
   
@@ -379,7 +437,7 @@ function updateEndTimeTimer() {
     if (prayerInfo.type === 'active') {
       endTimeDisplayText.innerHTML = `🔚 শেষ: ${formatTimeDisplay(prayerInfo.targetRawTime)}`;
     } else {
-      endTimeDisplayText.innerHTML = `🕐 শুরু হতে বাকি`;
+      endTimeDisplayText.innerHTML = `🕐 শুরু: ${formatTimeDisplay(prayerInfo.targetRawTime)}`;
     }
   }
   
@@ -393,17 +451,17 @@ function updateEndTimeTimer() {
     currentPrayerTimeDisplay.innerHTML = `${dh}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')} <sub>${period}</sub>`;
   }
   
-  // Calculate max total for progress bar
-  let maxTotal = 7200;
+  // Calculate total duration for circle progress
+  let totalDuration = 0;
   if (prayerInfo.type === 'active') {
-    if (prayerInfo.targetName === "ইশা") maxTotal = 14400;
-    if (prayerInfo.targetName === "ফজর") maxTotal = 5400;
+    totalDuration = (prayerInfo.targetTime - prayerInfo.currentPrayer.startMinutes) * 60;
+    if (totalDuration <= 0) totalDuration = remainingSeconds;
   } else {
-    maxTotal = remainingSeconds;
+    totalDuration = remainingSeconds;
   }
   
   if (window._updateCircularTimer) {
-    window._updateCircularTimer(Math.max(0, remainingSeconds), maxTotal);
+    window._updateCircularTimer(Math.max(0, remainingSeconds), Math.max(1, totalDuration));
   }
 }
 
@@ -458,7 +516,14 @@ function loadStoredDates() {
 }
 
 // ========== FETCH PRAYER TIMES FROM API ==========
-const fallbackTimings = { Fajr: "05:00", Dhuhr: "12:00", Asr: "15:30", Maghrib: "17:45", Isha: "19:00" };
+const fallbackTimings = { 
+  Fajr: "4:08 AM", 
+  Sunrise: "5:30 AM",
+  Dhuhr: "11:54 AM", 
+  Asr: "4:25 PM", 
+  Maghrib: "6:16 PM", 
+  Isha: "7:35 PM" 
+};
 
 async function fetchPrayerTimes() {
   const storedData = loadPrayerTimesFromStorage();
@@ -481,7 +546,7 @@ async function fetchPrayerTimes() {
 
 async function updatePrayerTimesInBackground() {
   try {
-    const res = await fetch("https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=4");
+    const res = await fetch("https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=2");
     if (!res.ok) throw new Error("Network error");
     const data = await res.json();
     
@@ -490,34 +555,10 @@ async function updatePrayerTimesInBackground() {
       const hijri = data.data.date.hijri;
       const greg = data.data.date.gregorian;
       
-      const sunriseMinutes = timeToMinutes(timings.Sunrise || "");
-      const sunsetMinutes = timeToMinutes(timings.Sunset || "");
-      const ishaMinutes = timeToMinutes(timings.Isha || "");
-      const midnightMinutes = timeToMinutes(timings.Midnight || timings.Lastthird || "");
+      // Calculate prayer times like Muslims Day App
+      const newPrayerTimes = calculatePrayerTimesLikeMuslimsDayApp(timings);
       
-      const newPrayerTimes = prayerKeys.map((key, idx) => {
-        const startMinutes = timeToMinutes(timings[key]);
-        const startRawTime = timings[key];
-        const { endMinutes, endRawTime } = calculateEndTime(
-          prayerNames[idx], startMinutes, startRawTime,
-          sunriseMinutes, sunsetMinutes, ishaMinutes, midnightMinutes
-        );
-        return {
-          name: prayerNames[idx],
-          minutes: startMinutes,
-          rawTime: startRawTime,
-          endMinutes: endMinutes,
-          endRawTime: endRawTime
-        };
-      });
-      
-      newPrayerTimes.sort((a, b) => a.minutes - b.minutes);
-      
-      const gregDay = greg.day;
-      const gregMonth = greg.month.en;
-      const gregYear = greg.year;
-      const gregStr = `${gregDay} ${gregMonth} ${gregYear}`;
-      
+      const gregStr = `${greg.day} ${greg.month.en} ${greg.year}`;
       const hijriDay = hijri.day;
       const hijriMonth = hijri.month.en;
       const hijriYear = hijri.year;
@@ -544,7 +585,7 @@ async function updatePrayerTimesInBackground() {
 
 async function fetchPrayerTimesFromAPI() {
   try {
-    const res = await fetch("https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=4");
+    const res = await fetch("https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=2");
     const data = await res.json();
     
     if (data.code === 200 && data.data) {
@@ -552,11 +593,7 @@ async function fetchPrayerTimesFromAPI() {
       const hijri = data.data.date.hijri;
       const greg = data.data.date.gregorian;
       
-      const gregDay = greg.day;
-      const gregMonth = greg.month.en;
-      const gregYear = greg.year;
-      const gregStr = `${gregDay} ${gregMonth} ${gregYear}`;
-      
+      const gregStr = `${greg.day} ${greg.month.en} ${greg.year}`;
       const hijriDay = hijri.day;
       const hijriMonth = hijri.month.en;
       const hijriYear = hijri.year;
@@ -571,28 +608,8 @@ async function fetchPrayerTimesFromAPI() {
       if (gregEl) gregEl.innerText = gregStr;
       if (arabicMonthEl) arabicMonthEl.innerText = arabicMonthStr;
       
-      const sunriseMinutes = timeToMinutes(timings.Sunrise || "");
-      const sunsetMinutes = timeToMinutes(timings.Sunset || "");
-      const ishaMinutes = timeToMinutes(timings.Isha || "");
-      const midnightMinutes = timeToMinutes(timings.Midnight || timings.Lastthird || "");
-      
-      prayerTimeList = prayerKeys.map((key, idx) => {
-        const startMinutes = timeToMinutes(timings[key]);
-        const startRawTime = timings[key];
-        const { endMinutes, endRawTime } = calculateEndTime(
-          prayerNames[idx], startMinutes, startRawTime,
-          sunriseMinutes, sunsetMinutes, ishaMinutes, midnightMinutes
-        );
-        return {
-          name: prayerNames[idx],
-          minutes: startMinutes,
-          rawTime: startRawTime,
-          endMinutes: endMinutes,
-          endRawTime: endRawTime
-        };
-      });
-      
-      prayerTimeList.sort((a, b) => a.minutes - b.minutes);
+      // Calculate prayer times like Muslims Day App
+      prayerTimeList = calculatePrayerTimesLikeMuslimsDayApp(timings);
       savePrayerTimesToStorage(prayerTimeList, gregStr, arabicMonthStr);
       showToastMessage("নামাজের সময় আপডেট হয়েছে");
     } else {
@@ -607,22 +624,10 @@ async function fetchPrayerTimesFromAPI() {
       loadStoredDates();
       showToastMessage("📱 অফলাইন মোড: সংরক্ষিত সময় দেখানো হচ্ছে");
     } else {
-      prayerTimeList = prayerKeys.map((key, idx) => {
-        const startMinutes = timeToMinutes(fallbackTimings[key]);
-        const startRawTime = fallbackTimings[key];
-        const { endMinutes, endRawTime } = calculateEndTime(prayerNames[idx], startMinutes, startRawTime, 0, 0, 0, 0);
-        return {
-          name: prayerNames[idx],
-          minutes: startMinutes,
-          rawTime: startRawTime,
-          endMinutes: endMinutes,
-          endRawTime: endRawTime
-        };
-      });
-      prayerTimeList.sort((a, b) => a.minutes - b.minutes);
+      prayerTimeList = calculatePrayerTimesLikeMuslimsDayApp(fallbackTimings);
       showToastMessage("ডিফল্ট সময় দেখানো হচ্ছে");
       
-      const fallbackArabicStr = "٦ ذُو ٱلْقَعْدَة ١٤٤٧";
+      const fallbackArabicStr = "৬ জুমাদাল উলা ১৪৪৬";
       savePrayerTimesToStorage(prayerTimeList, "22 April 2026", fallbackArabicStr);
       
       const gregEl = document.getElementById("gregDateText");
@@ -722,8 +727,6 @@ function renderWeeklyCalendar() {
 
 function renderWeeklyStats() {
   const weekDates = getWeekDates();
-  const todayStr = formatDateKey(new Date());
-  let consecutiveDays = 0;
   let totalCompletedPrayers = 0;
   let totalPossiblePrayers = weekDates.length * 5;
   
@@ -736,24 +739,22 @@ function renderWeeklyStats() {
       dateKey: dk,
       isFullDay: isFullDay,
       completedCount: completed,
-      isToday: dk === todayStr,
-      isFuture: dk > todayStr
+      isFuture: dk > formatDateKey(new Date())
     };
   });
   
   totalCompletedPrayers = dailyStats.filter(day => !day.isFuture).reduce((sum, day) => sum + day.completedCount, 0);
   
-  let currentStreak = 0;
+  let consecutiveDays = 0;
   for (let i = dailyStats.length - 1; i >= 0; i--) {
     const day = dailyStats[i];
     if (day.isFuture) continue;
     if (day.isFullDay) {
-      currentStreak++;
+      consecutiveDays++;
     } else {
       break;
     }
   }
-  consecutiveDays = currentStreak;
   
   const weekProgress = totalPossiblePrayers > 0 ? Math.round((totalCompletedPrayers / totalPossiblePrayers) * 100) : 0;
   
@@ -871,6 +872,10 @@ function setThemeMode(mode) {
   localStorage.setItem("deen_theme", mode);
   document.querySelectorAll(".theme-btn").forEach(b =>
     b.classList.toggle("active", b.dataset.theme === mode));
+  
+  if (currentTimerInterval) {
+    updateEndTimeTimer();
+  }
 }
 
 function initTheme() {

@@ -12,32 +12,48 @@
 
 <div class="quran-header">
   <div class="header-row">
+    <button class="toggle-surah-btn" id="toggleSurahBtn" title="সূরা তালিকা">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+    
     <div class="quran-title">
       <img src="image/quran.png" alt="কুরআন" class="title-icon">
       <span>আল-কুরআন</span>
     </div>
-    <div class="header-buttons">
-      <button class="toggle-surah-btn" id="toggleSurahBtn" title="সূরা তালিকা">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
-        </svg>
-      </button>
-      <button class="settings-header-btn" id="settingsHeaderBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-      </button>
-    </div>
+    
+    <button class="settings-header-btn" id="settingsHeaderBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
   </div>
 </div>
 
-<!-- Surah Sidebar (Hidden by default) -->
+<!-- Surah Sidebar -->
 <div class="surah-sidebar" id="surahSidebar">
   <div class="sidebar-header">
-    <h3>সূরা তালিকা</h3>
-    <div class="surah-count">১১৪ টি সূরা</div>
+    <div class="sidebar-logo">
+      <img src="image/sisda-logo.png" alt="সিসদা" class="sisda-logo" id="sisdaLogo">
+      <h3>সূরা তালিকা</h3>
+    </div>
+    <div class="surah-count" id="surahCount">১১৪ টি সূরা</div>
   </div>
+  
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" id="surahSearchInput" placeholder="সূরা নাম, আরবি নাম বা নম্বর দিয়ে খুঁজুন..." class="search-input">
+      <button class="search-clear" id="searchClearBtn" style="display: none;">✕</button>
+    </div>
+  </div>
+  
   <div class="surah-list" id="surahList"></div>
 </div>
 
@@ -46,10 +62,9 @@
 
 <!-- Main Content -->
 <div class="quran-container">
-  <!-- Quran Reader -->
   <div class="quran-reader" id="quranReader">
     <div class="reader-header">
-      <div class="surah-info" id="surahInfo">
+      <div class="surah-info">
         <h2 id="surahName">সূরা আল-ফাতিহা</h2>
         <div class="surah-meta">
           <span id="surahNameArabic">الفاتحة</span>
@@ -63,7 +78,6 @@
     <div class="audio-player" id="audioPlayer" style="display: none;">
       <audio id="quranAudio" controls>
         <source src="" type="audio/mpeg">
-        আপনার ব্রাউজার অডিও সাপোর্ট করে না।
       </audio>
       <button id="closeAudioBtn">✕</button>
     </div>
@@ -76,6 +90,14 @@
 
     <!-- Ayah Container -->
     <div class="ayah-container" id="ayahContainer"></div>
+  </div>
+</div>
+
+<!-- Ayah Meaning Tooltip -->
+<div class="ayah-tooltip" id="ayahTooltip" style="display: none;">
+  <div class="tooltip-content">
+    <div class="tooltip-arabic"></div>
+    <div class="tooltip-translation"></div>
   </div>
 </div>
 
@@ -102,6 +124,13 @@
         <label>📝 বাংলা অনুবাদ দেখান</label>
         <div class="toggle-switch">
           <input type="checkbox" id="showTranslationToggle" checked>
+          <span class="toggle-slider"></span>
+        </div>
+      </div>
+      <div class="setting-item">
+        <label>🔤 টাচ মোড (টাচ করে অর্থ দেখুন)</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="touchModeToggle" checked>
           <span class="toggle-slider"></span>
         </div>
       </div>

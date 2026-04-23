@@ -1,15 +1,15 @@
 // ========== QURAN API AND FUNCTIONALITY ==========
 
-// API Endpoints
-const API_BASE = 'https://api.alquran.cloud/v1';
-const SURAH_API = `${API_BASE}/surah`;
-
 // Global Variables
 let surahList = [];
+let filteredSurahList = [];
 let currentAyahs = [];
 let showTranslation = true;
+let touchMode = true;
 let currentReciter = 'ar.alafasy';
 let isLoading = false;
+let currentTooltip = null;
+let tooltipTimeout = null;
 
 // DOM Elements
 const surahListContainer = document.getElementById('surahList');
@@ -24,12 +24,17 @@ const quranSettingsModal = document.getElementById('quranSettingsModal');
 const closeSettingsBtn = document.getElementById('closeSettingsBtn');
 const reciterSelect = document.getElementById('reciterSelect');
 const showTranslationToggle = document.getElementById('showTranslationToggle');
+const touchModeToggle = document.getElementById('touchModeToggle');
 const audioPlayer = document.getElementById('audioPlayer');
 const quranAudio = document.getElementById('quranAudio');
 const closeAudioBtn = document.getElementById('closeAudioBtn');
 const toggleSurahBtn = document.getElementById('toggleSurahBtn');
 const surahSidebar = document.getElementById('surahSidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
+const searchInput = document.getElementById('surahSearchInput');
+const searchClearBtn = document.getElementById('searchClearBtn');
+const surahCountSpan = document.getElementById('surahCount');
+const ayahTooltip = document.getElementById('ayahTooltip');
 
 // Theme buttons
 const themeBtns = document.querySelectorAll('.theme-btn-small');
@@ -40,7 +45,7 @@ const SURAH_FATIHA = {
   name: "সূরা আল-ফাতিহা",
   nameArabic: "الفاتحة",
   meaning: "উদ্বোধন",
-  revelationType: "Meccan",
+  revelationType: "মক্কী",
   numberOfAyahs: 7,
   ayahs: [
     { number: 1, arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", translation: "শুরু করছি আল্লাহর নামে যিনি পরম করুণাময়, অতি দয়ালু।" },
@@ -92,15 +97,55 @@ function closeSidebar() {
   sidebarOverlay.classList.remove('show');
 }
 
+// ========== SEARCH FUNCTIONALITY ==========
+function filterSurahList(searchTerm) {
+  if (!searchTerm.trim()) {
+    filteredSurahList = [...surahList];
+    searchClearBtn.style.display = 'none';
+  } else {
+    const term = searchTerm.toLowerCase().trim();
+    filteredSurahList = surahList.filter(surah => {
+      const banglaName = surah.name?.toLowerCase() || '';
+      const arabicName = surah.nameArabic?.toLowerCase() || '';
+      const numberMatch = surah.number.toString().includes(term);
+      const englishName = surah.nameEnglish?.toLowerCase() || '';
+      
+      return banglaName.includes(term) || 
+             arabicName.includes(term) || 
+             numberMatch ||
+             englishName.includes(term);
+    });
+    searchClearBtn.style.display = 'inline-block';
+  }
+  
+  renderSurahList();
+  updateSurahCount();
+}
+
+function updateSurahCount() {
+  if (surahCountSpan) {
+    surahCountSpan.textContent = `${filteredSurahList.length} টি সূরা`;
+  }
+}
+
+function clearSearch() {
+  if (searchInput) {
+    searchInput.value = '';
+    filterSurahList('');
+  }
+}
+
 // ========== LOAD SURAH LIST ==========
 async function loadSurahList() {
   try {
-    const response = await fetch(`${API_BASE}/surah`);
+    const response = await fetch('surah data/surah-list.json');
     const data = await response.json();
     
-    if (data.code === 200) {
-      surahList = data.data;
+    if (data && data.length) {
+      surahList = data;
+      filteredSurahList = [...surahList];
       renderSurahList();
+      updateSurahCount();
     } else {
       throw new Error('Failed to load surah list');
     }
@@ -116,24 +161,40 @@ function loadFallbackSurahList() {
     surahList.push({
       number: i,
       name: `সূরা ${i}`,
-      englishName: `Surah ${i}`,
-      englishNameTranslation: '',
-      revelationType: i % 2 === 0 ? 'Meccan' : 'Medinan',
+      nameArabic: i === 1 ? 'الفاتحة' : `سورة ${i}`,
+      nameEnglish: `Surah ${i}`,
+      meaning: '',
+      revelationType: i % 2 === 0 ? 'মাদানী' : 'মক্কী',
       numberOfAyahs: i === 1 ? 7 : (i === 2 ? 286 : 20)
     });
   }
+  filteredSurahList = [...surahList];
   renderSurahList();
+  updateSurahCount();
 }
 
 function renderSurahList() {
   if (!surahListContainer) return;
   
-  surahListContainer.innerHTML = surahList.map(surah => `
+  if (filteredSurahList.length === 0) {
+    surahListContainer.innerHTML = `
+      <div class="no-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <p>কোন সূরা খুঁজে পাওয়া যায়নি</p>
+      </div>
+    `;
+    return;
+  }
+  
+  surahListContainer.innerHTML = filteredSurahList.map(surah => `
     <div class="surah-item" data-surah="${surah.number}">
       <span class="surah-number">${surah.number}</span>
-      <div class="surah-name">
-        <div>${surah.englishName || surah.name}</div>
-        <div class="surah-name-ar">${surah.name || ''}</div>
+      <div class="surah-name-info">
+        <div class="surah-name">${surah.name}</div>
+        <div class="surah-name-ar">${surah.nameArabic || ''}</div>
       </div>
       <span class="ayah-count">${surah.numberOfAyahs} আয়াত</span>
     </div>
@@ -161,7 +222,7 @@ function loadSurahFatiha() {
   surahNameEl.textContent = SURAH_FATIHA.name;
   surahNameArabicEl.textContent = SURAH_FATIHA.nameArabic;
   surahMeaningEl.textContent = SURAH_FATIHA.meaning;
-  surahDetailsEl.textContent = `মক্কী · ${SURAH_FATIHA.numberOfAyahs} আয়াত`;
+  surahDetailsEl.textContent = `${SURAH_FATIHA.revelationType} · ${SURAH_FATIHA.numberOfAyahs} আয়াত`;
   
   renderAyahs();
   updateActiveSurahInList(1);
@@ -174,11 +235,117 @@ function renderAyahs() {
   ayahContainer.innerHTML = currentAyahs.map(ayah => `
     <div class="ayah-item" data-ayah="${ayah.number}">
       <div class="ayah-number">${ayah.number}</div>
-      <div class="ayah-arabic">${ayah.arabic}</div>
+      <div class="ayah-arabic" data-arabic="${encodeURIComponent(ayah.arabic)}" data-translation="${encodeURIComponent(ayah.translation)}">${ayah.arabic}</div>
       ${showTranslation ? `<div class="ayah-translation">${ayah.translation}</div>` : ''}
     </div>
   `).join('');
+  
+  // Add click/touch listeners for arabic text
+  attachAyahListeners();
 }
+
+function attachAyahListeners() {
+  const arabicElements = document.querySelectorAll('.ayah-arabic');
+  
+  arabicElements.forEach(el => {
+    // Remove existing listeners to avoid duplicates
+    el.removeEventListener('click', handleAyahClick);
+    el.removeEventListener('mouseenter', handleAyahMouseEnter);
+    el.removeEventListener('mouseleave', handleAyahMouseLeave);
+    
+    if (touchMode) {
+      // Touch mode: click/tap to show tooltip
+      el.addEventListener('click', handleAyahClick);
+    } else {
+      // Desktop mode: hover to show tooltip
+      el.addEventListener('mouseenter', handleAyahMouseEnter);
+      el.addEventListener('mouseleave', handleAyahMouseLeave);
+    }
+  });
+}
+
+function handleAyahClick(e) {
+  e.stopPropagation();
+  const element = e.currentTarget;
+  const arabic = decodeURIComponent(element.dataset.arabic || '');
+  const translation = decodeURIComponent(element.dataset.translation || '');
+  
+  showTooltip(element, arabic, translation);
+}
+
+function handleAyahMouseEnter(e) {
+  if (touchMode) return;
+  
+  if (tooltipTimeout) clearTimeout(tooltipTimeout);
+  
+  const element = e.currentTarget;
+  const arabic = decodeURIComponent(element.dataset.arabic || '');
+  const translation = decodeURIComponent(element.dataset.translation || '');
+  
+  showTooltip(element, arabic, translation);
+}
+
+function handleAyahMouseLeave(e) {
+  if (touchMode) return;
+  
+  tooltipTimeout = setTimeout(() => {
+    hideTooltip();
+  }, 200);
+}
+
+function showTooltip(targetElement, arabic, translation) {
+  if (!ayahTooltip) return;
+  
+  // Update tooltip content
+  const tooltipArabic = ayahTooltip.querySelector('.tooltip-arabic');
+  const tooltipTranslation = ayahTooltip.querySelector('.tooltip-translation');
+  
+  if (tooltipArabic) tooltipArabic.innerHTML = arabic;
+  if (tooltipTranslation) tooltipTranslation.innerHTML = translation;
+  
+  // Position tooltip
+  const rect = targetElement.getBoundingClientRect();
+  const tooltipHeight = 150;
+  const tooltipWidth = 280;
+  
+  let top = rect.top - tooltipHeight - 10;
+  let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+  
+  // Adjust if tooltip goes out of viewport
+  if (top < 10) {
+    top = rect.bottom + 10;
+  }
+  if (left < 10) {
+    left = 10;
+  }
+  if (left + tooltipWidth > window.innerWidth - 10) {
+    left = window.innerWidth - tooltipWidth - 10;
+  }
+  
+  ayahTooltip.style.top = `${top}px`;
+  ayahTooltip.style.left = `${left}px`;
+  ayahTooltip.style.display = 'block';
+  
+  // Auto hide after 3 seconds in touch mode
+  if (touchMode) {
+    setTimeout(() => {
+      hideTooltip();
+    }, 3000);
+  }
+}
+
+function hideTooltip() {
+  if (ayahTooltip) {
+    ayahTooltip.style.display = 'none';
+  }
+}
+
+// Close tooltip when clicking elsewhere
+document.addEventListener('click', (e) => {
+  if (!e.target.classList.contains('ayah-arabic')) {
+    hideTooltip();
+  }
+});
 
 function updateActiveSurahInList(surahNumber) {
   document.querySelectorAll('.surah-item').forEach(item => {
@@ -240,10 +407,18 @@ function closeSettings() {
 function saveSettings() {
   currentReciter = reciterSelect.value;
   showTranslation = showTranslationToggle.checked;
+  const newTouchMode = touchModeToggle.checked;
+  
   localStorage.setItem('quran_reciter', currentReciter);
   localStorage.setItem('quran_show_translation', showTranslation);
+  localStorage.setItem('quran_touch_mode', newTouchMode);
   
-  if (currentAyahs.length) {
+  if (newTouchMode !== touchMode) {
+    touchMode = newTouchMode;
+    if (currentAyahs.length) {
+      renderAyahs();
+    }
+  } else if (currentAyahs.length) {
     renderAyahs();
   }
 }
@@ -251,6 +426,7 @@ function saveSettings() {
 function loadSettings() {
   const savedReciter = localStorage.getItem('quran_reciter');
   const savedTranslation = localStorage.getItem('quran_show_translation');
+  const savedTouchMode = localStorage.getItem('quran_touch_mode');
   
   if (savedReciter) {
     currentReciter = savedReciter;
@@ -259,6 +435,13 @@ function loadSettings() {
   if (savedTranslation !== null) {
     showTranslation = savedTranslation === 'true';
     showTranslationToggle.checked = showTranslation;
+  }
+  if (savedTouchMode !== null) {
+    touchMode = savedTouchMode === 'true';
+    if (touchModeToggle) touchModeToggle.checked = touchMode;
+  } else {
+    touchMode = true;
+    if (touchModeToggle) touchModeToggle.checked = true;
   }
 }
 
@@ -273,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
   if (reciterSelect) reciterSelect.addEventListener('change', saveSettings);
   if (showTranslationToggle) showTranslationToggle.addEventListener('change', saveSettings);
+  if (touchModeToggle) touchModeToggle.addEventListener('change', saveSettings);
   if (closeAudioBtn) closeAudioBtn.addEventListener('click', () => {
     audioPlayer.style.display = 'none';
     quranAudio.pause();
@@ -285,4 +469,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === quranSettingsModal) closeSettings();
     });
   }
+  
+  // Search functionality
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      filterSurahList(e.target.value);
+    });
+  }
+  
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener('click', clearSearch);
+  }
+  
+  // Tooltip close on scroll
+  window.addEventListener('scroll', hideTooltip);
+  window.addEventListener('resize', hideTooltip);
 });

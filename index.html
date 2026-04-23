@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,12 +13,11 @@
   <div class="header-row">
     <div class="date-stack">
       <div class="greg-date" id="gregDateText">লোড হচ্ছে...</div>
-      
     </div>
     <button class="settings-icon" id="openSettingsBtn">
       <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
       </svg>
     </button>
   </div>
@@ -31,7 +30,6 @@
       </div>
     </div>
 
-    <!-- Circular Countdown Timer -->
     <div class="time-card" id="timeCard">
       <div class="timer-svg-wrap">
         <svg id="timerSvg" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -48,74 +46,56 @@
 
 <div class="section-title">দ্রুত অ্যাকশন</div>
 <div class="actions-grid">
-
-  <!-- নামাজের সময় — পরে তৈরি হবে -->
-  <a href="salah.html" style="text-decoration:none; color:inherit;">
-    <div class="action-item">
-      <div class="icon-circle"><img src="image/salah.png" alt="নামাজ"></div>
-      <span class="action-label">নামাজের সময়</span>
-    </div>
-  </a>
-
-  <!-- কুরআন — তৈরি আছে -->
   <a href="quran.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/quran.png" alt="কুরআন"></div>
       <span class="action-label">আল-কুরআন</span>
     </div>
   </a>
-
-  <!-- হাদিস — পরে তৈরি হবে -->
   <a href="hadith.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/hadith.png" alt="হাদিস"></div>
       <span class="action-label">হাদিস</span>
     </div>
   </a>
-
-  <!-- কিবলা — পরে তৈরি হবে -->
+  <a href="hadith.html" style="text-decoration:none; color:inherit;">
+    <div class="action-item">
+      <div class="icon-circle"><img src="image/hadith.png" alt="হাদিস"></div>
+      <span class="action-label">যাকাত</span>
+    </div>
+  </a>
   <a href="qibla.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/compass.png" alt="কিবলা"></div>
       <span class="action-label">কিবলা</span>
     </div>
   </a>
-
-  <!-- তাসবিহ — পরে তৈরি হবে -->
   <a href="tasbih.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/tasbih.png" alt="তাসবিহ"></div>
       <span class="action-label">তাসবিহ</span>
     </div>
   </a>
-
-  <!-- আসমাউল হুসনা — পরে তৈরি হবে -->
   <a href="asmaul-husna.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা"></div>
       <span class="action-label">আসমাউল হুসনা</span>
     </div>
   </a>
-
-  <!-- অজু — পরে তৈরি হবে -->
   <a href="oju.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/oju.png" alt="অজু"></div>
       <span class="action-label">অজু</span>
     </div>
   </a>
-
-  <!-- মসজিদ — পরে তৈরি হবে -->
   <a href="masjid.html" style="text-decoration:none; color:inherit;">
     <div class="action-item">
       <div class="icon-circle"><img src="image/mosjid.png" alt="মসজিদ"></div>
       <span class="action-label">মসজিদ</span>
     </div>
   </a>
-
 </div>
 
-<!-- Weekly Calendar -->
 <div class="weekly-calendar-card">
   <div class="weekly-cal-header">
     <div class="weekly-cal-title">📅 সাপ্তাহিক নামাজ</div>
@@ -124,7 +104,6 @@
   <div class="week-days-strip" id="weekDaysStrip"></div>
 </div>
 
-<!-- Prayer Record Modal -->
 <div class="record-modal-overlay" id="recordModal">
   <div class="record-modal-panel">
     <div class="record-modal-header">
@@ -143,7 +122,6 @@
   </div>
 </div>
 
-<!-- Prayer Tracker -->
 <div class="tracker-container">
   <div class="tracker-header">
     <div class="tracker-title">মোট নামাজ</div>
@@ -191,7 +169,6 @@
   </div>
 </div>
 
-<!-- Stats Card -->
 <div class="stats-card">
   <div class="stats-header">
     <div class="stats-title">📊 সাপ্তাহিক পরিসংখ্যান</div>
@@ -215,7 +192,6 @@
   </div>
 </div>
 
-<!-- Bottom Navigation -->
 <div class="bottom-navigation">
   <button class="nav-icon-btn" data-nav="tasbih" onclick="window.location.href='tasbih.html'">
     <img src="image/tasbih.png" alt="তাসবিহ">
@@ -239,7 +215,6 @@
   </button>
 </div>
 
-<!-- Settings Modal -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-panel">
     <div class="modal-header">

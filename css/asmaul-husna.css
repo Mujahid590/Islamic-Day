@@ -1,0 +1,177 @@
+/* ========== ASMAUL HUSNA STYLES ========== */
+.asmaul-header {
+  background: linear-gradient(135deg, #2d6a9f, #1a4f7a);
+  padding: 20px 20px 30px;
+  border-radius: 0 0 32px 32px;
+  color: white;
+}
+
+body.dark .asmaul-header {
+  background: linear-gradient(135deg, #0f2a3f, #0a1e2e);
+}
+
+.asmaul-header .header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.back-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+}
+
+.asmaul-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.asmaul-container {
+  padding: 20px 16px;
+  padding-bottom: 100px;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 30px;
+  border: 1px solid var(--border-light);
+  background: var(--card-light);
+  color: var(--text-dark);
+  font-size: 0.9rem;
+}
+
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.name-card {
+  background: var(--card-light);
+  border-radius: 20px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.name-card:hover {
+  transform: translateY(-2px);
+  background: var(--primary-soft);
+}
+
+.name-number {
+  font-size: 0.6rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.name-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.name-bangla {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.name-meaning {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.selected-card {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--card-light);
+  border-radius: 32px 32px 0 0;
+  padding: 24px;
+  z-index: 200;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.selected-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 2rem;
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.selected-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.selected-meaning {
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.selected-benefit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.close-selected {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+@media (max-width: 450px) {
+  .names-grid {
+    grid-template-columns: 1fr;
+  }
+}

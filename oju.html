@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>অজু শিক্ষা - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/oju.css">
+</head>
+<body>
+
+<div class="oju-header">
+  <div class="header-row">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <h2>💧 অজু শিক্ষা</h2>
+    <div style="width: 40px;"></div>
+  </div>
+</div>
+
+<div class="oju-container">
+  <div class="steps-list" id="stepsList"></div>
+  
+  <div class="dua-section">
+    <div class="dua-title">🤲 অজুর দোয়া</div>
+    <div class="dua-arabic" id="duaArabic">اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ</div>
+    <div class="dua-translation" id="duaTranslation">হে আল্লাহ! আমাকে তওবাকারী ও পবিত্রকারীদের অন্তর্ভুক্ত করুন।</div>
+  </div>
+</div>
+
+<div class="bottom-navigation">
+  <button class="nav-icon-btn" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn active" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="js/oju.js"></script>
+</body>
+</html>

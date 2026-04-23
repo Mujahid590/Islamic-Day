@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>কিবলা দিকনির্দেশক - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/qibla.css">
+</head>
+<body>
+
+<div class="qibla-header">
+  <div class="header-row">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <h2>🕋 কিবলা দিকনির্দেশক</h2>
+    <div style="width: 40px;"></div>
+  </div>
+</div>
+
+<div class="qibla-container">
+  <div class="compass-card">
+    <div class="compass-wrapper">
+      <div class="compass" id="compass">
+        <div class="compass-inner">
+          <div class="direction-markers">
+            <span class="dir-n">N</span>
+            <span class="dir-ne">NE</span>
+            <span class="dir-e">E</span>
+            <span class="dir-se">SE</span>
+            <span class="dir-s">S</span>
+            <span class="dir-sw">SW</span>
+            <span class="dir-w">W</span>
+            <span class="dir-nw">NW</span>
+          </div>
+          <div class="needle" id="needle">
+            <div class="needle-north"></div>
+            <div class="needle-south"></div>
+          </div>
+          <div class="center-dot"></div>
+          <div class="kibla-marker" id="kiblaMarker">
+            <span>🕋</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="qibla-info">
+      <div class="direction-badge" id="directionBadge">
+        <span id="currentDirection">--°</span>
+      </div>
+      <div class="kibla-angle" id="kiblaAngle">
+        কিবলা দিক: <span id="kiblaDegrees">--</span>°
+      </div>
+      <div class="instruction">
+        📱 ফোনটি সমতল করে ধরে রাখুন এবং ঘোরান
+      </div>
+    </div>
+  </div>
+
+  <div class="location-info">
+    <div class="location-title">📍 আপনার অবস্থান</div>
+    <div class="location-coords" id="locationCoords">অনুমতি চাইছি...</div>
+    <button class="locate-btn" id="locateBtn">আমার অবস্থান নিশ্চিত করুন</button>
+  </div>
+
+  <div class="qibla-note">
+    <div class="note-title">📖 কিবলা সম্পর্কে</div>
+    <div class="note-text">
+      কিবলা হলো পবিত্র কাবা ঘরের দিক যা মুসলমানরা নামাজের সময় মুখ করে থাকেন। 
+      বাংলাদেশ থেকে কিবলার দিক প্রায় পশ্চিম-উত্তর দিকে (২৭৭° থেকে ২৮০°)।
+    </div>
+  </div>
+</div>
+
+<div class="bottom-navigation">
+  <button class="nav-icon-btn" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn active" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="js/qibla.js"></script>
+</body>
+</html>

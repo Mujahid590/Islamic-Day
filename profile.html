@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>প্রোফাইল - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+<div class="profile-header">
+  <div class="header-row">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <h2>👤 আমার প্রোফাইল</h2>
+    <button class="save-profile-btn" id="saveProfileBtn">💾 সংরক্ষণ</button>
+  </div>
+</div>
+
+<div class="profile-container">
+  <!-- Profile Photo Section -->
+  <div class="photo-section">
+    <div class="profile-photo" id="profilePhoto">
+      <img id="profileImage" src="image/default-avatar.png" alt="প্রোফাইল ছবি">
+      <div class="photo-overlay" id="changePhotoBtn">
+        <span>📷 পরিবর্তন</span>
+      </div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+  </div>
+
+  <!-- Personal Information -->
+  <div class="info-card">
+    <div class="card-title">📋 ব্যক্তিগত তথ্য</div>
+    
+    <div class="form-group">
+      <label>পূর্ণ নাম</label>
+      <input type="text" id="fullName" placeholder="আপনার নাম লিখুন" class="form-input">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label>লিঙ্গ</label>
+        <select id="gender" class="form-input">
+          <option value="">নির্বাচন করুন</option>
+          <option value="পুরুষ">পুরুষ</option>
+          <option value="মহিলা">মহিলা</option>
+        </select>
+      </div>
+      <div class="form-group half">
+        <label>জন্ম তারিখ</label>
+        <input type="date" id="birthDate" class="form-input">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label>মোবাইল নম্বর</label>
+        <input type="tel" id="phone" placeholder="০১XXXXXXXXX" class="form-input">
+      </div>
+      <div class="form-group half">
+        <label>ইমেইল</label>
+        <input type="email" id="email" placeholder="example@email.com" class="form-input">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>ঠিকানা</label>
+      <input type="text" id="address" placeholder="জেলা, শহর" class="form-input">
+    </div>
+  </div>
+
+  <!-- Religious Preferences -->
+  <div class="info-card">
+    <div class="card-title">🕌 ধর্মীয় পছন্দ</div>
+    
+    <div class="form-group">
+      <label>মাজহাব</label>
+      <select id="mazhab" class="form-input">
+        <option value="">নির্বাচন করুন</option>
+        <option value="হানাফি">হানাফি</option>
+        <option value="শাফেঈ">শাফেঈ</option>
+        <option value="মালেকি">মালেকি</option>
+        <option value="হাম্বলি">হাম্বলি</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>কুরআন তিলাওয়াতের ধরন</label>
+      <select id="quranStyle" class="form-input">
+        <option value="">নির্বাচন করুন</option>
+        <option value="হাফস">হাফস (আন আসিম)</option>
+        <option value="ওয়ারশ">ওয়ারশ (নাফি)</option>
+        <option value="কালুন">কালুন (নাফি)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- QR Code Section -->
+  <div class="qr-card">
+    <div class="card-title">📱 প্রোফাইল শেয়ার করুন</div>
+    <div class="qr-subtitle">অন্য ডিভাইসে স্ক্যান করে আপনার প্রোফাইল ডেটা নিন</div>
+    
+    <div class="qr-container">
+      <div class="qr-code" id="qrCode">
+        <div id="qrPlaceholder">📱 লোড হচ্ছে...</div>
+        <canvas id="qrCanvas" style="display: none;"></canvas>
+      </div>
+    </div>
+    
+    <div class="share-buttons">
+      <button class="share-btn-wa" id="shareWhatsAppBtn">
+        <span>📱</span> ওয়াটসঅ্যাপে শেয়ার করুন
+      </button>
+      <button class="share-btn-copy" id="copyDataBtn">
+        📋 ডেটা কপি করুন
+      </button>
+    </div>
+  </div>
+
+  <!-- Scanner Section -->
+  <div class="scanner-card">
+    <div class="card-title">🔍 প্রোফাইল স্ক্যানার</div>
+    <div class="qr-subtitle">অন্য ডিভাইসের QR কোড স্ক্যান করুন</div>
+    
+    <button class="scan-btn" id="startScanBtn">
+      📷 ক্যামেরা চালু করুন
+    </button>
+    
+    <div class="scanner-container" id="scannerContainer" style="display: none;">
+      <video id="scannerVideo" playsinline></video>
+      <button class="close-scanner" id="closeScannerBtn">✕ বন্ধ করুন</button>
+    </div>
+    
+    <div class="scanned-data" id="scannedData" style="display: none;">
+      <div class="scanned-header">
+        <span>✅ স্ক্যান সম্পন্ন</span>
+        <button id="importDataBtn">আমার প্রোফাইলে ইম্পোর্ট করুন</button>
+      </div>
+      <div id="scannedContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-navigation">
+  <button class="nav-icon-btn" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn active" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>তাসবিহ কাউন্টার - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/tasbih.css">
+</head>
+<body>
+
+<div class="tasbih-header">
+  <div class="header-row">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <h2>📿 তাসবিহ কাউন্টার</h2>
+    <div style="width: 40px;"></div>
+  </div>
+</div>
+
+<div class="tasbih-container">
+  <div class="tasbih-selector">
+    <button class="tasbih-type active" data-type="subhanallah">
+      <div class="type-arabic">سُبْحَانَ اللَّهِ</div>
+      <div class="type-bangla">সুবহানাল্লাহ</div>
+    </button>
+    <button class="tasbih-type" data-type="alhamdulillah">
+      <div class="type-arabic">الْحَمْدُ لِلَّهِ</div>
+      <div class="type-bangla">আলহামদুলিল্লাহ</div>
+    </button>
+    <button class="tasbih-type" data-type="allahuakbar">
+      <div class="type-arabic">اللَّهُ أَكْبَرُ</div>
+      <div class="type-bangla">আল্লাহু আকবার</div>
+    </button>
+    <button class="tasbih-type" data-type="lahilaha">
+      <div class="type-arabic">لَا إِلٰهَ إِلَّا اللَّهُ</div>
+      <div class="type-bangla">লা ইলাহা ইল্লাল্লাহ</div>
+    </button>
+  </div>
+
+  <div class="counter-card">
+    <div class="counter-display">
+      <span id="counterValue">0</span>
+      <span class="counter-target">/ 33</span>
+    </div>
+    <div class="counter-progress">
+      <div class="counter-progress-fill" id="counterProgressFill" style="width: 0%;"></div>
+    </div>
+    
+    <div class="counter-buttons">
+      <button class="counter-btn minus-btn" id="minusBtn">-</button>
+      <button class="counter-btn plus-btn" id="plusBtn">+</button>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="action-btn reset-btn" id="resetBtn">⟳ রিসেট</button>
+      <button class="action-btn complete-btn" id="completeBtn">✓ সম্পন্ন</button>
+    </div>
+  </div>
+
+  <div class="daily-stats">
+    <div class="stats-header">
+      <span>📊 আজকের অগ্রগতি</span>
+      <button id="resetAllBtn" class="reset-all-btn">সব রিসেট</button>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+
+  <div class="tasbih-info">
+    <div class="info-title">💡 তাসবিহের ফজিলত</div>
+    <div class="info-text">
+      রাসূলুল্লাহ (সা.) বলেছেন: "সুবহানাল্লাহ (৩৩ বার), আলহামদুলিল্লাহ (৩৩ বার), 
+      আল্লাহু আকবার (৩৪ বার) পাঠ করলে জান্নাতে একটি খেজুর গাছ রোপণ করা হয়।" (সহীহ বুখারী)
+    </div>
+  </div>
+</div>
+
+<div class="bottom-navigation">
+  <button class="nav-icon-btn active" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="js/tasbih.js"></script>
+</body>
+</html>

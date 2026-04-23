@@ -1,0 +1,263 @@
+/* ========== QIBLA PAGE STYLES ========== */
+.qibla-header {
+  background: linear-gradient(135deg, #2d6a9f, #1a4f7a);
+  padding: 20px 20px 30px;
+  border-radius: 0 0 32px 32px;
+  color: white;
+}
+
+body.dark .qibla-header {
+  background: linear-gradient(135deg, #0f2a3f, #0a1e2e);
+}
+
+.qibla-header .header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.back-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+}
+
+.qibla-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.qibla-container {
+  padding: 20px 16px;
+  padding-bottom: 100px;
+}
+
+.compass-card {
+  background: var(--card-light);
+  border-radius: 32px;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 20px;
+}
+
+.compass-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.compass {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.compass-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.direction-markers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.direction-markers span {
+  position: absolute;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.dir-n { top: 8px; left: 50%; transform: translateX(-50%); }
+.dir-ne { top: 18px; right: 25px; }
+.dir-e { top: 50%; right: 8px; transform: translateY(-50%); }
+.dir-se { bottom: 18px; right: 25px; }
+.dir-s { bottom: 8px; left: 50%; transform: translateX(-50%); }
+.dir-sw { bottom: 18px; left: 25px; }
+.dir-w { top: 50%; left: 8px; transform: translateY(-50%); }
+.dir-nw { top: 18px; left: 25px; }
+
+.needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 120px;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: 2;
+}
+
+.needle-north {
+  position: absolute;
+  bottom: 50%;
+  left: 0;
+  width: 4px;
+  height: 60px;
+  background: linear-gradient(180deg, #e74c3c, #c0392b);
+  border-radius: 2px 2px 0 0;
+}
+
+.needle-south {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 4px;
+  height: 60px;
+  background: #95a5a6;
+  border-radius: 0 0 2px 2px;
+}
+
+.center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: var(--primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  box-shadow: 0 0 0 3px rgba(45,106,159,0.3);
+}
+
+.kibla-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(0deg) translateY(-130px);
+  z-index: 1;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.qibla-info {
+  text-align: center;
+}
+
+.direction-badge {
+  margin-bottom: 12px;
+}
+
+.direction-badge span {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: 'Poppins', monospace;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 8px 24px;
+  border-radius: 40px;
+  display: inline-block;
+}
+
+.kibla-angle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.kibla-angle span {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.instruction {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-light);
+  padding: 8px;
+  border-radius: 20px;
+}
+
+.location-info {
+  background: var(--card-light);
+  border-radius: 24px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.location-title {
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.location-coords {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: monospace;
+  margin-bottom: 12px;
+}
+
+.locate-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.locate-btn:active {
+  transform: scale(0.97);
+}
+
+.qibla-note {
+  background: var(--primary-soft);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.note-title {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.note-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 450px) {
+  .compass {
+    width: 240px;
+    height: 240px;
+  }
+  .kibla-marker {
+    transform: translate(-50%, -50%) rotate(0deg) translateY(-110px);
+    font-size: 1.5rem;
+  }
+  .needle {
+    height: 100px;
+  }
+  .needle-north, .needle-south {
+    height: 50px;
+  }
+}

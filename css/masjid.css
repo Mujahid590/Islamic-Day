@@ -1,0 +1,168 @@
+/* ========== MASJID PAGE STYLES ========== */
+.masjid-header {
+  background: linear-gradient(135deg, #2d6a9f, #1a4f7a);
+  padding: 20px 20px 30px;
+  border-radius: 0 0 32px 32px;
+  color: white;
+}
+
+body.dark .masjid-header {
+  background: linear-gradient(135deg, #0f2a3f, #0a1e2e);
+}
+
+.masjid-header .header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.back-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+}
+
+.masjid-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.masjid-container {
+  padding: 20px 16px;
+  padding-bottom: 100px;
+}
+
+.location-control {
+  margin-bottom: 20px;
+}
+
+.locate-masjid-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-spinner .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.masjid-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.info-message {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--card-light);
+  border-radius: 24px;
+  color: var(--text-muted);
+}
+
+.masjid-card {
+  background: var(--card-light);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.masjid-icon {
+  font-size: 2rem;
+}
+
+.masjid-info {
+  flex: 1;
+}
+
+.masjid-name {
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.masjid-address {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.masjid-distance {
+  font-size: 0.65rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.masjid-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-btn {
+  background: var(--primary-soft);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.masjid-note {
+  background: var(--primary-soft);
+  border-radius: 20px;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.note-title {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.note-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+}

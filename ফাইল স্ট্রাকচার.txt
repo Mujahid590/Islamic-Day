@@ -1,0 +1,51 @@
+project
++- index.html
++- quran.html 
++- salah.html 
++- hadith.html 
++- qibla.html 
++- tasbih.html 
++- asmaul-husna.html 
++- oju.html 
++- masjid.html
++- css/
+    +- styil.css
+    +- quran.css
+    +- salah.css 
+    +- hadith.css 
+    +- qibla.css
+    +- tasbih.css
+    +- asmaul-husna.css
+    +- oju.css
+    +- masjid.css
++- JS/
+    +- main.js
+    +- quran.js
+    +- salah.js
+    +- hadith.js
+    +- qibla.js
+    +- tasbih.js
+    +- asmaul-husna.js
+    +- oju.js
+    +- masjid.js
++-- image/
+    +-- asmaul_husna.png
+    +-- asor.png
+    +-- calendar.png
+    +-- Clock.png
+    +-- compass.png
+    +-- fozor.png
+    +-- hadith.png
+    +-- home.png
+    +-- isa.png
+    +-- Logo.png
+    +-- magrib.png
+    +-- mosjid.png
+    +-- oju.png
+    +-- profile.png
+    +-- quran.png
+    +-- salah.png
+    +-- tasbih.png
+    +-- zohor.png
+
+

@@ -1,0 +1,1114 @@
+/* ========== CSS VARIABLES & RESET ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #2d6a9f;
+  --primary-light: #5ba3d9;
+  --primary-soft: #e8f2fa;
+  --primary-dark: #1a4f7a;
+  --accent-gold: #e6b12e;
+  --bg-light: #f0f6fc;
+  --card-light: #ffffff;
+  --text-dark: #1e3a5f;
+  --text-muted: #6a8eae;
+  --border-light: #deecf5;
+  --green: #27ae60;
+  --green-soft: #e8f5e9;
+  --red: #e74c3c;
+  --orange: #f39c12;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --radius-card: 24px;
+  --radius-sm: 16px;
+  --transition: all 0.25s ease;
+}
+
+body.dark {
+  --primary: #6ea8de;
+  --primary-light: #8bbce8;
+  --primary-soft: #1e2f42;
+  --primary-dark: #3a7ca5;
+  --bg-light: #0f1724;
+  --card-light: #1e293b;
+  --text-dark: #eef2ff;
+  --text-muted: #9aa9bf;
+  --border-light: #2d3a4e;
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --green-soft: #1e3a2a;
+}
+
+body {
+  font-family: 'Noto Sans Bengali', 'Poppins', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.2s ease;
+  padding-bottom: 85px;
+}
+
+/* ========== PRAYER HEADER ========== */
+.prayer-header {
+  background: linear-gradient(135deg, #eef4fa, #e3edf6, #dae6f2);
+  padding: 20px 20px 24px;
+  border-radius: 0 0 32px 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+body.dark .prayer-header {
+  background: linear-gradient(135deg, #0f2a3f, #14354d, #1a405c);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.date-stack {
+  color: var(--primary-dark);
+}
+
+.greg-date {
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(45, 106, 159, 0.12);
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 30px;
+  margin-bottom: 6px;
+}
+
+body.dark .greg-date {
+  background: rgba(110, 168, 222, 0.15);
+}
+
+/* Arabic Month Style */
+.arabic-month {
+  font-family: 'Amiri', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  opacity: 0.85;
+  direction: rtl;
+  background: rgba(45, 106, 159, 0.1);
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 25px;
+  letter-spacing: 0.5px;
+}
+
+body.dark .arabic-month {
+  color: #cbd5e6;
+  opacity: 0.9;
+  background: rgba(110, 168, 222, 0.15);
+}
+
+.settings-icon {
+  background: rgba(45, 106, 159, 0.12);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+body.dark .settings-icon {
+  background: rgba(110, 168, 222, 0.15);
+}
+
+.settings-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-dark);
+  stroke-width: 1.8;
+}
+
+body.dark .settings-icon svg {
+  stroke: #cbd5e6;
+}
+
+.prayer-main-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.current-prayer-block {
+  flex: 2;
+}
+
+.current-prayer-time {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-family: 'Poppins', monospace;
+  color: var(--primary-dark);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.current-prayer-time sub {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  opacity: 0.65;
+}
+
+.remaining-time-wrapper {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.remaining-time {
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(45, 106, 159, 0.1);
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+body.dark .remaining-time {
+  background: rgba(110, 168, 222, 0.15);
+  color: #cbd5e6;
+}
+
+/* ========== TIMER CARD ========== */
+.time-card {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  flex-shrink: 0;
+  background: transparent;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.timer-svg-wrap {
+  width: 148px;
+  height: 148px;
+  position: relative;
+}
+
+.timer-svg-wrap svg {
+  width: 148px;
+  height: 148px;
+  display: block;
+  border-radius: 50%;
+}
+
+/* Light Mode */
+body:not(.dark) .timer-svg-wrap svg circle:first-child {
+  fill: #ffffff;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+}
+
+body:not(.dark) .timer-svg-wrap svg circle:nth-child(2) {
+  stroke: rgba(45, 106, 159, 0.15);
+  stroke-width: 1.5;
+}
+
+body:not(.dark) .timer-tick {
+  stroke: #e2e8f0;
+}
+
+body:not(.dark) .timer-tick[stroke="#27ae60"] {
+  stroke: #27ae60;
+}
+
+/* Dark Mode */
+body.dark .timer-svg-wrap svg circle:first-child {
+  fill: #1e293b;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+body.dark .timer-svg-wrap svg circle:nth-child(2) {
+  stroke: rgba(110, 168, 222, 0.15);
+  stroke-width: 1.5;
+}
+
+body.dark .timer-tick {
+  stroke: #475569;
+}
+
+body.dark .timer-tick[stroke="#27ae60"] {
+  stroke: #27ae60;
+}
+
+/* Timer Center Overlay */
+.timer-center-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  width: 86px;
+  background: transparent;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Light Mode Text */
+body:not(.dark) .timer-label-top {
+  color: #1e3a5f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-family: 'Amiri', serif;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+body:not(.dark) .timer-countdown-text {
+  color: #1e3a5f;
+  font-family: 'Poppins', monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-shadow: none;
+}
+
+body:not(.dark) .timer-label-bot {
+  color: #94a3b8;
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Dark Mode Text */
+body.dark .timer-label-top {
+  color: #eef2ff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-family: 'Amiri', serif;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+body.dark .timer-countdown-text {
+  color: #eef2ff;
+  font-family: 'Poppins', monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .timer-label-bot {
+  color: #64748b;
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+@media (max-width: 400px) {
+  .time-card,
+  .timer-svg-wrap,
+  .timer-svg-wrap svg {
+    width: 128px;
+    height: 128px;
+  }
+  .timer-center-overlay { 
+    width: 74px; 
+  }
+  .timer-countdown-text { 
+    font-size: 0.9rem; 
+  }
+  .timer-label-top {
+    font-size: 0.6rem;
+  }
+  .timer-label-bot {
+    font-size: 0.42rem;
+  }
+}
+
+/* ========== SECTION TITLE ========== */
+.section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin: 20px 18px 12px 18px;
+}
+
+/* ========== ACTIONS GRID ========== */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 8px;
+  margin: 0 16px;
+}
+
+.action-item {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.action-item:active {
+  transform: scale(0.94);
+}
+
+.icon-circle {
+  background: var(--card-light);
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 6px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.icon-circle img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.action-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ========== TRACKER CONTAINER ========== */
+.tracker-container {
+  background: var(--card-light);
+  margin: 20px 16px 0px 16px;
+  border-radius: var(--radius-card);
+  padding: 18px 16px 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tracker-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.tracker-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.progress-wrapper {
+  background: var(--bg-light);
+  border-radius: 20px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  width: 0%;
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.prayer-circles-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.prayer-circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.circle-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  outline: none;
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  overflow: hidden;
+}
+
+.circle-btn img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.circle-btn.completed {
+  background: var(--green);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.35);
+}
+
+.circle-btn.missed {
+  background: #fee2e2;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+body.dark .circle-btn.missed {
+  background: #3b2a2a;
+}
+
+.circle-btn:active {
+  transform: scale(0.92);
+}
+
+.circle-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.circle-count {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ========== STATS CARD ========== */
+.stats-card {
+  background: var(--card-light);
+  margin: 12px 16px 20px 16px;
+  border-radius: var(--radius-card);
+  padding: 18px 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.stats-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.stats-range {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-light);
+  padding: 12px 8px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.stat-icon {
+  font-size: 1.6rem;
+  background: rgba(45, 106, 159, 0.1);
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+@media (max-width: 420px) {
+  .stat-item {
+    padding: 10px 6px;
+    gap: 6px;
+  }
+  .stat-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.4rem;
+  }
+  .stat-value {
+    font-size: 1rem;
+  }
+  .stat-label {
+    font-size: 0.55rem;
+  }
+}
+
+body.dark .stat-item {
+  background: #1e2d3f;
+}
+
+body.dark .stat-icon {
+  background: rgba(110, 168, 222, 0.15);
+}
+
+/* ========== BOTTOM NAVIGATION ========== */
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-light);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 16px 22px;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  border-top: 1px solid var(--border-light);
+}
+
+.nav-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  padding: 4px 12px;
+  border-radius: 40px;
+}
+
+.nav-icon-btn.active {
+  background: rgba(45, 106, 159, 0.12);
+}
+
+.nav-icon-btn img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.55;
+}
+
+.nav-icon-btn.active img {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(35%) sepia(68%) saturate(500%) hue-rotate(175deg);
+}
+
+body.dark .nav-icon-btn.active img {
+  filter: brightness(0) invert(0.7) sepia(1) hue-rotate(170deg);
+}
+
+.nav-text {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-panel {
+  background: var(--card-light);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 32px 32px 0 0;
+  padding: 24px 20px 32px;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  color: var(--primary);
+  font-size: 1.3rem;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.modal-option {
+  margin-bottom: 20px;
+}
+
+.modal-option label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.theme-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.theme-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 30px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  color: var(--text-dark);
+}
+
+.theme-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* ========== TOAST MESSAGE ========== */
+.toast-msg {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  right: 20px;
+  background: #1e293bdd;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  z-index: 1100;
+  backdrop-filter: blur(12px);
+  animation: fadeOut 2s ease forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* ========== WEEKLY CALENDAR ========== */
+.weekly-calendar-card {
+  background: var(--card-light);
+  margin: 20px 16px 0;
+  border-radius: var(--radius-card);
+  padding: 16px 14px 18px;
+  box-shadow: var(--shadow-md);
+}
+
+.weekly-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.weekly-cal-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.weekly-cal-range {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.week-days-strip {
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+}
+
+.cal-day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 2px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--bg-light);
+  border: 2px solid transparent;
+  min-width: 0;
+}
+
+.cal-day:hover { 
+  background: var(--primary-soft); 
+  border-color: var(--primary-light); 
+}
+
+.cal-day:active { 
+  transform: scale(0.95); 
+}
+
+.cal-today {
+  background: var(--primary) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.cal-today .cal-day-name,
+.cal-today .cal-day-num,
+.cal-today .cal-pct { 
+  color: white !important; 
+}
+
+.cal-future { 
+  opacity: 0.55; 
+  cursor: default; 
+}
+
+.cal-day-name {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.cal-day-num {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+}
+
+.cal-dots {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.cal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.cal-dot.completed { 
+  background: var(--green); 
+}
+
+.cal-dot.missed { 
+  background: var(--red); 
+}
+
+.cal-dot.pending { 
+  background: var(--border-light); 
+}
+
+.cal-today .cal-dot.pending { 
+  background: rgba(255,255,255,0.4); 
+}
+
+.cal-pct {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+body.dark .cal-day { 
+  background: #1e2d3f; 
+}
+
+body.dark .cal-dot.pending { 
+  background: #3d4a5e; 
+}
+
+/* ========== RECORD MODAL ========== */
+.record-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1200;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.record-modal-overlay.show { 
+  display: flex; 
+}
+
+.record-modal-panel {
+  background: var(--card-light);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 32px 32px 0 0;
+  padding: 22px 20px 36px;
+  animation: slideUp 0.3s ease;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.record-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.record-modal-day {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.record-modal-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 4px;
+}
+
+.record-close-btn {
+  background: var(--bg-light);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.record-close-btn:hover { 
+  background: var(--border-light); 
+}
+
+.record-prayer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.record-prayer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-light);
+  border-radius: 16px;
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.record-prayer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.record-prayer-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  min-width: 52px;
+}
+
+.record-btns {
+  display: flex;
+  gap: 5px;
+}
+
+.rec-btn {
+  padding: 5px 9px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border-light);
+  background: var(--card-light);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.rec-btn:hover { 
+  border-color: var(--primary); 
+  color: var(--primary); 
+}
+
+.rec-btn.active-done {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+
+.rec-btn.active-missed {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+}
+
+.rec-btn.active-pending {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.rec-btn:disabled { 
+  opacity: 0.4; 
+  cursor: not-allowed; 
+}
+
+.record-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.legend-item {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.done { 
+  background: var(--green); 
+}
+
+.legend-dot.missed { 
+  background: var(--red); 
+}
+
+.legend-dot.pending { 
+  background: var(--border-light); 
+}
+
+body.dark .record-prayer-row { 
+  background: #1a2638; 
+}
+
+body.dark .rec-btn { 
+  background: #1a2638; 
+  border-color: #3d4a5e; 
+}
