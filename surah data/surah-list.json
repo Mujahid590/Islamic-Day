@@ -1,0 +1,7 @@
+[
+    {"id": 1, "name_ar": "الفاتحة", "name_bn": "আল-ফাতিহা", "name_en": "Al-Fatihah", "ayat_count": 7, "place": "মক্কী"},
+    {"id": 2, "name_ar": "البقرة", "name_bn": "আল-বাকারাহ", "name_en": "Al-Baqarah", "ayat_count": 286, "place": "মাদানী"},
+    {"id": 3, "name_ar": "آل عمران", "name_bn": "আল-ইমরান", "name_en": "Aal-Imran", "ayat_count": 200, "place": "মাদানী"},
+    {"id": 4, "name_ar": "النساء", "name_bn": "আন-নিসা", "name_en": "An-Nisa", "ayat_count": 176, "place": "মাদানী"},
+    {"id": 5, "name_ar": "المائدة", "name_bn": "আল-মায়িদাহ", "name_en": "Al-Ma'idah", "ayat_count": 120, "place": "মাদানী"}
+]

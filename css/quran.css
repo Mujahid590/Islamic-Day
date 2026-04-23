@@ -1,0 +1,588 @@
+/* ========== QURAN PAGE STYLES ========== */
+
+/* Import Uthman Taha Naskh Font - Multiple Sources */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'Uthman Taha Naskh';
+  src: url('https://cdn.jsdelivr.net/gh/mhasan-me/fonts/UthmanTN1_Ver10.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Uthman Taha Naskh';
+  src: url('https://raw.githubusercontent.com/mhasan-me/fonts/main/UthmanTN1_Ver10.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Uthmanic';
+  src: url('https://cdn.jsdelivr.net/gh/mhasan-me/fonts/KFGQPCUthmanicScriptHAFS.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Header Styles */
+.quran-header {
+  background: linear-gradient(135deg, #eef4fa, #e3edf6, #dae6f2);
+  padding: 16px 20px 20px;
+  border-radius: 0 0 32px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+body.dark .quran-header {
+  background: linear-gradient(135deg, #0f2a3f, #14354d, #1a405c);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quran-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.title-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Toggle Surah Button */
+.toggle-surah-btn {
+  background: rgba(45, 106, 159, 0.12);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+body.dark .toggle-surah-btn {
+  background: rgba(110, 168, 222, 0.15);
+}
+
+.toggle-surah-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-dark);
+}
+
+body.dark .toggle-surah-btn svg {
+  stroke: #cbd5e6;
+}
+
+/* Settings Header Button */
+.settings-header-btn {
+  background: rgba(45, 106, 159, 0.12);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+body.dark .settings-header-btn {
+  background: rgba(110, 168, 222, 0.15);
+}
+
+.settings-header-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-dark);
+}
+
+body.dark .settings-header-btn svg {
+  stroke: #cbd5e6;
+}
+
+/* Surah Sidebar */
+.surah-sidebar {
+  position: fixed;
+  left: -320px;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background: var(--card-light);
+  z-index: 200;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.surah-sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  padding: 20px 16px;
+  background: var(--primary);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-header h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.surah-count {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.surah-list {
+  padding: 8px 0;
+}
+
+.surah-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.surah-item:hover {
+  background: var(--primary-soft);
+}
+
+.surah-item.active {
+  background: var(--primary);
+  color: white;
+}
+
+.surah-item .surah-number {
+  font-weight: 700;
+  width: 35px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.surah-item.active .surah-number {
+  color: white;
+}
+
+.surah-item .surah-name {
+  flex: 1;
+  font-weight: 600;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+/* Updated Arabic Font for Surah List */
+.surah-item .surah-name-ar {
+  font-family: 'Uthman Taha Naskh', 'Uthmanic', 'Traditional Arabic', 'Amiri', serif;
+  font-size: 0.9rem;
+}
+
+.surah-item .ayah-count {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+/* Main Container */
+.quran-container {
+  min-height: calc(100vh - 140px);
+  padding: 16px;
+  padding-bottom: 85px;
+}
+
+/* Quran Reader */
+.quran-reader {
+  width: 100%;
+  background: var(--card-light);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.reader-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-light);
+  margin-bottom: 20px;
+}
+
+.surah-info h2 {
+  font-size: 1.5rem;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.surah-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Updated Arabic Font for Surah Name in Header */
+.surah-meta span:first-child {
+  font-family: 'Uthman Taha Naskh', 'Uthmanic', 'Traditional Arabic', 'Amiri', serif;
+  font-size: 1.1rem;
+}
+
+/* Audio Player */
+.audio-player {
+  background: var(--bg-light);
+  border-radius: 30px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audio-player audio {
+  flex: 1;
+  height: 40px;
+}
+
+.audio-player button {
+  background: var(--primary);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Ayah Container */
+.ayah-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ayah-item {
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--bg-light);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.ayah-item:hover {
+  background: var(--primary-soft);
+  transform: translateX(5px);
+}
+
+.ayah-number {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 34px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+/* Updated Arabic Font for Ayah Text - Uthman Taha Naskh */
+.ayah-arabic {
+  font-family: 'Uthman Taha Naskh', 'Uthmanic', 'Traditional Arabic', 'Amiri', serif;
+  font-size: 1.8rem;
+  line-height: 1.8;
+  text-align: right;
+  direction: rtl;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  letter-spacing: 0.5px;
+  font-weight: normal;
+}
+
+.ayah-translation {
+  font-family: 'Noto Sans Bengali', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border-light);
+  padding-top: 12px;
+}
+
+/* Settings Modal */
+.quran-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.quran-modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--card-light);
+  width: 90%;
+  max-width: 400px;
+  border-radius: 24px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--primary);
+  color: white;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.setting-item {
+  margin-bottom: 20px;
+}
+
+.setting-item label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.setting-item select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-light);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Theme Buttons Small */
+.theme-btn-small {
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Bengali', sans-serif;
+  font-size: 0.8rem;
+}
+
+.theme-btn-small.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.theme-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Toast Message */
+.toast-msg {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  right: 20px;
+  background: #1e293bdd;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  z-index: 1100;
+  backdrop-filter: blur(12px);
+  animation: fadeOut 2s ease forwards;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .quran-reader {
+    padding: 15px;
+  }
+  
+  .ayah-arabic {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+  
+  .ayah-item {
+    padding: 15px;
+  }
+  
+  .reader-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .surah-info h2 {
+    font-size: 1.2rem;
+  }
+  
+  .surah-sidebar {
+    width: 85%;
+    left: -85%;
+  }
+}

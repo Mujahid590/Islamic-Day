@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>আল-কুরআন - দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/quran.css">
+</head>
+<body>
+
+<div class="quran-header">
+  <div class="header-row">
+    <div class="quran-title">
+      <img src="image/quran.png" alt="কুরআন" class="title-icon">
+      <span>আল-কুরআন</span>
+    </div>
+    <div class="header-buttons">
+      <button class="toggle-surah-btn" id="toggleSurahBtn" title="সূরা তালিকা">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+      <button class="settings-header-btn" id="settingsHeaderBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Surah Sidebar (Hidden by default) -->
+<div class="surah-sidebar" id="surahSidebar">
+  <div class="sidebar-header">
+    <h3>সূরা তালিকা</h3>
+    <div class="surah-count">১১৪ টি সূরা</div>
+  </div>
+  <div class="surah-list" id="surahList"></div>
+</div>
+
+<!-- Overlay for sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Main Content -->
+<div class="quran-container">
+  <!-- Quran Reader -->
+  <div class="quran-reader" id="quranReader">
+    <div class="reader-header">
+      <div class="surah-info" id="surahInfo">
+        <h2 id="surahName">সূরা আল-ফাতিহা</h2>
+        <div class="surah-meta">
+          <span id="surahNameArabic">الفاتحة</span>
+          <span id="surahMeaning">উদ্বোধন</span>
+          <span id="surahDetails">মক্কী · ৭ আয়াত</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer" style="display: none;">
+      <audio id="quranAudio" controls>
+        <source src="" type="audio/mpeg">
+        আপনার ব্রাউজার অডিও সাপোর্ট করে না।
+      </audio>
+      <button id="closeAudioBtn">✕</button>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" id="loadingIndicator">
+      <div class="spinner"></div>
+      <span>লোড হচ্ছে...</span>
+    </div>
+
+    <!-- Ayah Container -->
+    <div class="ayah-container" id="ayahContainer"></div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="quran-modal" id="quranSettingsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>⚙️ পঠন সেটিংস</h3>
+      <button class="close-modal-btn" id="closeSettingsBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="setting-item">
+        <label>🔊 ক্বারী নির্বাচন</label>
+        <select id="reciterSelect">
+          <option value="ar.alafasy">শাইখ মিশারি রশিদ আল-আফাসি</option>
+          <option value="ar.abdurrahmaansudais">শাইখ আবদুর রহমান আস-সুদাইস</option>
+          <option value="ar.saudalshuraim">শাইখ সাউদ আশ-শুরাইম</option>
+          <option value="ar.maheralmuaiqly">শাইখ মাহের আল মুয়াইকি</option>
+          <option value="ar.husary">শাইখ মাহমুদ খলিল আল-হুসারি</option>
+          <option value="ar.minshawi">শাইখ মুহাম্মদ সিদ্দিক আল-মিনশাওয়ি</option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <label>📝 বাংলা অনুবাদ দেখান</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="showTranslationToggle" checked>
+          <span class="toggle-slider"></span>
+        </div>
+      </div>
+      <div class="setting-item">
+        <label>🌙 থিম সেটিংস</label>
+        <div class="theme-buttons">
+          <button class="theme-btn-small" data-theme="light">☀️ লাইট</button>
+          <button class="theme-btn-small" data-theme="dark">🌙 ডার্ক</button>
+          <button class="theme-btn-small" data-theme="system">📱 সিস্টেম</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-navigation">
+  <button class="nav-icon-btn" data-nav="tasbih" onclick="window.location.href='tasbih.html'">
+    <img src="image/tasbih.png" alt="তাসবিহ">
+    <span class="nav-text">তাসবিহ</span>
+  </button>
+  <button class="nav-icon-btn active" data-nav="quran" onclick="window.location.href='quran.html'">
+    <img src="image/quran.png" alt="কুরআন">
+    <span class="nav-text">কুরআন</span>
+  </button>
+  <button class="nav-icon-btn" data-nav="home" onclick="window.location.href='index.html'">
+    <img src="image/home.png" alt="হোম">
+    <span class="nav-text">হোম</span>
+  </button>
+  <button class="nav-icon-btn" data-nav="hadith" onclick="window.location.href='hadith.html'">
+    <img src="image/hadith.png" alt="হাদিস">
+    <span class="nav-text">হাদিস</span>
+  </button>
+  <button class="nav-icon-btn" data-nav="profile" onclick="window.location.href='profile.html'">
+    <img src="image/profile.png" alt="প্রোফাইল">
+    <span class="nav-text">প্রোফাইল</span>
+  </button>
+</div>
+
+<script src="js/quran.js"></script>
+</body>
+</html>
