@@ -30,6 +30,8 @@
     --primary: #2D6A9F;
     --primary-dark: #1e4a6f;
     --primary-soft: rgba(45, 106, 159, 0.08);
+    --sajdah-color: #46596a;
+    --sajdah-soft: rgba(70, 89, 106, 0.1);
     --bg-light: #f8fafc;
     --card-light: #ffffff;
     --text-dark: #1e293b;
@@ -45,6 +47,8 @@ body.dark {
     --primary-light: #8bbce8;
     --primary-soft: #1e2f42;
     --primary-dark: #3a7ca5;
+    --sajdah-color: #8ba3b8;
+    --sajdah-soft: rgba(139, 163, 184, 0.15);
     --bg-light: #0f1724;
     --card-light: #1e293b;
     --text-dark: #eef2ff;
@@ -270,7 +274,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
 .surah-item {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 14px 16px;
     cursor: pointer;
     transition: all 0.2s;
@@ -292,7 +296,6 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     width: 40px;
     font-family: 'Noto Sans Bengali', sans-serif;
     font-size: 0.85rem;
-    margin-top: 2px;
 }
 
 .surah-item.active .surah-number {
@@ -303,31 +306,36 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     flex: 1;
 }
 
-/* সূরা নাম */
+/* সূরা নামের লাইন - সিজদা ব্যাজ সহ */
 .surah-item .surah-name {
     font-weight: 600;
     font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
 }
 
-/* সিজদা ব্যাজ - সূরা নামের নিচে আলাদা লাইনে */
+/* সিজদা ব্যাজ - রং #46596a */
 .sajdah-badge {
-    display: inline-block;
-    background: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sajdah-color);
     color: white;
     font-size: 0.55rem;
-    font-weight: 500;
-    padding: 3px 10px;
+    font-weight: 600;
+    padding: 2px 8px;
     border-radius: 20px;
     font-family: 'Noto Sans Bengali', sans-serif;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 .surah-item.active .sajdah-badge {
     background: white;
-    color: var(--primary);
+    color: var(--sajdah-color);
 }
 
 /* সূরা নামের নিচের আরবি নাম */
@@ -335,8 +343,8 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
     font-size: 0.75rem;
     opacity: 0.75;
+    margin-top: 4px;
     font-weight: 400;
-    margin-top: 2px;
 }
 
 .surah-item.active .surah-name-ar {
@@ -349,7 +357,6 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     font-size: 0.6rem;
     opacity: 0.65;
     font-family: 'Noto Sans Bengali', sans-serif;
-    margin-top: 2px;
 }
 
 /* Sidebar Overlay */
@@ -407,13 +414,13 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     color: var(--text-muted);
 }
 
-/* সিজদা ইনফো ব্যাজ - রিডার পেজে */
+/* সিজদা ইনফো ব্যাজ - রিডার পেজে রং #46596a */
 .sajdah-info-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: var(--primary-soft);
-    color: var(--primary);
+    background: var(--sajdah-soft);
+    color: var(--sajdah-color);
     padding: 4px 10px;
     border-radius: 30px;
     font-size: 0.7rem;
@@ -577,17 +584,17 @@ body.dark .bismillah-text {
     font-family: 'Noto Sans Bengali', sans-serif;
 }
 
-/* সিজদা আয়াত হাইলাইট */
+/* সিজদা আয়াত হাইলাইট - রং #46596a */
 .ayah-item.sajdah-ayah {
-    background: var(--primary-soft);
-    border-right: 3px solid var(--primary);
+    background: var(--sajdah-soft);
+    border-right: 3px solid var(--sajdah-color);
 }
 
 .sajdah-indicator {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: var(--primary);
+    background: var(--sajdah-color);
     color: white;
     font-size: 0.7rem;
     padding: 3px 8px;
@@ -966,14 +973,14 @@ body.dark .nav-icon-btn.active img {
         padding: 8px 12px 18px;
     }
     
-    /* ছোট স্ক্রিনে সিজদা ব্যাজ */
+    /* ছোট স্ক্রিনে সিজদা ব্যাজ আরও ছোট */
     .sajdah-badge {
         font-size: 0.5rem;
-        padding: 2px 8px;
+        padding: 1px 5px;
     }
     
     .surah-item .surah-name {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 }
 
