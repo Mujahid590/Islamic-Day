@@ -213,10 +213,8 @@ function renderSurahList() {
       <div class="surah-item" data-surah="${surah.number}">
         <span class="surah-number">${surah.number}</span>
         <div class="surah-name-info">
-          <div class="surah-name">
-            ${surah.name}
-            ${hasSajdah ? `<span class="sajdah-badge">${sajdahText}</span>` : ''}
-          </div>
+          <div class="surah-name">${surah.name}</div>
+          ${hasSajdah ? `<div class="sajdah-badge">${sajdahText}</div>` : ''}
           <div class="surah-name-ar">${surah.nameArabic || ''}</div>
         </div>
         <span class="ayah-count">${surah.numberOfAyahs} আয়াত</span>
