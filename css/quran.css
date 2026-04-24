@@ -1,826 +1,422 @@
-/* ========== QURAN PAGE STYLES ========== */
-/* ★★★ প্রিমিয়াম আরবি ফন্ট Me Quran - মদীনা মুশাফ লিপি (ছবির মতো) ★★★ */
-
-/* গ্লোবাল আরবি ফন্ট সেটিংস - Me Quran CDN থেকে লোড */
-@font-face {
-    font-family: 'MeQuran';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url('https://static-cdn.tarteel.ai/qul/fonts/me_quran_volt_newmet.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'MeQuran';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url('https://static-cdn.tarteel.ai/qul/fonts/me_quran_bold_newmet.ttf') format('truetype');
-}
-
-/* ব্যাকআপ ফন্ট - যদি Me Quran লোড না হয় */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Header Styles */
-.quran-header {
-  background: linear-gradient(135deg, #eef4fa, #e3edf6, #dae6f2);
-  padding: 16px 20px 20px;
-  border-radius: 0 0 32px 32px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-body.dark .quran-header {
-  background: linear-gradient(135deg, #0f2a3f, #14354d, #1a405c);
-}
-
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.quran-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.quran-title span {
-  white-space: nowrap;
-}
-
-.title-icon {
-  width: 32px;
-  height: 32px;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-/* Toggle Surah Button */
-.toggle-surah-btn {
-  background: rgba(45, 106, 159, 0.12);
-  border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.2s;
-  z-index: 10;
-}
-
-body.dark .toggle-surah-btn {
-  background: rgba(110, 168, 222, 0.15);
-}
-
-.toggle-surah-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--primary-dark);
-}
-
-body.dark .toggle-surah-btn svg {
-  stroke: #cbd5e6;
-}
-
-/* Settings Header Button */
-.settings-header-btn {
-  background: rgba(45, 106, 159, 0.12);
-  border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.2s;
-  z-index: 10;
-}
-
-body.dark .settings-header-btn {
-  background: rgba(110, 168, 222, 0.15);
-}
-
-.settings-header-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--primary-dark);
-}
-
-body.dark .settings-header-btn svg {
-  stroke: #cbd5e6;
-}
-
-/* Surah Sidebar */
-.surah-sidebar {
-  position: fixed;
-  left: -320px;
-  top: 0;
-  width: 320px;
-  height: 100%;
-  background: var(--card-light);
-  z-index: 200;
-  transition: left 0.3s ease;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
-.surah-sidebar.open {
-  left: 0;
-}
-
-.sidebar-header {
-  padding: 20px 16px;
-  background: var(--primary);
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.sidebar-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.sisda-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  background: white;
-  border-radius: 12px;
-  padding: 5px;
-}
-
-.sidebar-logo h3 {
-  font-size: 1.1rem;
-  margin: 0;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.surah-count {
-  font-size: 0.7rem;
-  opacity: 0.8;
-  margin-top: 5px;
-}
-
-/* Search Container */
-.search-container {
-  padding: 12px 16px;
-  background: var(--bg-light);
-  border-bottom: 1px solid var(--border-light);
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background: var(--card-light);
-  border: 1px solid var(--border-light);
-  border-radius: 30px;
-  padding: 8px 16px;
-  transition: all 0.2s;
-}
-
-.search-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(45, 106, 159, 0.2);
-}
-
-.search-icon {
-  width: 18px;
-  height: 18px;
-  stroke: var(--text-muted);
-  margin-right: 10px;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 0.85rem;
-  padding: 6px 0;
-  outline: none;
-  color: var(--text-dark);
-}
-
-.search-input::placeholder {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-}
-
-.search-clear {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: var(--text-muted);
-  padding: 0 5px;
-  transition: 0.2s;
-}
-
-.search-clear:hover {
-  color: var(--primary);
-}
-
-/* No Results */
-.no-results {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-muted);
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.no-results svg {
-  width: 50px;
-  height: 50px;
-  stroke: var(--text-muted);
-  margin-bottom: 15px;
-  opacity: 0.5;
-}
-
-.surah-list {
-  padding: 8px 0;
-}
-
-.surah-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.surah-item:hover {
-  background: var(--primary-soft);
-}
-
-.surah-item.active {
-  background: var(--primary);
-  color: white;
-}
-
-.surah-item.hidden {
-  display: none;
-}
-
-.surah-item .surah-number {
-  font-weight: 700;
-  width: 40px;
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 0.85rem;
-}
-
-.surah-item.active .surah-number {
-  color: white;
-}
-
-.surah-item .surah-name-info {
-  flex: 1;
-}
-
-.surah-item .surah-name {
-  font-weight: 600;
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 0.9rem;
-}
-
-/* ★★★ সাইডবারের আরবি সূরা নাম - Me Quran ফন্ট ★★★ */
-.surah-item .surah-name-ar {
-  font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
-  font-size: 0.85rem;
-  opacity: 0.8;
-  margin-top: 2px;
-  font-weight: 500;
-}
-
-.surah-item.active .surah-name-ar {
-  opacity: 0.95;
-  color: white;
-}
-
-.surah-item .ayah-count {
-  font-size: 0.65rem;
-  opacity: 0.7;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-/* Sidebar Overlay */
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 150;
-  display: none;
-}
-
-.sidebar-overlay.show {
-  display: block;
-}
-
-/* Main Container */
-.quran-container {
-  min-height: calc(100vh - 140px);
-  padding: 16px;
-  padding-bottom: 85px;
-}
-
-/* Quran Reader */
-.quran-reader {
-  width: 100%;
-  background: var(--card-light);
-  border-radius: 24px;
-  padding: 20px;
-  box-shadow: var(--shadow-md);
-}
-
-.reader-header {
-  text-align: center;
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--border-light);
-  margin-bottom: 20px;
-}
-
-.surah-info h2 {
-  font-size: 1.5rem;
-  color: var(--primary-dark);
-  margin-bottom: 6px;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.surah-meta {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* ★★★ সূরা আরবি নাম - Me Quran ফন্ট ★★★ */
-.surah-meta span:first-child {
-  font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-/* Audio Player */
-.audio-player {
-  background: var(--bg-light);
-  border-radius: 30px;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.audio-player audio {
-  flex: 1;
-  height: 40px;
-}
-
-.audio-player button {
-  background: var(--primary);
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-}
-
-/* Loading Indicator */
-.loading-indicator {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 50px;
-  text-align: center;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border-light);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 15px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Ayah Container */
-.ayah-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.ayah-item {
-  padding: 20px;
-  border-radius: 20px;
-  background: var(--bg-light);
-  transition: all 0.2s;
-  position: relative;
-  cursor: pointer;
-}
-
-.ayah-item:hover {
-  background: var(--primary-soft);
-}
-
-.ayah-number {
-  display: inline-block;
-  width: 34px;
-  height: 34px;
-  background: var(--primary);
-  color: white;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 34px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-/* ★★★ প্রধান কুরআন টেক্সট - Me Quran ফন্ট (মদীনা মুশাফ লিপি) ★★★ 
-       এই ফন্টে رَبِّ এর যবর র-এর সাথে লাগোয়া এবং بِّ এর জের তাশদিদের নিচে থাকে */
-.ayah-arabic {
-  font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
-  font-size: 1.9rem;
-  line-height: 2.1;
-  text-align: right;
-  direction: rtl;
-  margin-bottom: 10px;
-  color: var(--text-dark);
-  letter-spacing: 0;
-  font-weight: 400;
-  cursor: pointer;
-  transition: 0.2s;
-  padding: 10px;
-  border-radius: 16px;
-  font-feature-settings: "kern", "liga", "calt", "mark", "mkmk";
-  text-rendering: optimizeLegibility;
-  word-spacing: normal;
-}
-
-.ayah-arabic:hover {
-  background: rgba(45, 106, 159, 0.1);
-}
-
-.ayah-translation {
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--text-muted);
-  border-top: 1px dashed var(--border-light);
-  padding-top: 12px;
-}
-
-/* Tooltip Styles */
-.ayah-tooltip {
-  position: fixed;
-  z-index: 1000;
-  max-width: 300px;
-  background: var(--card-light);
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  animation: tooltipFadeIn 0.2s ease;
-  border: 1px solid var(--border-light);
-}
-
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+// ========== QURAN API AND FUNCTIONALITY ==========
+
+// Global Variables
+let surahList = [];
+let filteredSurahList = [];
+let currentSurah = null;
+let currentAyahs = [];
+let showTranslation = true;
+let touchMode = true;
+let currentReciter = 'ar.alafasy';
+let isLoading = false;
+let currentTooltip = null;
+let tooltipTimeout = null;
+
+// DOM Elements
+const surahListContainer = document.getElementById('surahList');
+const ayahContainer = document.getElementById('ayahContainer');
+const surahNameEl = document.getElementById('surahName');
+const surahNameArabicEl = document.getElementById('surahNameArabic');
+const surahMeaningEl = document.getElementById('surahMeaning');
+const surahDetailsEl = document.getElementById('surahDetails');
+const loadingIndicator = document.getElementById('loadingIndicator');
+const settingsHeaderBtn = document.getElementById('settingsHeaderBtn');
+const quranSettingsModal = document.getElementById('quranSettingsModal');
+const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+const reciterSelect = document.getElementById('reciterSelect');
+const showTranslationToggle = document.getElementById('showTranslationToggle');
+const touchModeToggle = document.getElementById('touchModeToggle');
+const audioPlayer = document.getElementById('audioPlayer');
+const quranAudio = document.getElementById('quranAudio');
+const closeAudioBtn = document.getElementById('closeAudioBtn');
+const toggleSurahBtn = document.getElementById('toggleSurahBtn');
+const surahSidebar = document.getElementById('surahSidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const searchInput = document.getElementById('surahSearchInput');
+const searchClearBtn = document.getElementById('searchClearBtn');
+const surahCountSpan = document.getElementById('surahCount');
+const ayahTooltip = document.getElementById('ayahTooltip');
+
+// Theme buttons
+const themeBtns = document.querySelectorAll('.theme-btn-small');
+
+// ========== THEME FUNCTIONS ==========
+function setThemeMode(mode) {
+  if (mode === "dark") document.body.classList.add("dark");
+  else if (mode === "light") document.body.classList.remove("dark");
+  else {
+    window.matchMedia("(prefers-color-scheme:dark)").matches ?
+      document.body.classList.add("dark") : document.body.classList.remove("dark");
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  localStorage.setItem("deen_theme", mode);
+  document.querySelectorAll(".theme-btn-small").forEach(b =>
+    b.classList.toggle("active", b.dataset.theme === mode));
 }
 
-.tooltip-content {
-  padding: 12px 16px;
+function initTheme() {
+  const savedTheme = localStorage.getItem("deen_theme") || "light";
+  setThemeMode(savedTheme);
+  themeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      setThemeMode(btn.dataset.theme);
+      showToast(btn.dataset.theme === "dark" ? "🌙 ডার্ক মোড সক্রিয়" : 
+                 btn.dataset.theme === "light" ? "☀️ লাইট মোড সক্রিয়" : "📱 সিস্টেম থিম");
+    });
+  });
+  window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change", () => {
+    if (localStorage.getItem("deen_theme") === "system") setThemeMode("system");
+  });
 }
 
-/* ★★★ টুলটিপের আরবি টেক্সট Me Quran ফন্টে ★★★ */
-.tooltip-arabic {
-  font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
-  font-size: 1.2rem;
-  text-align: right;
-  direction: rtl;
-  color: var(--primary-dark);
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px dashed var(--border-light);
-  font-weight: 400;
+// ========== SIDEBAR TOGGLE FUNCTIONS ==========
+function toggleSidebar() {
+  surahSidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('show');
 }
 
-.tooltip-translation {
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--text-dark);
+function closeSidebar() {
+  surahSidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('show');
 }
 
-body.dark .tooltip-translation {
-  color: #cbd5e6;
-}
-
-/* Settings Modal */
-.quran-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-}
-
-.quran-modal.show {
-  display: flex;
-}
-
-.modal-content {
-  background: var(--card-light);
-  width: 90%;
-  max-width: 400px;
-  border-radius: 24px;
-  overflow: hidden;
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: var(--primary);
-  color: white;
-}
-
-.modal-header h3 {
-  font-size: 1.2rem;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.close-modal-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: white;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.setting-item {
-  margin-bottom: 20px;
-}
-
-.setting-item label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--text-dark);
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.setting-item select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-light);
-  color: var(--text-dark);
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--border-light);
-  transition: 0.3s;
-  border-radius: 24px;
-}
-
-.toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.3s;
-  border-radius: 50%;
-}
-
-.toggle-switch input:checked + .toggle-slider {
-  background-color: var(--primary);
-}
-
-.toggle-switch input:checked + .toggle-slider:before {
-  transform: translateX(26px);
-}
-
-/* Theme Buttons Small */
-.theme-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.theme-btn-small {
-  padding: 8px 16px;
-  border-radius: 25px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-light);
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-  color: var(--text-dark);
-  font-family: 'Noto Sans Bengali', sans-serif;
-  font-size: 0.8rem;
-}
-
-.theme-btn-small.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-/* Toast Message */
-.toast-msg {
-  position: fixed;
-  bottom: 90px;
-  left: 20px;
-  right: 20px;
-  background: #1e293bdd;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  z-index: 1100;
-  backdrop-filter: blur(12px);
-  animation: fadeOut 2s ease forwards;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  70% { opacity: 1; }
-  100% { opacity: 0; visibility: hidden; }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .quran-reader {
-    padding: 15px;
+// ========== SEARCH FUNCTIONALITY ==========
+function filterSurahList(searchTerm) {
+  if (!searchTerm.trim()) {
+    filteredSurahList = [...surahList];
+    searchClearBtn.style.display = 'none';
+  } else {
+    const term = searchTerm.toLowerCase().trim();
+    filteredSurahList = surahList.filter(surah => {
+      const banglaName = surah.name?.toLowerCase() || '';
+      const arabicName = surah.nameArabic?.toLowerCase() || '';
+      const numberMatch = surah.number.toString().includes(term);
+      const englishName = surah.nameEnglish?.toLowerCase() || '';
+      
+      return banglaName.includes(term) || 
+             arabicName.includes(term) || 
+             numberMatch ||
+             englishName.includes(term);
+    });
+    searchClearBtn.style.display = 'inline-block';
   }
   
-  .ayah-arabic {
-    font-size: 1.5rem;
-    line-height: 1.85;
-  }
-  
-  .ayah-item {
-    padding: 15px;
-  }
-  
-  .surah-info h2 {
-    font-size: 1.2rem;
-  }
-  
-  .surah-sidebar {
-    width: 85%;
-    left: -85%;
-  }
-  
-  .quran-title {
-    position: relative;
-    left: auto;
-    transform: none;
-  }
-  
-  .header-row {
-    justify-content: space-between;
-  }
-  
-  .tooltip-content {
-    padding: 10px 12px;
-  }
-  
-  .ayah-tooltip {
-    max-width: 260px;
+  renderSurahList();
+  updateSurahCount();
+}
+
+function updateSurahCount() {
+  if (surahCountSpan) {
+    surahCountSpan.textContent = `${filteredSurahList.length} টি সূরা`;
   }
 }
 
-/* Desktop optimization */
-@media (min-width: 768px) {
-  .quran-container {
-    max-width: 800px;
-    margin: 0 auto;
+function clearSearch() {
+  if (searchInput) {
+    searchInput.value = '';
+    filterSurahList('');
+  }
+}
+
+// ========== LOAD SURAH LIST FROM JSON ==========
+async function loadSurahList() {
+  try {
+    const response = await fetch('surah data/surah-list.json');
+    const data = await response.json();
+    
+    if (data && data.length) {
+      surahList = data;
+      filteredSurahList = [...surahList];
+      renderSurahList();
+      updateSurahCount();
+      
+      // Auto-load first surah (Fatiha)
+      if (surahList.length > 0) {
+        loadSurah(surahList[0].number);
+      }
+    } else {
+      throw new Error('Failed to load surah list');
+    }
+  } catch (error) {
+    console.error('Error loading surah list:', error);
+    showToast('সূরা তালিকা লোড করতে ব্যর্থ হয়েছে');
+  }
+}
+
+function renderSurahList() {
+  if (!surahListContainer) return;
+  
+  if (filteredSurahList.length === 0) {
+    surahListContainer.innerHTML = `
+      <div class="no-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <p>কোন সূরা খুঁজে পাওয়া যায়নি</p>
+      </div>
+    `;
+    return;
   }
   
-  .ayah-tooltip {
-    max-width: 350px;
-  }
+  surahListContainer.innerHTML = filteredSurahList.map(surah => `
+    <div class="surah-item" data-surah="${surah.number}">
+      <span class="surah-number">${surah.number}</span>
+      <div class="surah-name-info">
+        <div class="surah-name">${surah.name}</div>
+        <div class="surah-name-ar">${surah.nameArabic || ''}</div>
+      </div>
+      <span class="ayah-count">${surah.numberOfAyahs} আয়াত</span>
+    </div>
+  `).join('');
+  
+  document.querySelectorAll('.surah-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const surahNum = parseInt(item.dataset.surah);
+      loadSurah(surahNum);
+      closeSidebar();
+    });
+  });
 }
 
-/* Dark mode arabic text */
-body.dark .ayah-arabic,
-body.dark .tooltip-arabic {
-  color: #f0e6d2;
-}
-
-/* ★★★ বেসমাল্লাহ বা অন্য আরবি এলিমেন্টের জন্য Me Quran ফন্ট ★★★ */
-.bismillah,
-.quran-arabic-text {
-  font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
-  font-weight: 400;
-}
-
-/* Print support */
-@media print {
-  .quran-header,
-  .audio-player,
-  .toggle-surah-btn,
-  .settings-header-btn,
-  .surah-sidebar,
-  .sidebar-overlay,
-  .quran-modal,
-  .bottom-navigation,
-  .ayah-tooltip {
-    display: none;
+// ========== LOAD SURAH FROM JSON FILE ==========
+async function loadSurah(surahNumber) {
+  showLoading(true);
+  
+  try {
+    const response = await fetch(`surah data/surah-${surahNumber}.json`);
+    if (!response.ok) {
+      throw new Error(`Surah ${surahNumber} not found`);
+    }
+    
+    const data = await response.json();
+    currentSurah = data;
+    currentAyahs = data.ayahs || [];
+    
+    // Update header
+    surahNameEl.textContent = data.name;
+    surahNameArabicEl.textContent = data.nameArabic;
+    surahMeaningEl.textContent = data.meaning || '';
+    surahDetailsEl.textContent = `${data.revelationType || ''} · ${data.numberOfAyahs} আয়াত`;
+    
+    renderAyahs();
+    updateActiveSurahInList(surahNumber);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+  } catch (error) {
+    console.error('Error loading surah:', error);
+    showToast(`সূরা ${surahNumber} লোড করতে ব্যর্থ হয়েছে`);
+    
+    // Show error in container
+    if (ayahContainer) {
+      ayahContainer.innerHTML = `
+        <div class="no-results">
+          <p>⚠️ সূরা টি লোড করা সম্ভব হয়নি</p>
+          <p style="font-size:0.8rem; margin-top:10px;">surah data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
+        </div>
+      `;
+    }
   }
   
-  .ayah-arabic {
-    font-size: 1.6rem;
-    color: black;
+  showLoading(false);
+}
+
+function renderAyahs() {
+  if (!ayahContainer) return;
+  
+  if (!currentAyahs || currentAyahs.length === 0) {
+    ayahContainer.innerHTML = '<div class="no-results"><p>কোন আয়াত পাওয়া যায়নি</p></div>';
+    return;
+  }
+  
+  ayahContainer.innerHTML = currentAyahs.map(ayah => `
+    <div class="ayah-item" data-ayah="${ayah.number}">
+      <div class="ayah-number">${ayah.number}</div>
+      <div class="ayah-arabic" data-arabic="${encodeURIComponent(ayah.arabic)}" data-translation="${encodeURIComponent(ayah.translation)}">${ayah.arabic}</div>
+      ${showTranslation ? `<div class="ayah-translation">${ayah.translation}</div>` : ''}
+    </div>
+  `).join('');
+  
+  attachAyahListeners();
+}
+
+function attachAyahListeners() {
+  const arabicElements = document.querySelectorAll('.ayah-arabic');
+  
+  arabicElements.forEach(el => {
+    el.removeEventListener('click', handleAyahClick);
+    el.removeEventListener('mouseenter', handleAyahMouseEnter);
+    el.removeEventListener('mouseleave', handleAyahMouseLeave);
+    
+    if (touchMode) {
+      el.addEventListener('click', handleAyahClick);
+    } else {
+      el.addEventListener('mouseenter', handleAyahMouseEnter);
+      el.addEventListener('mouseleave', handleAyahMouseLeave);
+    }
+  });
+}
+
+function handleAyahClick(e) {
+  e.stopPropagation();
+  const element = e.currentTarget;
+  const arabic = decodeURIComponent(element.dataset.arabic || '');
+  const translation = decodeURIComponent(element.dataset.translation || '');
+  showTooltip(element, arabic, translation);
+}
+
+function handleAyahMouseEnter(e) {
+  if (touchMode) return;
+  if (tooltipTimeout) clearTimeout(tooltipTimeout);
+  const element = e.currentTarget;
+  const arabic = decodeURIComponent(element.dataset.arabic || '');
+  const translation = decodeURIComponent(element.dataset.translation || '');
+  showTooltip(element, arabic, translation);
+}
+
+function handleAyahMouseLeave(e) {
+  if (touchMode) return;
+  tooltipTimeout = setTimeout(() => hideTooltip(), 200);
+}
+
+function showTooltip(targetElement, arabic, translation) {
+  if (!ayahTooltip) return;
+  
+  const tooltipArabic = ayahTooltip.querySelector('.tooltip-arabic');
+  const tooltipTranslation = ayahTooltip.querySelector('.tooltip-translation');
+  
+  if (tooltipArabic) tooltipArabic.innerHTML = arabic;
+  if (tooltipTranslation) tooltipTranslation.innerHTML = translation;
+  
+  const rect = targetElement.getBoundingClientRect();
+  const tooltipHeight = 150;
+  const tooltipWidth = 280;
+  
+  let top = rect.top - tooltipHeight - 10;
+  let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+  
+  if (top < 10) top = rect.bottom + 10;
+  if (left < 10) left = 10;
+  if (left + tooltipWidth > window.innerWidth - 10) left = window.innerWidth - tooltipWidth - 10;
+  
+  ayahTooltip.style.top = `${top}px`;
+  ayahTooltip.style.left = `${left}px`;
+  ayahTooltip.style.display = 'block';
+  
+  if (touchMode) {
+    setTimeout(() => hideTooltip(), 3000);
   }
 }
+
+function hideTooltip() {
+  if (ayahTooltip) ayahTooltip.style.display = 'none';
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.classList?.contains('ayah-arabic')) hideTooltip();
+});
+
+function updateActiveSurahInList(surahNumber) {
+  document.querySelectorAll('.surah-item').forEach(item => {
+    const num = parseInt(item.dataset.surah);
+    item.classList.toggle('active', num === surahNumber);
+  });
+}
+
+// ========== AUDIO PLAYER ==========
+function playSurahAudio(surahNumber = 1, ayahNumber = 1) {
+  try {
+    const audioUrl = `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${surahNumber}_${ayahNumber}.mp3`;
+    quranAudio.src = audioUrl;
+    audioPlayer.style.display = 'flex';
+    quranAudio.play().catch(e => console.log('Audio play error:', e));
+  } catch (error) {
+    console.error('Error playing audio:', error);
+    showToast('অডিও প্লে করতে ব্যর্থ হয়েছে');
+  }
+}
+
+// ========== LOADING & TOAST ==========
+function showLoading(show) {
+  if (loadingIndicator) {
+    loadingIndicator.style.display = show ? 'flex' : 'none';
+  }
+  if (ayahContainer) {
+    ayahContainer.style.display = show ? 'none' : 'block';
+  }
+}
+
+function showToast(message) {
+  const existingToast = document.querySelector('.toast-msg');
+  if (existingToast) existingToast.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast-msg';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 2500);
+}
+
+// ========== SETTINGS ==========
+function openSettings() {
+  quranSettingsModal.classList.add('show');
+}
+
+function closeSettings() {
+  quranSettingsModal.classList.remove('show');
+}
+
+function saveSettings() {
+  currentReciter = reciterSelect.value;
+  showTranslation = showTranslationToggle.checked;
+  const newTouchMode = touchModeToggle.checked;
+  
+  localStorage.setItem('quran_reciter', currentReciter);
+  localStorage.setItem('quran_show_translation', showTranslation);
+  localStorage.setItem('quran_touch_mode', newTouchMode);
+  
+  if (newTouchMode !== touchMode) {
+    touchMode = newTouchMode;
+    if (currentAyahs.length) renderAyahs();
+  } else if (currentAyahs.length) {
+    renderAyahs();
+  }
+}
+
+function loadSettings() {
+  const savedReciter = localStorage.getItem('quran_reciter');
+  const savedTranslation = localStorage.getItem('quran_show_translation');
+  const savedTouchMode = localStorage.getItem('quran_touch_mode');
+  
+  if (savedReciter) {
+    currentReciter = savedReciter;
+    reciterSelect.value = savedReciter;
+  }
+  if (savedTranslation !== null) {
+    showTranslation = savedTranslation === 'true';
+    showTranslationToggle.checked = showTranslation;
+  }
+  if (savedTouchMode !== null) {
+    touchMode = savedTouchMode === 'true';
+    if (touchModeToggle) touchModeToggle.checked = touchMode;
+  } else {
+    touchMode = true;
+    if (touchModeToggle) touchModeToggle.checked = true;
+  }
+}
+
+// ========== INITIALIZATION ==========
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  loadSettings();
+  loadSurahList();
+  
+  if (settingsHeaderBtn) settingsHeaderBtn.addEventListener('click', openSettings);
+  if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
+  if (reciterSelect) reciterSelect.addEventListener('change', saveSettings);
+  if (showTranslationToggle) showTranslationToggle.addEventListener('change', saveSettings);
+  if (touchModeToggle) touchModeToggle
