@@ -870,4 +870,159 @@ body.dark .tooltip-translation {
     background: var(--card-light);
     display: flex;
     justify-content: space-around;
-    padding: 10px 16px
+    padding: 10px 16px 22px;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06);
+    z-index: 100;
+    border-top: 1px solid var(--border-light);
+}
+
+.nav-icon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 4px 12px;
+    border-radius: 40px;
+}
+
+.nav-icon-btn:active {
+    transform: scale(0.94);
+}
+
+.nav-icon-btn.active {
+    background: rgba(45, 106, 159, 0.12);
+}
+
+.nav-icon-btn img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.55;
+}
+
+.nav-icon-btn.active img {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(35%) sepia(68%) saturate(500%) hue-rotate(175deg);
+}
+
+body.dark .nav-icon-btn.active img {
+    filter: brightness(0) invert(0.7) sepia(1) hue-rotate(170deg);
+}
+
+.nav-text {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+body.dark .nav-icon-btn.active .nav-text {
+    color: #6ea8de;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .quran-reader {
+        padding: 16px;
+    }
+    
+    .ayah-arabic {
+        font-size: 1.5rem;
+        line-height: 1.85;
+    }
+    
+    .bismillah-text {
+        font-size: 1.3rem;
+    }
+    
+    .ayah-item {
+        padding: 15px;
+    }
+    
+    .surah-info h2 {
+        font-size: 1.2rem;
+    }
+    
+    .surah-sidebar {
+        width: 85%;
+        left: -85%;
+    }
+    
+    .tooltip-content {
+        padding: 10px 12px;
+    }
+    
+    .ayah-tooltip {
+        max-width: 260px;
+    }
+    
+    .bottom-navigation {
+        padding: 8px 12px 18px;
+    }
+    
+    .nav-icon-btn {
+        padding: 4px 8px;
+    }
+    
+    .nav-text {
+        font-size: 0.55rem;
+    }
+    
+    .nav-icon-btn img {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Desktop optimization */
+@media (min-width: 768px) {
+    .quran-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .ayah-tooltip {
+        max-width: 350px;
+    }
+    
+    .bottom-navigation {
+        left: 50%;
+        right: auto;
+    }
+}
+
+/* Dark mode arabic text */
+body.dark .ayah-arabic,
+body.dark .tooltip-arabic {
+    color: #f0e6d2;
+}
+
+/* অন্যান্য আরবি এলিমেন্টের জন্য */
+.bismillah,
+.quran-arabic-text {
+    font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
+    font-weight: 400;
+}
+
+/* Print support */
+@media print {
+    .quran-header,
+    .audio-player,
+    .toggle-surah-btn,
+    .settings-header-btn,
+    .surah-sidebar,
+    .sidebar-overlay,
+    .quran-modal,
+    .bottom-navigation,
+    .ayah-tooltip {
+        display: none;
+    }
+    
+    .ayah-arabic {
+        font-size: 1.6rem;
+        color: black;
+    }
+}
