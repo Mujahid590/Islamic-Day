@@ -313,16 +313,16 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     gap: 4px;
 }
 
-/* সিজদা ব্যাজ - ছোট আকারে */
+/* সিজদা ব্যাজ - ছোট আকারে (হলুদ রং বাদ) */
 .sajdah-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #e8a020;
+    background: var(--primary);
     color: white;
     font-size: 0.55rem;
     font-weight: 600;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 20px;
     font-family: 'Noto Sans Bengali', sans-serif;
     vertical-align: middle;
@@ -410,13 +410,13 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     color: var(--text-muted);
 }
 
-/* সিজদা ইনফো ব্যাজ - রিডার পেজে */
+/* সিজদা ইনফো ব্যাজ - রিডার পেজে (হলুদ রং বাদ) */
 .sajdah-info-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: #e8a02020;
-    color: #e8a020;
+    background: var(--primary-soft);
+    color: var(--primary);
     padding: 4px 10px;
     border-radius: 30px;
     font-size: 0.7rem;
@@ -539,6 +539,10 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     transform: scale(0.99);
 }
 
+.ayah-item:hover {
+    background: var(--primary-soft);
+}
+
 /* বিসমিল্লাহ স্টাইল */
 .bismillah-container {
     text-align: center;
@@ -576,17 +580,17 @@ body.dark .bismillah-text {
     font-family: 'Noto Sans Bengali', sans-serif;
 }
 
-/* সিজদা আয়াত হাইলাইট */
+/* সিজদা আয়াত হাইলাইট (হলুদ রং বাদ) */
 .ayah-item.sajdah-ayah {
-    background: linear-gradient(135deg, #e8a02010, #e8a02005);
-    border-right: 3px solid #e8a020;
+    background: var(--primary-soft);
+    border-right: 3px solid var(--primary);
 }
 
 .sajdah-indicator {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: #e8a020;
+    background: var(--primary);
     color: white;
     font-size: 0.7rem;
     padding: 3px 8px;
@@ -672,6 +676,10 @@ body.dark .bismillah-text {
     font-size: 0.85rem;
     line-height: 1.5;
     color: var(--text-dark);
+}
+
+body.dark .tooltip-translation {
+    color: #cbd5e6;
 }
 
 /* Settings Modal */
@@ -964,7 +972,7 @@ body.dark .nav-icon-btn.active img {
     /* ছোট স্ক্রিনে সিজদা ব্যাজ আরও ছোট */
     .sajdah-badge {
         font-size: 0.5rem;
-        padding: 1px 4px;
+        padding: 1px 5px;
     }
     
     .surah-item .surah-name {
@@ -989,10 +997,16 @@ body.dark .tooltip-arabic {
     color: #f0e6d2;
 }
 
+/* Print support */
 @media print {
     .quran-header, .audio-player, .toggle-surah-btn,
     .settings-header-btn, .surah-sidebar, .sidebar-overlay,
     .quran-modal, .bottom-navigation, .ayah-tooltip {
         display: none;
+    }
+    
+    .ayah-arabic {
+        font-size: 1.6rem;
+        color: black;
     }
 }
