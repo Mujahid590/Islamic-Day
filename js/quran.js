@@ -11,14 +11,12 @@ let currentReciter = 'ar.alafasy';
 let isLoading = false;
 let currentTooltip = null;
 let tooltipTimeout = null;
-let sajdahSurahs = {}; // Store sajdah info per surah
+let sajdahSurahs = {};
 
 // DOM Elements
 const surahListContainer = document.getElementById('surahList');
 const ayahContainer = document.getElementById('ayahContainer');
 const surahNameEl = document.getElementById('surahName');
-const surahNameArabicEl = document.getElementById('surahNameArabic');
-const surahMeaningEl = document.getElementById('surahMeaning');
 const surahDetailsEl = document.getElementById('surahDetails');
 const loadingIndicator = document.getElementById('loadingIndicator');
 const settingsHeaderBtn = document.getElementById('settingsHeaderBtn');
@@ -121,7 +119,8 @@ function clearSearch() {
 // ========== LOAD SURAH LIST FROM JSON ==========
 async function loadSurahList() {
   try {
-    const response = await fetch('surah data/surah-list.json');
+    const response = await fetch('surah-data/surah-list.json');
+    if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
     
     if (data && data.length) {
@@ -151,7 +150,24 @@ async function loadSurahList() {
   } catch (error) {
     console.error('Error loading surah list:', error);
     showToast('সূরা তালিকা লোড করতে ব্যর্থ হয়েছে');
+    // Load fallback data
+    loadFallbackSurahList();
   }
+}
+
+function loadFallbackSurahList() {
+  // Fallback data for first 5 surahs
+  surahList = [
+    { number: 1, name: "সূরা আল-ফাতিহা", nameArabic: "الفاتحة", nameEnglish: "Al-Fatiha", numberOfAyahs: 7, revelationType: "মক্কী" },
+    { number: 2, name: "সূরা আল-বাকারা", nameArabic: "البقرة", nameEnglish: "Al-Baqarah", numberOfAyahs: 286, revelationType: "মাদানী" },
+    { number: 3, name: "সূরা আল-ইমরান", nameArabic: "آل عمران", nameEnglish: "Aal-E-Imran", numberOfAyahs: 200, revelationType: "মাদানী" },
+    { number: 4, name: "সূরা আন-নিসা", nameArabic: "النساء", nameEnglish: "An-Nisa", numberOfAyahs: 176, revelationType: "মাদানী" },
+    { number: 5, name: "সূরা আল-মায়িদাহ", nameArabic: "المائدة", nameEnglish: "Al-Ma'idah", numberOfAyahs: 120, revelationType: "মাদানী" }
+  ];
+  filteredSurahList = [...surahList];
+  renderSurahList();
+  updateSurahCount();
+  if (surahList.length > 0) loadSurah(1);
 }
 
 function renderSurahList() {
@@ -201,7 +217,7 @@ async function loadSurah(surahNumber) {
   showLoading(true);
   
   try {
-    const response = await fetch(`surah data/surah-${surahNumber}.json`);
+    const response = await fetch(`surah-data/surah-${surahNumber}.json`);
     if (!response.ok) {
       throw new Error(`Surah ${surahNumber} not found`);
     }
@@ -226,8 +242,6 @@ async function loadSurah(surahNumber) {
     
     // Update header
     surahNameEl.textContent = data.name || surahInfo?.name;
-    surahNameArabicEl.textContent = data.nameArabic || surahInfo?.nameArabic;
-    surahMeaningEl.textContent = data.meaning || surahInfo?.meaning || '';
     surahDetailsEl.innerHTML = detailsText;
     
     renderAyahs(surahNumber);
@@ -240,18 +254,38 @@ async function loadSurah(surahNumber) {
     console.error('Error loading surah:', error);
     showToast(`সূরা ${surahNumber} লোড করতে ব্যর্থ হয়েছে`);
     
-    // Show error in container
+    // Show error in container with option to use fallback
     if (ayahContainer) {
       ayahContainer.innerHTML = `
         <div class="no-results">
           <p>⚠️ সূরা টি লোড করা সম্ভব হয়নি</p>
-          <p style="font-size:0.8rem; margin-top:10px;">surah data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
+          <p style="font-size:0.8rem; margin-top:10px;">surah-data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
+          <button onclick="loadFallbackSurahContent(${surahNumber})" style="margin-top:15px; padding:8px 20px; background:var(--primary); color:white; border:none; border-radius:25px; cursor:pointer;">ফলব্যাক কন্টেন্ট লোড করুন</button>
         </div>
       `;
     }
   }
   
   showLoading(false);
+}
+
+function loadFallbackSurahContent(surahNumber) {
+  // Provide fallback content for surahs
+  const fallbackAyahs = [];
+  const surahInfo = surahList.find(s => s.number === surahNumber);
+  const ayahCount = surahInfo?.numberOfAyahs || 7;
+  
+  for (let i = 1; i <= Math.min(ayahCount, 10); i++) {
+    fallbackAyahs.push({
+      number: i,
+      arabic: `আয়াত ${i} এর আরবি টেক্সট`,
+      translation: `আয়াত ${i} এর বাংলা অনুবাদ`
+    });
+  }
+  
+  currentAyahs = fallbackAyahs;
+  renderAyahs(surahNumber);
+  showToast(`সূরা ${surahNumber} এর ফলব্যাক কন্টেন্ট লোড হয়েছে`);
 }
 
 function renderAyahs(surahNumber) {
@@ -268,7 +302,7 @@ function renderAyahs(surahNumber) {
   const sajdahAyah = sajdahInfo ? sajdahInfo.ayah : null;
   
   let bismillahHtml = '';
-  if (showBismillah && surahNumber !== 1) { // Fatiha doesn't have Bismillah as separate ayah
+  if (showBismillah && surahNumber !== 1) {
     bismillahHtml = `
       <div class="bismillah-container">
         <div class="bismillah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
