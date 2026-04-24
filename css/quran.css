@@ -329,6 +329,26 @@ body.dark .settings-header-btn svg {
   font-family: 'Noto Sans Bengali', sans-serif;
 }
 
+/* সিজদা আইকন স্টাইল */
+.sajdah-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8a020;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 20px;
+  margin-left: 8px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.surah-item.active .sajdah-badge {
+  background: white;
+  color: var(--primary);
+}
+
 /* Sidebar Overlay */
 .sidebar-overlay {
   position: fixed;
@@ -386,6 +406,23 @@ body.dark .settings-header-btn svg {
   font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
   font-size: 1.2rem;
   font-weight: 500;
+}
+
+/* সিজদা ইনফো ব্যাজ */
+.sajdah-info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #e8a02020;
+  color: #e8a020;
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.sajdah-info-badge .sajdah-symbol {
+  font-size: 1rem;
 }
 
 /* Audio Player */
@@ -458,6 +495,28 @@ body.dark .settings-header-btn svg {
   background: var(--primary-soft);
 }
 
+/* বিসমিল্লাহ স্টাইল */
+.bismillah-container {
+  text-align: center;
+  padding: 20px 15px;
+  margin-bottom: 15px;
+  background: var(--primary-soft);
+  border-radius: 30px;
+  direction: rtl;
+}
+
+.bismillah-text {
+  font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
+  font-size: 1.8rem;
+  line-height: 2;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+body.dark .bismillah-text {
+  color: #f0e6d2;
+}
+
 .ayah-number {
   display: inline-block;
   width: 34px;
@@ -473,8 +532,31 @@ body.dark .settings-header-btn svg {
   font-family: 'Noto Sans Bengali', sans-serif;
 }
 
-/* ★★★ প্রধান কুরআন টেক্সট - Me Quran ফন্ট (মদীনা মুশাফ লিপি) ★★★ 
-       এই ফন্টে رَبِّ এর যবর র-এর সাথে লাগোয়া এবং بِّ এর জের তাশদিদের নিচে থাকে */
+/* সিজদা আয়াত হাইলাইট */
+.ayah-item.sajdah-ayah {
+  background: linear-gradient(135deg, #e8a02010, #e8a02005);
+  border-right: 3px solid #e8a020;
+}
+
+.sajdah-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #e8a020;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-left: 10px;
+  vertical-align: middle;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.sajdah-indicator .sajdah-symbol {
+  font-size: 0.9rem;
+}
+
+/* ★★★ প্রধান কুরআন টেক্সট - Me Quran ফন্ট (মদীনা মুশাফ লিপি) ★★★ */
 .ayah-arabic {
   font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
   font-size: 1.9rem;
@@ -737,6 +819,52 @@ body.dark .tooltip-translation {
   100% { opacity: 0; visibility: hidden; }
 }
 
+/* Bottom Navigation */
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-light);
+  border-radius: 25px 25px 0 0;
+  z-index: 100;
+}
+
+.nav-icon-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 30px;
+  transition: 0.2s;
+  opacity: 0.6;
+}
+
+.nav-icon-btn.active {
+  opacity: 1;
+  background: var(--primary-soft);
+}
+
+.nav-icon-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-text {
+  font-size: 0.7rem;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  color: var(--text-dark);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .quran-reader {
@@ -746,6 +874,10 @@ body.dark .tooltip-translation {
   .ayah-arabic {
     font-size: 1.5rem;
     line-height: 1.85;
+  }
+  
+  .bismillah-text {
+    font-size: 1.3rem;
   }
   
   .ayah-item {
