@@ -8,6 +8,10 @@ project
 +- asmaul-husna.html 
 +- oju.html 
 +- masjid.html
++- surah data/
+     +-surah-list.json
+     +-surah-1.json
+     +-surah-2.json
 +- css/
     +- styil.css
     +- quran.css
