@@ -11,6 +11,7 @@ let currentReciter = 'ar.alafasy';
 let isLoading = false;
 let currentTooltip = null;
 let tooltipTimeout = null;
+let sajdahSurahs = {}; // Store sajdah info per surah
 
 // DOM Elements
 const surahListContainer = document.getElementById('surahList');
@@ -125,6 +126,17 @@ async function loadSurahList() {
     
     if (data && data.length) {
       surahList = data;
+      
+      // Build sajdah info map
+      surahList.forEach(surah => {
+        if (surah.sajdahAyah) {
+          sajdahSurahs[surah.number] = {
+            ayah: surah.sajdahAyah,
+            symbol: surah.sajdahSymbol || '۩'
+          };
+        }
+      });
+      
       filteredSurahList = [...surahList];
       renderSurahList();
       updateSurahCount();
@@ -158,16 +170,22 @@ function renderSurahList() {
     return;
   }
   
-  surahListContainer.innerHTML = filteredSurahList.map(surah => `
-    <div class="surah-item" data-surah="${surah.number}">
-      <span class="surah-number">${surah.number}</span>
-      <div class="surah-name-info">
-        <div class="surah-name">${surah.name}</div>
-        <div class="surah-name-ar">${surah.nameArabic || ''}</div>
+  surahListContainer.innerHTML = filteredSurahList.map(surah => {
+    const hasSajdah = surah.sajdahAyah ? true : false;
+    return `
+      <div class="surah-item" data-surah="${surah.number}">
+        <span class="surah-number">${surah.number}</span>
+        <div class="surah-name-info">
+          <div class="surah-name">
+            ${surah.name}
+            ${hasSajdah ? `<span class="sajdah-badge">۩ সিজদা ${surah.sajdahAyah}</span>` : ''}
+          </div>
+          <div class="surah-name-ar">${surah.nameArabic || ''}</div>
+        </div>
+        <span class="ayah-count">${surah.numberOfAyahs} আয়াত</span>
       </div>
-      <span class="ayah-count">${surah.numberOfAyahs} আয়াত</span>
-    </div>
-  `).join('');
+    `;
+  }).join('');
   
   document.querySelectorAll('.surah-item').forEach(item => {
     item.addEventListener('click', () => {
@@ -192,13 +210,27 @@ async function loadSurah(surahNumber) {
     currentSurah = data;
     currentAyahs = data.ayahs || [];
     
-    // Update header
-    surahNameEl.textContent = data.name;
-    surahNameArabicEl.textContent = data.nameArabic;
-    surahMeaningEl.textContent = data.meaning || '';
-    surahDetailsEl.textContent = `${data.revelationType || ''} · ${data.numberOfAyahs} আয়াত`;
+    // Get surah info from list
+    const surahInfo = surahList.find(s => s.number === surahNumber);
+    const revelationText = surahInfo?.revelationType || data.revelationType || '';
+    const ayahCount = surahInfo?.numberOfAyahs || data.numberOfAyahs || currentAyahs.length;
     
-    renderAyahs();
+    // Build details text
+    let detailsText = `${revelationText} · ${ayahCount} আয়াত`;
+    
+    // Add sajdah info if exists
+    const sajdahInfo = sajdahSurahs[surahNumber];
+    if (sajdahInfo) {
+      detailsText += ` · <span class="sajdah-info-badge"><span class="sajdah-symbol">${sajdahInfo.symbol}</span> সিজদা (আয়াত ${sajdahInfo.ayah})</span>`;
+    }
+    
+    // Update header
+    surahNameEl.textContent = data.name || surahInfo?.name;
+    surahNameArabicEl.textContent = data.nameArabic || surahInfo?.nameArabic;
+    surahMeaningEl.textContent = data.meaning || surahInfo?.meaning || '';
+    surahDetailsEl.innerHTML = detailsText;
+    
+    renderAyahs(surahNumber);
     updateActiveSurahInList(surahNumber);
     
     // Scroll to top
@@ -222,7 +254,7 @@ async function loadSurah(surahNumber) {
   showLoading(false);
 }
 
-function renderAyahs() {
+function renderAyahs(surahNumber) {
   if (!ayahContainer) return;
   
   if (!currentAyahs || currentAyahs.length === 0) {
@@ -230,14 +262,35 @@ function renderAyahs() {
     return;
   }
   
-  ayahContainer.innerHTML = currentAyahs.map(ayah => `
-    <div class="ayah-item" data-ayah="${ayah.number}">
-      <div class="ayah-number">${ayah.number}</div>
-      <div class="ayah-arabic" data-arabic="${encodeURIComponent(ayah.arabic)}" data-translation="${encodeURIComponent(ayah.translation)}">${ayah.arabic}</div>
-      ${showTranslation ? `<div class="ayah-translation">${ayah.translation}</div>` : ''}
-    </div>
-  `).join('');
+  // Check if we should show Bismillah (except Surah At-Tawbah - number 9)
+  const showBismillah = surahNumber !== 9;
+  const sajdahInfo = sajdahSurahs[surahNumber];
+  const sajdahAyah = sajdahInfo ? sajdahInfo.ayah : null;
   
+  let bismillahHtml = '';
+  if (showBismillah && surahNumber !== 1) { // Fatiha doesn't have Bismillah as separate ayah
+    bismillahHtml = `
+      <div class="bismillah-container">
+        <div class="bismillah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      </div>
+    `;
+  }
+  
+  const ayahsHtml = currentAyahs.map(ayah => {
+    const isSajdahAyah = sajdahAyah === ayah.number;
+    const sajdahIndicator = isSajdahAyah ? 
+      `<span class="sajdah-indicator"><span class="sajdah-symbol">۩</span> সিজদার আয়াত</span>` : '';
+    
+    return `
+      <div class="ayah-item ${isSajdahAyah ? 'sajdah-ayah' : ''}" data-ayah="${ayah.number}">
+        <div class="ayah-number">${ayah.number} ${sajdahIndicator}</div>
+        <div class="ayah-arabic" data-arabic="${encodeURIComponent(ayah.arabic)}" data-translation="${encodeURIComponent(ayah.translation)}">${ayah.arabic}</div>
+        ${showTranslation ? `<div class="ayah-translation">${ayah.translation}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+  
+  ayahContainer.innerHTML = bismillahHtml + ayahsHtml;
   attachAyahListeners();
 }
 
@@ -381,9 +434,11 @@ function saveSettings() {
   
   if (newTouchMode !== touchMode) {
     touchMode = newTouchMode;
-    if (currentAyahs.length) renderAyahs();
-  } else if (currentAyahs.length) {
-    renderAyahs();
+    if (currentSurah) {
+      renderAyahs(currentSurah.number);
+    }
+  } else if (currentSurah) {
+    renderAyahs(currentSurah.number);
   }
 }
 
