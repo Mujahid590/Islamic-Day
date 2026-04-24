@@ -13,6 +13,12 @@ let currentTooltip = null;
 let tooltipTimeout = null;
 let sajdahSurahs = {};
 
+// Audio Player Variables
+let audioElement = null;
+let isPlaying = false;
+let currentSurahNumber = null;
+let audioUpdateInterval = null;
+
 // DOM Elements
 const surahListContainer = document.getElementById('surahList');
 const ayahContainer = document.getElementById('ayahContainer');
@@ -27,7 +33,12 @@ const showTranslationToggle = document.getElementById('showTranslationToggle');
 const touchModeToggle = document.getElementById('touchModeToggle');
 const audioPlayer = document.getElementById('audioPlayer');
 const quranAudio = document.getElementById('quranAudio');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const stopBtn = document.getElementById('stopBtn');
 const closeAudioBtn = document.getElementById('closeAudioBtn');
+const audioProgress = document.getElementById('audioProgress');
+const currentTimeSpan = document.getElementById('currentTime');
+const durationSpan = document.getElementById('duration');
 const toggleSurahBtn = document.getElementById('toggleSurahBtn');
 const surahSidebar = document.getElementById('surahSidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -35,6 +46,10 @@ const searchInput = document.getElementById('surahSearchInput');
 const searchClearBtn = document.getElementById('searchClearBtn');
 const surahCountSpan = document.getElementById('surahCount');
 const ayahTooltip = document.getElementById('ayahTooltip');
+
+// Icons
+const playIcon = document.querySelector('.play-icon');
+const pauseIcon = document.querySelector('.pause-icon');
 
 // Theme buttons
 const themeBtns = document.querySelectorAll('.theme-btn-small');
@@ -126,7 +141,6 @@ async function loadSurahList() {
     if (data && data.length) {
       surahList = data;
       
-      // Build sajdah info map
       surahList.forEach(surah => {
         if (surah.sajdahAyah) {
           sajdahSurahs[surah.number] = {
@@ -140,7 +154,6 @@ async function loadSurahList() {
       renderSurahList();
       updateSurahCount();
       
-      // Auto-load first surah (Fatiha)
       if (surahList.length > 0) {
         loadSurah(surahList[0].number);
       }
@@ -150,19 +163,15 @@ async function loadSurahList() {
   } catch (error) {
     console.error('Error loading surah list:', error);
     showToast('সূরা তালিকা লোড করতে ব্যর্থ হয়েছে');
-    // Load fallback data
     loadFallbackSurahList();
   }
 }
 
 function loadFallbackSurahList() {
-  // Fallback data for first 5 surahs
   surahList = [
     { number: 1, name: "সূরা আল-ফাতিহা", nameArabic: "الفاتحة", nameEnglish: "Al-Fatiha", numberOfAyahs: 7, revelationType: "মক্কী" },
     { number: 2, name: "সূরা আল-বাকারা", nameArabic: "البقرة", nameEnglish: "Al-Baqarah", numberOfAyahs: 286, revelationType: "মাদানী" },
-    { number: 3, name: "সূরা আল-ইমরান", nameArabic: "آل عمران", nameEnglish: "Aal-E-Imran", numberOfAyahs: 200, revelationType: "মাদানী" },
-    { number: 4, name: "সূরা আন-নিসা", nameArabic: "النساء", nameEnglish: "An-Nisa", numberOfAyahs: 176, revelationType: "মাদানী" },
-    { number: 5, name: "সূরা আল-মায়িদাহ", nameArabic: "المائدة", nameEnglish: "Al-Ma'idah", numberOfAyahs: 120, revelationType: "মাদানী" }
+    { number: 3, name: "সূরা আল-ইমরান", nameArabic: "آل عمران", nameEnglish: "Aal-E-Imran", numberOfAyahs: 200, revelationType: "মাদানী" }
   ];
   filteredSurahList = [...surahList];
   renderSurahList();
@@ -215,6 +224,7 @@ function renderSurahList() {
 // ========== LOAD SURAH FROM JSON FILE ==========
 async function loadSurah(surahNumber) {
   showLoading(true);
+  stopAudio();
   
   try {
     const response = await fetch(`surah-data/surah-${surahNumber}.json`);
@@ -225,67 +235,42 @@ async function loadSurah(surahNumber) {
     const data = await response.json();
     currentSurah = data;
     currentAyahs = data.ayahs || [];
+    currentSurahNumber = surahNumber;
     
-    // Get surah info from list
     const surahInfo = surahList.find(s => s.number === surahNumber);
     const revelationText = surahInfo?.revelationType || data.revelationType || '';
     const ayahCount = surahInfo?.numberOfAyahs || data.numberOfAyahs || currentAyahs.length;
     
-    // Build details text
     let detailsText = `${revelationText} · ${ayahCount} আয়াত`;
     
-    // Add sajdah info if exists
     const sajdahInfo = sajdahSurahs[surahNumber];
     if (sajdahInfo) {
       detailsText += ` · <span class="sajdah-info-badge"><span class="sajdah-symbol">${sajdahInfo.symbol}</span> সিজদা (আয়াত ${sajdahInfo.ayah})</span>`;
     }
     
-    // Update header
     surahNameEl.textContent = data.name || surahInfo?.name;
     surahDetailsEl.innerHTML = detailsText;
     
     renderAyahs(surahNumber);
     updateActiveSurahInList(surahNumber);
     
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
   } catch (error) {
     console.error('Error loading surah:', error);
     showToast(`সূরা ${surahNumber} লোড করতে ব্যর্থ হয়েছে`);
     
-    // Show error in container with option to use fallback
     if (ayahContainer) {
       ayahContainer.innerHTML = `
         <div class="no-results">
           <p>⚠️ সূরা টি লোড করা সম্ভব হয়নি</p>
           <p style="font-size:0.8rem; margin-top:10px;">surah-data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
-          <button onclick="loadFallbackSurahContent(${surahNumber})" style="margin-top:15px; padding:8px 20px; background:var(--primary); color:white; border:none; border-radius:25px; cursor:pointer;">ফলব্যাক কন্টেন্ট লোড করুন</button>
         </div>
       `;
     }
   }
   
   showLoading(false);
-}
-
-function loadFallbackSurahContent(surahNumber) {
-  // Provide fallback content for surahs
-  const fallbackAyahs = [];
-  const surahInfo = surahList.find(s => s.number === surahNumber);
-  const ayahCount = surahInfo?.numberOfAyahs || 7;
-  
-  for (let i = 1; i <= Math.min(ayahCount, 10); i++) {
-    fallbackAyahs.push({
-      number: i,
-      arabic: `আয়াত ${i} এর আরবি টেক্সট`,
-      translation: `আয়াত ${i} এর বাংলা অনুবাদ`
-    });
-  }
-  
-  currentAyahs = fallbackAyahs;
-  renderAyahs(surahNumber);
-  showToast(`সূরা ${surahNumber} এর ফলব্যাক কন্টেন্ট লোড হয়েছে`);
 }
 
 function renderAyahs(surahNumber) {
@@ -296,7 +281,6 @@ function renderAyahs(surahNumber) {
     return;
   }
   
-  // Check if we should show Bismillah (except Surah At-Tawbah - number 9)
   const showBismillah = surahNumber !== 9;
   const sajdahInfo = sajdahSurahs[surahNumber];
   const sajdahAyah = sajdahInfo ? sajdahInfo.ayah : null;
@@ -411,16 +395,148 @@ function updateActiveSurahInList(surahNumber) {
   });
 }
 
-// ========== AUDIO PLAYER ==========
-function playSurahAudio(surahNumber = 1, ayahNumber = 1) {
-  try {
-    const audioUrl = `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${surahNumber}_${ayahNumber}.mp3`;
+// ========== AUDIO PLAYER FUNCTIONS ==========
+function getAudioUrl(surahNumber) {
+  // Local audio file path pattern: audio/surah-{surahNumber}.mp3
+  // Or use online CDN based on reciter
+  if (currentReciter === 'local') {
+    return `audio/surah-${surahNumber}.mp3`;
+  } else {
+    return `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${surahNumber}.mp3`;
+  }
+}
+
+function playSurahAudio() {
+  if (!currentSurahNumber) {
+    showToast('প্রথমে একটি সূরা নির্বাচন করুন');
+    return;
+  }
+  
+  const audioUrl = getAudioUrl(currentSurahNumber);
+  
+  if (quranAudio.src !== audioUrl) {
     quranAudio.src = audioUrl;
-    audioPlayer.style.display = 'flex';
-    quranAudio.play().catch(e => console.log('Audio play error:', e));
-  } catch (error) {
-    console.error('Error playing audio:', error);
-    showToast('অডিও প্লে করতে ব্যর্থ হয়েছে');
+    quranAudio.load();
+  }
+  
+  quranAudio.play()
+    .then(() => {
+      isPlaying = true;
+      audioPlayer.style.display = 'block';
+      updatePlayPauseButtons(true);
+      startAudioProgressUpdate();
+      showToast(`🔊 ${surahNameEl.innerText} শুরু হচ্ছে...`);
+    })
+    .catch(e => {
+      console.error('Audio play error:', e);
+      showToast('অডিও প্লে করতে ব্যর্থ হয়েছে। ফাইলটি নেই।');
+      updatePlayPauseButtons(false);
+    });
+}
+
+function pauseAudio() {
+  quranAudio.pause();
+  isPlaying = false;
+  updatePlayPauseButtons(false);
+  stopAudioProgressUpdate();
+}
+
+function stopAudio() {
+  quranAudio.pause();
+  quranAudio.currentTime = 0;
+  isPlaying = false;
+  updatePlayPauseButtons(false);
+  if (audioProgress) audioProgress.value = 0;
+  if (currentTimeSpan) currentTimeSpan.textContent = '00:00';
+  stopAudioProgressUpdate();
+}
+
+function togglePlayPause() {
+  if (isPlaying) {
+    pauseAudio();
+  } else {
+    playSurahAudio();
+  }
+}
+
+function updatePlayPauseButtons(playing) {
+  if (playIcon && pauseIcon) {
+    if (playing) {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  }
+}
+
+function startAudioProgressUpdate() {
+  if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+  audioUpdateInterval = setInterval(updateAudioProgress, 500);
+}
+
+function stopAudioProgressUpdate() {
+  if (audioUpdateInterval) {
+    clearInterval(audioUpdateInterval);
+    audioUpdateInterval = null;
+  }
+}
+
+function updateAudioProgress() {
+  if (!quranAudio || !audioProgress) return;
+  
+  const duration = quranAudio.duration;
+  const currentTime = quranAudio.currentTime;
+  
+  if (!isNaN(duration) && duration > 0) {
+    audioProgress.value = (currentTime / duration) * 100;
+    currentTimeSpan.textContent = formatTime(currentTime);
+    durationSpan.textContent = formatTime(duration);
+  }
+}
+
+function formatTime(seconds) {
+  if (isNaN(seconds)) return '00:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function seekAudio(e) {
+  if (!quranAudio) return;
+  const duration = quranAudio.duration;
+  if (!isNaN(duration) && duration > 0) {
+    const seekTime = (e.target.value / 100) * duration;
+    quranAudio.currentTime = seekTime;
+  }
+}
+
+function closeAudio() {
+  stopAudio();
+  audioPlayer.style.display = 'none';
+  quranAudio.src = '';
+}
+
+// Audio event listeners
+function setupAudioListeners() {
+  if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
+  if (stopBtn) stopBtn.addEventListener('click', stopAudio);
+  if (closeAudioBtn) closeAudioBtn.addEventListener('click', closeAudio);
+  if (audioProgress) audioProgress.addEventListener('input', seekAudio);
+  
+  if (quranAudio) {
+    quranAudio.addEventListener('ended', () => {
+      isPlaying = false;
+      updatePlayPauseButtons(false);
+      stopAudioProgressUpdate();
+      showToast('সূরা শেষ হয়েছে');
+    });
+    
+    quranAudio.addEventListener('loadedmetadata', () => {
+      if (audioProgress) audioProgress.value = 0;
+      if (durationSpan) durationSpan.textContent = formatTime(quranAudio.duration);
+    });
   }
 }
 
@@ -474,6 +590,11 @@ function saveSettings() {
   } else if (currentSurah) {
     renderAyahs(currentSurah.number);
   }
+  
+  // Stop current audio when reciter changes
+  if (currentReciter !== reciterSelect.value) {
+    stopAudio();
+  }
 }
 
 function loadSettings() {
@@ -503,16 +624,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadSettings();
   loadSurahList();
+  setupAudioListeners();
   
   if (settingsHeaderBtn) settingsHeaderBtn.addEventListener('click', openSettings);
   if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
   if (reciterSelect) reciterSelect.addEventListener('change', saveSettings);
   if (showTranslationToggle) showTranslationToggle.addEventListener('change', saveSettings);
   if (touchModeToggle) touchModeToggle.addEventListener('change', saveSettings);
-  if (closeAudioBtn) closeAudioBtn.addEventListener('click', () => {
-    audioPlayer.style.display = 'none';
-    quranAudio.pause();
-  });
   if (toggleSurahBtn) toggleSurahBtn.addEventListener('click', toggleSidebar);
   if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
   
