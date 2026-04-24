@@ -3,6 +3,7 @@
 // Global Variables
 let surahList = [];
 let filteredSurahList = [];
+let currentSurah = null;
 let currentAyahs = [];
 let showTranslation = true;
 let touchMode = true;
@@ -38,25 +39,6 @@ const ayahTooltip = document.getElementById('ayahTooltip');
 
 // Theme buttons
 const themeBtns = document.querySelectorAll('.theme-btn-small');
-
-// Surah Fatiha Data (Built-in)
-const SURAH_FATIHA = {
-  number: 1,
-  name: "সূরা আল-ফাতিহা",
-  nameArabic: "الفاتحة",
-  meaning: "উদ্বোধন",
-  revelationType: "মক্কী",
-  numberOfAyahs: 7,
-  ayahs: [
-    { number: 1, arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", translation: "শুরু করছি আল্লাহর নামে যিনি পরম করুণাময়, অতি দয়ালু।" },
-    { number: 2, arabic: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", translation: "সমস্ত প্রশংসা আল্লাহর জন্য, যিনি সমগ্র বিশ্বের পালনকর্তা।" },
-    { number: 3, arabic: "الرَّحْمَٰنِ الرَّحِيمِ", translation: "যিনি পরম করুণাময়, অতি দয়ালু।" },
-    { number: 4, arabic: "مَالِكِ يَوْمِ الدِّينِ", translation: "যিনি বিচার দিনের মালিক।" },
-    { number: 5, arabic: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", translation: "আমরা শুধু আপনারই ইবাদত করি এবং শুধু আপনারই সাহায্য প্রার্থনা করি।" },
-    { number: 6, arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", translation: "আমাদেরকে সরল পথ দেখান।" },
-    { number: 7, arabic: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", translation: "তাদের পথ, যাদেরকে আপনি অনুগ্রহ দান করেছেন, যাদের উপর আপনার ক্রোধ নাযিল হয়নি এবং যারা পথভ্রষ্ট হয়নি।" }
-  ]
-};
 
 // ========== THEME FUNCTIONS ==========
 function setThemeMode(mode) {
@@ -135,7 +117,7 @@ function clearSearch() {
   }
 }
 
-// ========== LOAD SURAH LIST ==========
+// ========== LOAD SURAH LIST FROM JSON ==========
 async function loadSurahList() {
   try {
     const response = await fetch('surah data/surah-list.json');
@@ -146,31 +128,18 @@ async function loadSurahList() {
       filteredSurahList = [...surahList];
       renderSurahList();
       updateSurahCount();
+      
+      // Auto-load first surah (Fatiha)
+      if (surahList.length > 0) {
+        loadSurah(surahList[0].number);
+      }
     } else {
       throw new Error('Failed to load surah list');
     }
   } catch (error) {
     console.error('Error loading surah list:', error);
-    loadFallbackSurahList();
+    showToast('সূরা তালিকা লোড করতে ব্যর্থ হয়েছে');
   }
-}
-
-function loadFallbackSurahList() {
-  surahList = [];
-  for (let i = 1; i <= 114; i++) {
-    surahList.push({
-      number: i,
-      name: `সূরা ${i}`,
-      nameArabic: i === 1 ? 'الفاتحة' : `سورة ${i}`,
-      nameEnglish: `Surah ${i}`,
-      meaning: '',
-      revelationType: i % 2 === 0 ? 'মাদানী' : 'মক্কী',
-      numberOfAyahs: i === 1 ? 7 : (i === 2 ? 286 : 20)
-    });
-  }
-  filteredSurahList = [...surahList];
-  renderSurahList();
-  updateSurahCount();
 }
 
 function renderSurahList() {
@@ -203,34 +172,63 @@ function renderSurahList() {
   document.querySelectorAll('.surah-item').forEach(item => {
     item.addEventListener('click', () => {
       const surahNum = parseInt(item.dataset.surah);
-      if (surahNum === 1) {
-        loadSurahFatiha();
-      } else {
-        showToast(`শুধুমাত্র সূরা আল-ফাতিহা উপলব্ধ`);
-      }
+      loadSurah(surahNum);
       closeSidebar();
     });
   });
 }
 
-// ========== LOAD SURAH FATIHA ==========
-function loadSurahFatiha() {
+// ========== LOAD SURAH FROM JSON FILE ==========
+async function loadSurah(surahNumber) {
   showLoading(true);
   
-  currentAyahs = SURAH_FATIHA.ayahs;
+  try {
+    const response = await fetch(`surah data/surah-${surahNumber}.json`);
+    if (!response.ok) {
+      throw new Error(`Surah ${surahNumber} not found`);
+    }
+    
+    const data = await response.json();
+    currentSurah = data;
+    currentAyahs = data.ayahs || [];
+    
+    // Update header
+    surahNameEl.textContent = data.name;
+    surahNameArabicEl.textContent = data.nameArabic;
+    surahMeaningEl.textContent = data.meaning || '';
+    surahDetailsEl.textContent = `${data.revelationType || ''} · ${data.numberOfAyahs} আয়াত`;
+    
+    renderAyahs();
+    updateActiveSurahInList(surahNumber);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+  } catch (error) {
+    console.error('Error loading surah:', error);
+    showToast(`সূরা ${surahNumber} লোড করতে ব্যর্থ হয়েছে`);
+    
+    // Show error in container
+    if (ayahContainer) {
+      ayahContainer.innerHTML = `
+        <div class="no-results">
+          <p>⚠️ সূরা টি লোড করা সম্ভব হয়নি</p>
+          <p style="font-size:0.8rem; margin-top:10px;">surah data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
+        </div>
+      `;
+    }
+  }
   
-  surahNameEl.textContent = SURAH_FATIHA.name;
-  surahNameArabicEl.textContent = SURAH_FATIHA.nameArabic;
-  surahMeaningEl.textContent = SURAH_FATIHA.meaning;
-  surahDetailsEl.textContent = `${SURAH_FATIHA.revelationType} · ${SURAH_FATIHA.numberOfAyahs} আয়াত`;
-  
-  renderAyahs();
-  updateActiveSurahInList(1);
   showLoading(false);
 }
 
 function renderAyahs() {
   if (!ayahContainer) return;
+  
+  if (!currentAyahs || currentAyahs.length === 0) {
+    ayahContainer.innerHTML = '<div class="no-results"><p>কোন আয়াত পাওয়া যায়নি</p></div>';
+    return;
+  }
   
   ayahContainer.innerHTML = currentAyahs.map(ayah => `
     <div class="ayah-item" data-ayah="${ayah.number}">
@@ -240,7 +238,6 @@ function renderAyahs() {
     </div>
   `).join('');
   
-  // Add click/touch listeners for arabic text
   attachAyahListeners();
 }
 
@@ -248,16 +245,13 @@ function attachAyahListeners() {
   const arabicElements = document.querySelectorAll('.ayah-arabic');
   
   arabicElements.forEach(el => {
-    // Remove existing listeners to avoid duplicates
     el.removeEventListener('click', handleAyahClick);
     el.removeEventListener('mouseenter', handleAyahMouseEnter);
     el.removeEventListener('mouseleave', handleAyahMouseLeave);
     
     if (touchMode) {
-      // Touch mode: click/tap to show tooltip
       el.addEventListener('click', handleAyahClick);
     } else {
-      // Desktop mode: hover to show tooltip
       el.addEventListener('mouseenter', handleAyahMouseEnter);
       el.addEventListener('mouseleave', handleAyahMouseLeave);
     }
@@ -269,41 +263,32 @@ function handleAyahClick(e) {
   const element = e.currentTarget;
   const arabic = decodeURIComponent(element.dataset.arabic || '');
   const translation = decodeURIComponent(element.dataset.translation || '');
-  
   showTooltip(element, arabic, translation);
 }
 
 function handleAyahMouseEnter(e) {
   if (touchMode) return;
-  
   if (tooltipTimeout) clearTimeout(tooltipTimeout);
-  
   const element = e.currentTarget;
   const arabic = decodeURIComponent(element.dataset.arabic || '');
   const translation = decodeURIComponent(element.dataset.translation || '');
-  
   showTooltip(element, arabic, translation);
 }
 
 function handleAyahMouseLeave(e) {
   if (touchMode) return;
-  
-  tooltipTimeout = setTimeout(() => {
-    hideTooltip();
-  }, 200);
+  tooltipTimeout = setTimeout(() => hideTooltip(), 200);
 }
 
 function showTooltip(targetElement, arabic, translation) {
   if (!ayahTooltip) return;
   
-  // Update tooltip content
   const tooltipArabic = ayahTooltip.querySelector('.tooltip-arabic');
   const tooltipTranslation = ayahTooltip.querySelector('.tooltip-translation');
   
   if (tooltipArabic) tooltipArabic.innerHTML = arabic;
   if (tooltipTranslation) tooltipTranslation.innerHTML = translation;
   
-  // Position tooltip
   const rect = targetElement.getBoundingClientRect();
   const tooltipHeight = 150;
   const tooltipWidth = 280;
@@ -311,50 +296,31 @@ function showTooltip(targetElement, arabic, translation) {
   let top = rect.top - tooltipHeight - 10;
   let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
   
-  // Adjust if tooltip goes out of viewport
-  if (top < 10) {
-    top = rect.bottom + 10;
-  }
-  if (left < 10) {
-    left = 10;
-  }
-  if (left + tooltipWidth > window.innerWidth - 10) {
-    left = window.innerWidth - tooltipWidth - 10;
-  }
+  if (top < 10) top = rect.bottom + 10;
+  if (left < 10) left = 10;
+  if (left + tooltipWidth > window.innerWidth - 10) left = window.innerWidth - tooltipWidth - 10;
   
   ayahTooltip.style.top = `${top}px`;
   ayahTooltip.style.left = `${left}px`;
   ayahTooltip.style.display = 'block';
   
-  // Auto hide after 3 seconds in touch mode
   if (touchMode) {
-    setTimeout(() => {
-      hideTooltip();
-    }, 3000);
+    setTimeout(() => hideTooltip(), 3000);
   }
 }
 
 function hideTooltip() {
-  if (ayahTooltip) {
-    ayahTooltip.style.display = 'none';
-  }
+  if (ayahTooltip) ayahTooltip.style.display = 'none';
 }
 
-// Close tooltip when clicking elsewhere
 document.addEventListener('click', (e) => {
-  if (!e.target.classList.contains('ayah-arabic')) {
-    hideTooltip();
-  }
+  if (!e.target.classList?.contains('ayah-arabic')) hideTooltip();
 });
 
 function updateActiveSurahInList(surahNumber) {
   document.querySelectorAll('.surah-item').forEach(item => {
     const num = parseInt(item.dataset.surah);
-    if (num === surahNumber) {
-      item.classList.add('active');
-    } else {
-      item.classList.remove('active');
-    }
+    item.classList.toggle('active', num === surahNumber);
   });
 }
 
@@ -415,9 +381,7 @@ function saveSettings() {
   
   if (newTouchMode !== touchMode) {
     touchMode = newTouchMode;
-    if (currentAyahs.length) {
-      renderAyahs();
-    }
+    if (currentAyahs.length) renderAyahs();
   } else if (currentAyahs.length) {
     renderAyahs();
   }
@@ -450,7 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadSettings();
   loadSurahList();
-  loadSurahFatiha();
   
   if (settingsHeaderBtn) settingsHeaderBtn.addEventListener('click', openSettings);
   if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
@@ -470,18 +433,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Search functionality
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      filterSurahList(e.target.value);
-    });
+    searchInput.addEventListener('input', (e) => filterSurahList(e.target.value));
   }
   
   if (searchClearBtn) {
     searchClearBtn.addEventListener('click', clearSearch);
   }
   
-  // Tooltip close on scroll
   window.addEventListener('scroll', hideTooltip);
   window.addEventListener('resize', hideTooltip);
 });
