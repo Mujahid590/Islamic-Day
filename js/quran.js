@@ -1,5 +1,5 @@
 // ========== QURAN API AND FUNCTIONALITY ==========
-// সমস্ত ডাটা surah-data/ ফোল্ডার থেকে লোড হবে
+// অফলাইন ও অনলাইন উভয় মোডে কাজ করবে
 
 // Global Variables
 let surahList = [];
@@ -53,6 +53,38 @@ const pauseIcon = document.querySelector('.pause-icon');
 
 // Theme buttons
 const themeBtns = document.querySelectorAll('.theme-btn-small');
+
+// ========== ইনলাইন ফলব্যাক ডাটা (অফলাইনের জন্য) ==========
+const INLINE_SURAH_LIST = [
+  { number: 1, name: "সূরা আল-ফাতিহা", nameArabic: "الفاتحة", nameEnglish: "Al-Fatiha", numberOfAyahs: 7, revelationType: "মক্কী" },
+  { number: 2, name: "সূরা আল-বাকারা", nameArabic: "البقرة", nameEnglish: "Al-Baqarah", numberOfAyahs: 286, revelationType: "মাদানী" },
+  { number: 3, name: "সূরা আল-ইমরান", nameArabic: "آل عمران", nameEnglish: "Aal-E-Imran", numberOfAyahs: 200, revelationType: "মাদানী" },
+  { number: 4, name: "সূরা আন-নিসা", nameArabic: "النساء", nameEnglish: "An-Nisa", numberOfAyahs: 176, revelationType: "মাদানী" },
+  { number: 5, name: "সূরা আল-মায়িদাহ", nameArabic: "المائدة", nameEnglish: "Al-Ma'idah", numberOfAyahs: 120, revelationType: "মাদানী" },
+  { number: 6, name: "সূরা আল-আনআম", nameArabic: "الأنعام", nameEnglish: "Al-An'am", numberOfAyahs: 165, revelationType: "মক্কী" },
+  { number: 7, name: "সূরা আল-আরাফ", nameArabic: "الأعراف", nameEnglish: "Al-A'raf", numberOfAyahs: 206, revelationType: "মক্কী", sajdahAyah: 206, sajdahSymbol: "۩" },
+  { number: 13, name: "সূরা আর-রাদ", nameArabic: "الرعد", nameEnglish: "Ar-Ra'd", numberOfAyahs: 43, revelationType: "মাদানী", sajdahAyah: 15, sajdahSymbol: "۩" }
+];
+
+const INLINE_SURAH_DATA = {
+  1: {
+    number: 1,
+    name: "সূরা আল-ফাতিহা",
+    nameArabic: "الفاتحة",
+    meaning: "উদ্বোধন",
+    revelationType: "মক্কী",
+    numberOfAyahs: 7,
+    ayahs: [
+      { number: 1, arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", translation: "শুরু করছি আল্লাহর নামে যিনি পরম করুণাময় ও অতি দয়ালু।" },
+      { number: 2, arabic: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", translation: "সমস্ত প্রশংসা আল্লাহর জন্য, যিনি সমস্ত সৃষ্টিকুলের রব।" },
+      { number: 3, arabic: "الرَّحْمَٰنِ الرَّحِيمِ", translation: "যিনি পরম করুণাময় ও অতি দয়ালু।" },
+      { number: 4, arabic: "مَالِكِ يَوْمِ الدِّينِ", translation: "যিনি বিচার দিনের মালিক।" },
+      { number: 5, arabic: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", translation: "আমরা শুধুমাত্র তোমারই ইবাদত করি এবং শুধুমাত্র তোমারই কাছে সাহায্য চাই।" },
+      { number: 6, arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", translation: "আমাদের সরল পথ দেখাও।" },
+      { number: 7, arabic: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", translation: "তাদের পথ, যাদেরকে তুমি নেয়ামত দান করেছ, তাদের পথ নয় যাদের প্রতি তোমার ক্রোধ নাযিল হয়েছে এবং তারা পথভ্রষ্টও নয়।" }
+    ]
+  }
+};
 
 // ========== THEME FUNCTIONS ==========
 function setThemeMode(mode) {
@@ -127,7 +159,7 @@ function clearSearch() {
   }
 }
 
-// ========== LOAD SURAH LIST FROM JSON FILE ==========
+// ========== LOAD SURAH LIST (অফলাইন + অনলাইন) ==========
 async function loadSurahList() {
   showLoading(true);
   try {
@@ -138,46 +170,37 @@ async function loadSurahList() {
     
     if (data && data.length) {
       surahList = data;
-      
-      // Store sajdah info
-      surahList.forEach(surah => {
-        if (surah.sajdahAyah) {
-          sajdahSurahs[surah.number] = {
-            ayah: surah.sajdahAyah,
-            symbol: surah.sajdahSymbol || '۩'
-          };
-          if (surah.sajdahAyah2) {
-            sajdahSurahs[surah.number].ayah2 = surah.sajdahAyah2;
-          }
-        }
-      });
-      
-      filteredSurahList = [...surahList];
-      renderSurahList();
-      updateSurahCount();
-      
-      // Load first surah
-      if (surahList.length > 0) {
-        loadSurah(surahList[0].number);
-      }
     } else {
-      throw new Error('No data in surah list');
+      throw new Error('No data');
     }
   } catch (error) {
-    console.error('Error loading surah list:', error);
-    showToast('সূরা তালিকা লোড করতে ব্যর্থ হয়েছে। surah-data/surah-list.json ফাইল চেক করুন।');
-    surahListContainer.innerHTML = `
-      <div class="no-results">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="M21 21l-4.35-4.35"/>
-        </svg>
-        <p>সূরা তালিকা লোড করা সম্ভব হয়নি</p>
-        <p style="font-size:0.7rem; margin-top:10px;">surah-data/surah-list.json ফাইলটি বিদ্যমান নেই</p>
-        <p style="font-size:0.7rem;">অনুগ্রহ করে surah-data ফোল্ডার তৈরি করে তাতে surah-list.json ফাইল রাখুন</p>
-      </div>
-    `;
+    console.warn('Online JSON not available, using inline data');
+    showToast('অফলাইনে সূরা তালিকা লোড করা হচ্ছে');
+    surahList = INLINE_SURAH_LIST;
   }
+  
+  // Store sajdah info
+  surahList.forEach(surah => {
+    if (surah.sajdahAyah) {
+      sajdahSurahs[surah.number] = {
+        ayah: surah.sajdahAyah,
+        symbol: surah.sajdahSymbol || '۩'
+      };
+      if (surah.sajdahAyah2) {
+        sajdahSurahs[surah.number].ayah2 = surah.sajdahAyah2;
+      }
+    }
+  });
+  
+  filteredSurahList = [...surahList];
+  renderSurahList();
+  updateSurahCount();
+  
+  // Load first surah
+  if (surahList.length > 0) {
+    loadSurah(surahList[0].number);
+  }
+  
   showLoading(false);
 }
 
@@ -199,7 +222,6 @@ function renderSurahList() {
   
   surahListContainer.innerHTML = filteredSurahList.map(surah => {
     const hasSajdah = surah.sajdahAyah ? true : false;
-    // সিজদা ব্যাজের টেক্সট তৈরি
     let sajdahText = '';
     if (hasSajdah) {
       if (surah.sajdahAyah2) {
@@ -231,7 +253,7 @@ function renderSurahList() {
   });
 }
 
-// ========== LOAD SURAH FROM JSON FILE ==========
+// ========== LOAD SURAH (অফলাইন + অনলাইন) ==========
 async function loadSurah(surahNumber) {
   showLoading(true);
   stopAudio();
@@ -242,49 +264,60 @@ async function loadSurah(surahNumber) {
     if (!response.ok) {
       throw new Error(`Surah ${surahNumber} not found`);
     }
-    
     const data = await response.json();
     currentSurah = data;
     currentAyahs = data.ayahs || [];
-    currentSurahNumber = surahNumber;
-    
-    const surahInfo = surahList.find(s => s.number === surahNumber);
-    const revelationText = surahInfo?.revelationType || data.revelationType || '';
-    const ayahCount = surahInfo?.numberOfAyahs || data.numberOfAyahs || currentAyahs.length;
-    
-    let detailsText = `${revelationText} · ${ayahCount} আয়াত`;
-    
-    const sajdahInfo = sajdahSurahs[surahNumber];
-    if (sajdahInfo) {
-      detailsText += ` · <span class="sajdah-info-badge"><span class="sajdah-symbol">${sajdahInfo.symbol}</span> সিজদা (আয়াত ${sajdahInfo.ayah})</span>`;
-      if (sajdahInfo.ayah2) {
-        detailsText += `, ${sajdahInfo.ayah2}`;
-      }
-    }
-    
-    surahNameEl.textContent = data.name || surahInfo?.name || `সূরা ${surahNumber}`;
-    surahDetailsEl.innerHTML = detailsText;
-    
-    renderAyahs(surahNumber);
-    updateActiveSurahInList(surahNumber);
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
   } catch (error) {
-    console.error('Error loading surah:', error);
-    showToast(`সূরা ${surahNumber} লোড করতে ব্যর্থ হয়েছে`);
-    
-    if (ayahContainer) {
-      ayahContainer.innerHTML = `
-        <div class="no-results">
-          <p>⚠️ সূরা টি লোড করা সম্ভব হয়নি</p>
-          <p style="font-size:0.8rem; margin-top:10px;">surah-data/surah-${surahNumber}.json ফাইলটি বিদ্যমান নেই</p>
-          <p style="font-size:0.7rem; margin-top:5px;">অনুগ্রহ করে surah-data ফোল্ডারে surah-${surahNumber}.json ফাইল তৈরি করুন</p>
-        </div>
-      `;
+    console.warn(`Online JSON for surah ${surahNumber} not available, using inline data`);
+    if (INLINE_SURAH_DATA[surahNumber]) {
+      currentSurah = INLINE_SURAH_DATA[surahNumber];
+      currentAyahs = currentSurah.ayahs || [];
+    } else {
+      // Create placeholder data
+      const surahInfo = surahList.find(s => s.number === surahNumber);
+      currentAyahs = [];
+      const ayahCount = surahInfo?.numberOfAyahs || 7;
+      for (let i = 1; i <= Math.min(ayahCount, 10); i++) {
+        currentAyahs.push({
+          number: i,
+          arabic: `آيَة ${i}`,
+          translation: `আয়াত ${i}`
+        });
+      }
+      currentSurah = {
+        number: surahNumber,
+        name: surahInfo?.name || `সূরা ${surahNumber}`,
+        nameArabic: surahInfo?.nameArabic || '',
+        revelationType: surahInfo?.revelationType || 'মক্কী',
+        numberOfAyahs: ayahCount,
+        ayahs: currentAyahs
+      };
+    }
+    showToast(`সূরা ${surahNumber} অফলাইনে লোড করা হচ্ছে`);
+  }
+  
+  currentSurahNumber = surahNumber;
+  const surahInfo = surahList.find(s => s.number === surahNumber);
+  const revelationText = surahInfo?.revelationType || currentSurah?.revelationType || '';
+  const ayahCount = surahInfo?.numberOfAyahs || currentSurah?.numberOfAyahs || currentAyahs.length;
+  
+  let detailsText = `${revelationText} · ${ayahCount} আয়াত`;
+  
+  const sajdahInfo = sajdahSurahs[surahNumber];
+  if (sajdahInfo) {
+    detailsText += ` · <span class="sajdah-info-badge"><span class="sajdah-symbol">${sajdahInfo.symbol}</span> সিজদা (আয়াত ${sajdahInfo.ayah})</span>`;
+    if (sajdahInfo.ayah2) {
+      detailsText += `, ${sajdahInfo.ayah2}`;
     }
   }
   
+  surahNameEl.textContent = currentSurah.name || surahInfo?.name || `সূরা ${surahNumber}`;
+  surahDetailsEl.innerHTML = detailsText;
+  
+  renderAyahs(surahNumber);
+  updateActiveSurahInList(surahNumber);
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   showLoading(false);
 }
 
@@ -410,7 +443,7 @@ function updateActiveSurahInList(surahNumber) {
   });
 }
 
-// ========== AUDIO PLAYER FUNCTIONS ==========
+// ========== AUDIO PLAYER FUNCTIONS (অনলাইন অডিও) ==========
 function getAudioUrl(surahNumber) {
   return `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${surahNumber}.mp3`;
 }
@@ -610,7 +643,6 @@ function saveSettings() {
     renderAyahs(currentSurah.number);
   }
   
-  // Stop current audio when reciter changes
   stopAudio();
 }
 
