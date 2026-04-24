@@ -1,6 +1,7 @@
-/* ========== QURAN PAGE STYLES - অফলাইন সাপোর্ট সহ ========== */
+/* ========== QURAN PAGE STYLES ========== */
+/* অফলাইন ও অনলাইন উভয় মোডে কাজ করবে */
 
-/* গ্লোবাল আরবি ফন্ট সেটিংস - লোকাল ফন্ট (অফলাইনের জন্য) */
+/* গ্লোবাল আরবি ফন্ট সেটিংস */
 @font-face {
     font-family: 'MeQuran';
     font-style: normal;
@@ -17,7 +18,7 @@
     src: url('https://static-cdn.tarteel.ai/qul/fonts/me_quran_bold_newmet.ttf') format('truetype');
 }
 
-/* ব্যাকআপ ফন্ট - আরবির জন্য */
+/* ব্যাকআপ আরবি ফন্ট */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
 /* বাংলা ফন্ট */
@@ -41,9 +42,11 @@
     --text-dark: #1e293b;
     --text-muted: #64748b;
     --border-light: #e2e8f0;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     --radius-card: 24px;
+    --radius-sm: 16px;
 }
 
 body.dark {
@@ -51,14 +54,16 @@ body.dark {
     --primary-light: #8bbce8;
     --primary-soft: #1e2f42;
     --primary-dark: #3a7ca5;
-    --sajdah-color: #7a8e9e;
-    --sajdah-soft: rgba(122, 142, 158, 0.15);
+    --sajdah-color: #8ba3b8;
+    --sajdah-soft: rgba(139, 163, 184, 0.15);
     --bg-light: #0f1724;
     --card-light: #1e293b;
     --text-dark: #eef2ff;
     --text-muted: #9aa9bf;
     --border-light: #2d3a4e;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -71,7 +76,7 @@ body {
     padding-bottom: 85px;
 }
 
-/* Header Styles */
+/* ========== HEADER STYLES ========== */
 .quran-header {
     background: linear-gradient(135deg, #eef4fa, #e3edf6, #dae6f2);
     padding: 16px 20px 24px;
@@ -107,7 +112,7 @@ body.dark .quran-header {
     height: 32px;
 }
 
-/* Buttons */
+/* ========== BUTTONS ========== */
 .toggle-surah-btn, .settings-header-btn {
     background: rgba(45, 106, 159, 0.12);
     border: none;
@@ -140,7 +145,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     stroke: #cbd5e6;
 }
 
-/* Surah Sidebar */
+/* ========== SURAH SIDEBAR ========== */
 .surah-sidebar {
     position: fixed;
     left: -320px;
@@ -195,7 +200,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     margin-top: 5px;
 }
 
-/* Search Container */
+/* ========== SEARCH CONTAINER ========== */
 .search-container {
     padding: 12px 16px;
     background: var(--bg-light);
@@ -254,7 +259,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     color: var(--primary);
 }
 
-/* No Results */
+/* ========== NO RESULTS ========== */
 .no-results {
     text-align: center;
     padding: 60px 20px;
@@ -270,11 +275,11 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     opacity: 0.5;
 }
 
+/* ========== SURAH LIST ========== */
 .surah-list {
     padding: 8px 0;
 }
 
-/* সূরা আইটেম স্টাইল */
 .surah-item {
     display: flex;
     justify-content: space-between;
@@ -310,14 +315,15 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     flex: 1;
 }
 
-/* সূরা নামের লাইন */
+/* সূরা নাম */
 .surah-item .surah-name {
     font-weight: 600;
     font-family: 'Noto Sans Bengali', sans-serif;
     font-size: 0.9rem;
+    margin-bottom: 2px;
 }
 
-/* সিজদা ব্যাজ */
+/* সিজদা ব্যাজ - রং #485764 */
 .sajdah-badge {
     display: inline-block;
     background: #485764;
@@ -327,8 +333,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     padding: 2px 8px;
     border-radius: 20px;
     font-family: 'Noto Sans Bengali', sans-serif;
-    margin-top: 4px;
-    margin-bottom: 2px;
+    margin: 4px 0 2px 0;
 }
 
 .surah-item.active .sajdah-badge {
@@ -355,9 +360,10 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     font-size: 0.6rem;
     opacity: 0.65;
     font-family: 'Noto Sans Bengali', sans-serif;
+    white-space: nowrap;
 }
 
-/* Sidebar Overlay */
+/* ========== SIDEBAR OVERLAY ========== */
 .sidebar-overlay {
     position: fixed;
     inset: 0;
@@ -373,14 +379,14 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     opacity: 1;
 }
 
-/* Main Container */
+/* ========== MAIN CONTAINER ========== */
 .quran-container {
     min-height: calc(100vh - 140px);
     padding: 16px;
     padding-bottom: 20px;
 }
 
-/* Quran Reader */
+/* ========== QURAN READER ========== */
 .quran-reader {
     width: 100%;
     background: var(--card-light);
@@ -412,7 +418,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     color: var(--text-muted);
 }
 
-/* সিজদা ইনফো ব্যাজ */
+/* সিজদা ইনফো ব্যাজ - রিডার পেজে */
 .sajdah-info-badge {
     display: inline-flex;
     align-items: center;
@@ -430,11 +436,11 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
 }
 
 body.dark .sajdah-info-badge {
-    background: rgba(122, 142, 158, 0.15);
-    color: #7a8e9e;
+    background: rgba(139, 163, 184, 0.15);
+    color: #8ba3b8;
 }
 
-/* Audio Player Styles */
+/* ========== AUDIO PLAYER ========== */
 .audio-player {
     background: var(--bg-light);
     border-radius: 30px;
@@ -498,7 +504,11 @@ body.dark .sajdah-info-badge {
     cursor: pointer;
 }
 
-/* Loading Indicator */
+.audio-progress::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+}
+
+/* ========== LOADING INDICATOR ========== */
 .loading-indicator {
     display: none;
     flex-direction: column;
@@ -522,7 +532,7 @@ body.dark .sajdah-info-badge {
     to { transform: rotate(360deg); }
 }
 
-/* Ayah Container */
+/* ========== AYAH CONTAINER ========== */
 .ayah-container {
     display: flex;
     flex-direction: column;
@@ -546,7 +556,7 @@ body.dark .sajdah-info-badge {
     background: var(--primary-soft);
 }
 
-/* বিসমিল্লাহ */
+/* বিসমিল্লাহ স্টাইল */
 .bismillah-container {
     text-align: center;
     padding: 20px 15px;
@@ -568,6 +578,7 @@ body.dark .bismillah-text {
     color: #f0e6d2;
 }
 
+/* আয়াত নম্বর */
 .ayah-number {
     display: inline-block;
     width: 34px;
@@ -604,10 +615,10 @@ body.dark .bismillah-text {
 }
 
 body.dark .sajdah-indicator {
-    background: #7a8e9e;
+    background: #8ba3b8;
 }
 
-/* আরবি টেক্সট */
+/* প্রধান কুরআন টেক্সট */
 .ayah-arabic {
     font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
     font-size: 1.9rem;
@@ -629,6 +640,7 @@ body.dark .sajdah-indicator {
     transform: scale(0.99);
 }
 
+/* অনুবাদ */
 .ayah-translation {
     font-family: 'Noto Sans Bengali', sans-serif;
     font-size: 1rem;
@@ -638,7 +650,7 @@ body.dark .sajdah-indicator {
     padding-top: 12px;
 }
 
-/* Tooltip */
+/* ========== TOOLTIP ========== */
 .ayah-tooltip {
     position: fixed;
     z-index: 1000;
@@ -689,7 +701,7 @@ body.dark .tooltip-translation {
     color: #cbd5e6;
 }
 
-/* Settings Modal */
+/* ========== SETTINGS MODAL ========== */
 .quran-modal {
     display: none;
     position: fixed;
@@ -778,6 +790,7 @@ body.dark .tooltip-translation {
     cursor: pointer;
 }
 
+/* ========== TOGGLE SWITCH ========== */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -823,7 +836,7 @@ body.dark .tooltip-translation {
     transform: translateX(26px);
 }
 
-/* Theme Buttons */
+/* ========== THEME BUTTONS ========== */
 .theme-buttons {
     display: flex;
     gap: 10px;
@@ -853,7 +866,7 @@ body.dark .tooltip-translation {
     border-color: var(--primary);
 }
 
-/* Toast Message */
+/* ========== TOAST MESSAGE ========== */
 .toast-msg {
     position: fixed;
     bottom: 90px;
@@ -878,7 +891,7 @@ body.dark .tooltip-translation {
     100% { opacity: 0; transform: translateY(20px); visibility: hidden; }
 }
 
-/* Bottom Navigation */
+/* ========== BOTTOM NAVIGATION ========== */
 .bottom-navigation {
     position: fixed;
     bottom: 0;
@@ -938,7 +951,7 @@ body.dark .nav-icon-btn.active img {
     color: var(--text-muted);
 }
 
-/* Responsive */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 600px) {
     .quran-reader {
         padding: 16px;
@@ -951,6 +964,10 @@ body.dark .nav-icon-btn.active img {
     
     .bismillah-text {
         font-size: 1.3rem;
+    }
+    
+    .ayah-item {
+        padding: 15px;
     }
     
     .audio-controls {
@@ -976,9 +993,26 @@ body.dark .nav-icon-btn.active img {
         padding: 8px 12px 18px;
     }
     
+    .nav-icon-btn {
+        padding: 4px 8px;
+    }
+    
+    .nav-text {
+        font-size: 0.55rem;
+    }
+    
+    .nav-icon-btn img {
+        width: 22px;
+        height: 22px;
+    }
+    
     .sajdah-badge {
         font-size: 0.5rem;
         padding: 1px 5px;
+    }
+    
+    .surah-info h2 {
+        font-size: 1.2rem;
     }
 }
 
@@ -988,18 +1022,23 @@ body.dark .nav-icon-btn.active img {
         margin: 0 auto;
     }
     
+    .ayah-tooltip {
+        max-width: 350px;
+    }
+    
     .bottom-navigation {
         left: 50%;
         right: auto;
     }
 }
 
+/* ========== DARK MODE ARABIC TEXT ========== */
 body.dark .ayah-arabic,
 body.dark .tooltip-arabic {
     color: #f0e6d2;
 }
 
-/* Print support */
+/* ========== PRINT SUPPORT ========== */
 @media print {
     .quran-header, .audio-player, .toggle-surah-btn,
     .settings-header-btn, .surah-sidebar, .sidebar-overlay,
@@ -1010,5 +1049,10 @@ body.dark .tooltip-arabic {
     .ayah-arabic {
         font-size: 1.6rem;
         color: black;
+    }
+    
+    .quran-reader {
+        box-shadow: none;
+        padding: 0;
     }
 }
