@@ -8,7 +8,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 7,
     "startPage": 1,
-    "endPage": 1
+    "endPage": 1,
+    "sajdahAyah": null
   },
   {
     "number": 2,
@@ -19,7 +20,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 286,
     "startPage": 2,
-    "endPage": 49
+    "endPage": 49,
+    "sajdahAyah": null
   },
   {
     "number": 3,
@@ -30,7 +32,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 200,
     "startPage": 50,
-    "endPage": 76
+    "endPage": 76,
+    "sajdahAyah": null
   },
   {
     "number": 4,
@@ -41,7 +44,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 176,
     "startPage": 77,
-    "endPage": 106
+    "endPage": 106,
+    "sajdahAyah": null
   },
   {
     "number": 5,
@@ -52,7 +56,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 120,
     "startPage": 106,
-    "endPage": 127
+    "endPage": 127,
+    "sajdahAyah": null
   },
   {
     "number": 6,
@@ -63,7 +68,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 165,
     "startPage": 128,
-    "endPage": 150
+    "endPage": 150,
+    "sajdahAyah": null
   },
   {
     "number": 7,
@@ -74,7 +80,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 206,
     "startPage": 151,
-    "endPage": 176
+    "endPage": 176,
+    "sajdahAyah": 206,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 8,
@@ -85,7 +93,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 75,
     "startPage": 177,
-    "endPage": 186
+    "endPage": 186,
+    "sajdahAyah": null
   },
   {
     "number": 9,
@@ -96,7 +105,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 129,
     "startPage": 187,
-    "endPage": 207
+    "endPage": 207,
+    "sajdahAyah": null
   },
   {
     "number": 10,
@@ -107,7 +117,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 109,
     "startPage": 208,
-    "endPage": 221
+    "endPage": 221,
+    "sajdahAyah": null
   },
   {
     "number": 11,
@@ -118,7 +129,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 123,
     "startPage": 221,
-    "endPage": 235
+    "endPage": 235,
+    "sajdahAyah": null
   },
   {
     "number": 12,
@@ -129,7 +141,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 111,
     "startPage": 235,
-    "endPage": 248
+    "endPage": 248,
+    "sajdahAyah": null
   },
   {
     "number": 13,
@@ -140,7 +153,9 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 43,
     "startPage": 249,
-    "endPage": 255
+    "endPage": 255,
+    "sajdahAyah": 15,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 14,
@@ -151,7 +166,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 52,
     "startPage": 255,
-    "endPage": 261
+    "endPage": 261,
+    "sajdahAyah": null
   },
   {
     "number": 15,
@@ -162,7 +178,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 99,
     "startPage": 262,
-    "endPage": 267
+    "endPage": 267,
+    "sajdahAyah": null
   },
   {
     "number": 16,
@@ -173,7 +190,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 128,
     "startPage": 267,
-    "endPage": 281
+    "endPage": 281,
+    "sajdahAyah": 49,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 17,
@@ -184,7 +203,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 111,
     "startPage": 282,
-    "endPage": 293
+    "endPage": 293,
+    "sajdahAyah": 107,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 18,
@@ -195,7 +216,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 110,
     "startPage": 293,
-    "endPage": 304
+    "endPage": 304,
+    "sajdahAyah": null
   },
   {
     "number": 19,
@@ -206,7 +228,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 98,
     "startPage": 305,
-    "endPage": 312
+    "endPage": 312,
+    "sajdahAyah": 58,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 20,
@@ -217,7 +241,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 135,
     "startPage": 312,
-    "endPage": 321
+    "endPage": 321,
+    "sajdahAyah": null
   },
   {
     "number": 21,
@@ -228,7 +253,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 112,
     "startPage": 322,
-    "endPage": 331
+    "endPage": 331,
+    "sajdahAyah": null
   },
   {
     "number": 22,
@@ -239,7 +265,9 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 78,
     "startPage": 332,
-    "endPage": 341
+    "endPage": 341,
+    "sajdahAyah": 18,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 23,
@@ -250,7 +278,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 118,
     "startPage": 342,
-    "endPage": 349
+    "endPage": 349,
+    "sajdahAyah": null
   },
   {
     "number": 24,
@@ -261,7 +290,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 64,
     "startPage": 350,
-    "endPage": 359
+    "endPage": 359,
+    "sajdahAyah": null
   },
   {
     "number": 25,
@@ -272,7 +302,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 77,
     "startPage": 359,
-    "endPage": 366
+    "endPage": 366,
+    "sajdahAyah": 60,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 26,
@@ -283,7 +315,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 227,
     "startPage": 367,
-    "endPage": 376
+    "endPage": 376,
+    "sajdahAyah": null
   },
   {
     "number": 27,
@@ -294,7 +327,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 93,
     "startPage": 377,
-    "endPage": 385
+    "endPage": 385,
+    "sajdahAyah": 25,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 28,
@@ -305,7 +340,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 88,
     "startPage": 385,
-    "endPage": 396
+    "endPage": 396,
+    "sajdahAyah": null
   },
   {
     "number": 29,
@@ -316,7 +352,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 69,
     "startPage": 396,
-    "endPage": 404
+    "endPage": 404,
+    "sajdahAyah": null
   },
   {
     "number": 30,
@@ -327,7 +364,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 60,
     "startPage": 404,
-    "endPage": 410
+    "endPage": 410,
+    "sajdahAyah": null
   },
   {
     "number": 31,
@@ -338,7 +376,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 34,
     "startPage": 411,
-    "endPage": 415
+    "endPage": 415,
+    "sajdahAyah": null
   },
   {
     "number": 32,
@@ -349,7 +388,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 30,
     "startPage": 415,
-    "endPage": 418
+    "endPage": 418,
+    "sajdahAyah": 15,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 33,
@@ -360,7 +401,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 73,
     "startPage": 418,
-    "endPage": 427
+    "endPage": 427,
+    "sajdahAyah": null
   },
   {
     "number": 34,
@@ -371,7 +413,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 54,
     "startPage": 428,
-    "endPage": 434
+    "endPage": 434,
+    "sajdahAyah": null
   },
   {
     "number": 35,
@@ -382,7 +425,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 45,
     "startPage": 434,
-    "endPage": 440
+    "endPage": 440,
+    "sajdahAyah": null
   },
   {
     "number": 36,
@@ -393,7 +437,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 83,
     "startPage": 440,
-    "endPage": 445
+    "endPage": 445,
+    "sajdahAyah": null
   },
   {
     "number": 37,
@@ -404,7 +449,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 182,
     "startPage": 446,
-    "endPage": 452
+    "endPage": 452,
+    "sajdahAyah": null
   },
   {
     "number": 38,
@@ -415,7 +461,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 88,
     "startPage": 453,
-    "endPage": 458
+    "endPage": 458,
+    "sajdahAyah": 24,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 39,
@@ -426,7 +474,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 75,
     "startPage": 458,
-    "endPage": 467
+    "endPage": 467,
+    "sajdahAyah": null
   },
   {
     "number": 40,
@@ -437,7 +486,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 85,
     "startPage": 467,
-    "endPage": 476
+    "endPage": 476,
+    "sajdahAyah": null
   },
   {
     "number": 41,
@@ -448,7 +498,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 54,
     "startPage": 477,
-    "endPage": 482
+    "endPage": 482,
+    "sajdahAyah": 37,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 42,
@@ -459,7 +511,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 53,
     "startPage": 483,
-    "endPage": 489
+    "endPage": 489,
+    "sajdahAyah": null
   },
   {
     "number": 43,
@@ -470,7 +523,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 89,
     "startPage": 489,
-    "endPage": 495
+    "endPage": 495,
+    "sajdahAyah": null
   },
   {
     "number": 44,
@@ -481,7 +535,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 59,
     "startPage": 496,
-    "endPage": 498
+    "endPage": 498,
+    "sajdahAyah": null
   },
   {
     "number": 45,
@@ -492,7 +547,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 37,
     "startPage": 499,
-    "endPage": 502
+    "endPage": 502,
+    "sajdahAyah": null
   },
   {
     "number": 46,
@@ -503,7 +559,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 35,
     "startPage": 502,
-    "endPage": 506
+    "endPage": 506,
+    "sajdahAyah": null
   },
   {
     "number": 47,
@@ -514,7 +571,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 38,
     "startPage": 507,
-    "endPage": 510
+    "endPage": 510,
+    "sajdahAyah": null
   },
   {
     "number": 48,
@@ -525,7 +583,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 29,
     "startPage": 511,
-    "endPage": 515
+    "endPage": 515,
+    "sajdahAyah": null
   },
   {
     "number": 49,
@@ -536,7 +595,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 18,
     "startPage": 515,
-    "endPage": 517
+    "endPage": 517,
+    "sajdahAyah": null
   },
   {
     "number": 50,
@@ -547,7 +607,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 45,
     "startPage": 518,
-    "endPage": 520
+    "endPage": 520,
+    "sajdahAyah": null
   },
   {
     "number": 51,
@@ -558,7 +619,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 60,
     "startPage": 520,
-    "endPage": 523
+    "endPage": 523,
+    "sajdahAyah": null
   },
   {
     "number": 52,
@@ -569,7 +631,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 49,
     "startPage": 523,
-    "endPage": 525
+    "endPage": 525,
+    "sajdahAyah": null
   },
   {
     "number": 53,
@@ -580,7 +643,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 62,
     "startPage": 526,
-    "endPage": 528
+    "endPage": 528,
+    "sajdahAyah": 62,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 54,
@@ -591,7 +656,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 55,
     "startPage": 528,
-    "endPage": 531
+    "endPage": 531,
+    "sajdahAyah": null
   },
   {
     "number": 55,
@@ -602,7 +668,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 78,
     "startPage": 531,
-    "endPage": 534
+    "endPage": 534,
+    "sajdahAyah": null
   },
   {
     "number": 56,
@@ -613,7 +680,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 96,
     "startPage": 534,
-    "endPage": 537
+    "endPage": 537,
+    "sajdahAyah": null
   },
   {
     "number": 57,
@@ -624,7 +692,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 29,
     "startPage": 537,
-    "endPage": 541
+    "endPage": 541,
+    "sajdahAyah": null
   },
   {
     "number": 58,
@@ -635,7 +704,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 22,
     "startPage": 542,
-    "endPage": 545
+    "endPage": 545,
+    "sajdahAyah": null
   },
   {
     "number": 59,
@@ -646,7 +716,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 24,
     "startPage": 545,
-    "endPage": 548
+    "endPage": 548,
+    "sajdahAyah": null
   },
   {
     "number": 60,
@@ -657,7 +728,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 13,
     "startPage": 549,
-    "endPage": 551
+    "endPage": 551,
+    "sajdahAyah": null
   },
   {
     "number": 61,
@@ -668,7 +740,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 14,
     "startPage": 551,
-    "endPage": 552
+    "endPage": 552,
+    "sajdahAyah": null
   },
   {
     "number": 62,
@@ -679,7 +752,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 11,
     "startPage": 553,
-    "endPage": 554
+    "endPage": 554,
+    "sajdahAyah": null
   },
   {
     "number": 63,
@@ -690,7 +764,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 11,
     "startPage": 554,
-    "endPage": 555
+    "endPage": 555,
+    "sajdahAyah": null
   },
   {
     "number": 64,
@@ -701,7 +776,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 18,
     "startPage": 556,
-    "endPage": 557
+    "endPage": 557,
+    "sajdahAyah": null
   },
   {
     "number": 65,
@@ -712,7 +788,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 12,
     "startPage": 558,
-    "endPage": 559
+    "endPage": 559,
+    "sajdahAyah": null
   },
   {
     "number": 66,
@@ -723,7 +800,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 12,
     "startPage": 560,
-    "endPage": 561
+    "endPage": 561,
+    "sajdahAyah": null
   },
   {
     "number": 67,
@@ -734,7 +812,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 30,
     "startPage": 562,
-    "endPage": 564
+    "endPage": 564,
+    "sajdahAyah": null
   },
   {
     "number": 68,
@@ -745,7 +824,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 52,
     "startPage": 564,
-    "endPage": 566
+    "endPage": 566,
+    "sajdahAyah": null
   },
   {
     "number": 69,
@@ -756,7 +836,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 52,
     "startPage": 566,
-    "endPage": 568
+    "endPage": 568,
+    "sajdahAyah": null
   },
   {
     "number": 70,
@@ -767,7 +848,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 44,
     "startPage": 568,
-    "endPage": 570
+    "endPage": 570,
+    "sajdahAyah": null
   },
   {
     "number": 71,
@@ -778,7 +860,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 28,
     "startPage": 570,
-    "endPage": 571
+    "endPage": 571,
+    "sajdahAyah": null
   },
   {
     "number": 72,
@@ -789,7 +872,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 28,
     "startPage": 572,
-    "endPage": 573
+    "endPage": 573,
+    "sajdahAyah": null
   },
   {
     "number": 73,
@@ -800,7 +884,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 20,
     "startPage": 574,
-    "endPage": 575
+    "endPage": 575,
+    "sajdahAyah": null
   },
   {
     "number": 74,
@@ -811,7 +896,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 56,
     "startPage": 575,
-    "endPage": 577
+    "endPage": 577,
+    "sajdahAyah": null
   },
   {
     "number": 75,
@@ -822,7 +908,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 40,
     "startPage": 577,
-    "endPage": 578
+    "endPage": 578,
+    "sajdahAyah": null
   },
   {
     "number": 76,
@@ -833,7 +920,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 31,
     "startPage": 578,
-    "endPage": 580
+    "endPage": 580,
+    "sajdahAyah": null
   },
   {
     "number": 77,
@@ -844,7 +932,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 50,
     "startPage": 580,
-    "endPage": 581
+    "endPage": 581,
+    "sajdahAyah": null
   },
   {
     "number": 78,
@@ -855,7 +944,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 40,
     "startPage": 582,
-    "endPage": 583
+    "endPage": 583,
+    "sajdahAyah": null
   },
   {
     "number": 79,
@@ -866,7 +956,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 46,
     "startPage": 583,
-    "endPage": 584
+    "endPage": 584,
+    "sajdahAyah": null
   },
   {
     "number": 80,
@@ -877,7 +968,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 42,
     "startPage": 585,
-    "endPage": 586
+    "endPage": 586,
+    "sajdahAyah": null
   },
   {
     "number": 81,
@@ -888,7 +980,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 29,
     "startPage": 586,
-    "endPage": 587
+    "endPage": 587,
+    "sajdahAyah": null
   },
   {
     "number": 82,
@@ -899,7 +992,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 19,
     "startPage": 587,
-    "endPage": 587
+    "endPage": 587,
+    "sajdahAyah": null
   },
   {
     "number": 83,
@@ -910,7 +1004,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 36,
     "startPage": 587,
-    "endPage": 589
+    "endPage": 589,
+    "sajdahAyah": null
   },
   {
     "number": 84,
@@ -921,7 +1016,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 25,
     "startPage": 589,
-    "endPage": 589
+    "endPage": 589,
+    "sajdahAyah": 21,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 85,
@@ -932,7 +1029,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 22,
     "startPage": 590,
-    "endPage": 590
+    "endPage": 590,
+    "sajdahAyah": null
   },
   {
     "number": 86,
@@ -943,7 +1041,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 17,
     "startPage": 591,
-    "endPage": 591
+    "endPage": 591,
+    "sajdahAyah": null
   },
   {
     "number": 87,
@@ -954,7 +1053,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 19,
     "startPage": 591,
-    "endPage": 592
+    "endPage": 592,
+    "sajdahAyah": null
   },
   {
     "number": 88,
@@ -965,7 +1065,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 26,
     "startPage": 592,
-    "endPage": 592
+    "endPage": 592,
+    "sajdahAyah": null
   },
   {
     "number": 89,
@@ -976,7 +1077,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 30,
     "startPage": 593,
-    "endPage": 594
+    "endPage": 594,
+    "sajdahAyah": null
   },
   {
     "number": 90,
@@ -987,7 +1089,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 20,
     "startPage": 594,
-    "endPage": 594
+    "endPage": 594,
+    "sajdahAyah": null
   },
   {
     "number": 91,
@@ -998,7 +1101,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 15,
     "startPage": 595,
-    "endPage": 595
+    "endPage": 595,
+    "sajdahAyah": null
   },
   {
     "number": 92,
@@ -1009,7 +1113,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 21,
     "startPage": 595,
-    "endPage": 596
+    "endPage": 596,
+    "sajdahAyah": null
   },
   {
     "number": 93,
@@ -1020,7 +1125,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 11,
     "startPage": 596,
-    "endPage": 596
+    "endPage": 596,
+    "sajdahAyah": null
   },
   {
     "number": 94,
@@ -1031,7 +1137,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 8,
     "startPage": 596,
-    "endPage": 597
+    "endPage": 597,
+    "sajdahAyah": null
   },
   {
     "number": 95,
@@ -1042,7 +1149,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 8,
     "startPage": 597,
-    "endPage": 597
+    "endPage": 597,
+    "sajdahAyah": null
   },
   {
     "number": 96,
@@ -1053,7 +1161,9 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 19,
     "startPage": 597,
-    "endPage": 598
+    "endPage": 598,
+    "sajdahAyah": 19,
+    "sajdahSymbol": "۩"
   },
   {
     "number": 97,
@@ -1064,7 +1174,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 5,
     "startPage": 598,
-    "endPage": 598
+    "endPage": 598,
+    "sajdahAyah": null
   },
   {
     "number": 98,
@@ -1075,7 +1186,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 8,
     "startPage": 598,
-    "endPage": 599
+    "endPage": 599,
+    "sajdahAyah": null
   },
   {
     "number": 99,
@@ -1086,7 +1198,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 8,
     "startPage": 599,
-    "endPage": 599
+    "endPage": 599,
+    "sajdahAyah": null
   },
   {
     "number": 100,
@@ -1097,7 +1210,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 11,
     "startPage": 599,
-    "endPage": 600
+    "endPage": 600,
+    "sajdahAyah": null
   },
   {
     "number": 101,
@@ -1108,7 +1222,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 11,
     "startPage": 600,
-    "endPage": 600
+    "endPage": 600,
+    "sajdahAyah": null
   },
   {
     "number": 102,
@@ -1119,7 +1234,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 8,
     "startPage": 600,
-    "endPage": 600
+    "endPage": 600,
+    "sajdahAyah": null
   },
   {
     "number": 103,
@@ -1130,7 +1246,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 3,
     "startPage": 601,
-    "endPage": 601
+    "endPage": 601,
+    "sajdahAyah": null
   },
   {
     "number": 104,
@@ -1141,7 +1258,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 9,
     "startPage": 601,
-    "endPage": 601
+    "endPage": 601,
+    "sajdahAyah": null
   },
   {
     "number": 105,
@@ -1152,7 +1270,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 5,
     "startPage": 601,
-    "endPage": 602
+    "endPage": 602,
+    "sajdahAyah": null
   },
   {
     "number": 106,
@@ -1163,7 +1282,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 4,
     "startPage": 602,
-    "endPage": 602
+    "endPage": 602,
+    "sajdahAyah": null
   },
   {
     "number": 107,
@@ -1174,7 +1294,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 7,
     "startPage": 602,
-    "endPage": 602
+    "endPage": 602,
+    "sajdahAyah": null
   },
   {
     "number": 108,
@@ -1185,7 +1306,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 3,
     "startPage": 602,
-    "endPage": 602
+    "endPage": 602,
+    "sajdahAyah": null
   },
   {
     "number": 109,
@@ -1196,7 +1318,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 6,
     "startPage": 603,
-    "endPage": 603
+    "endPage": 603,
+    "sajdahAyah": null
   },
   {
     "number": 110,
@@ -1207,7 +1330,8 @@
     "revelationType": "মাদানী",
     "numberOfAyahs": 3,
     "startPage": 603,
-    "endPage": 603
+    "endPage": 603,
+    "sajdahAyah": null
   },
   {
     "number": 111,
@@ -1218,7 +1342,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 5,
     "startPage": 603,
-    "endPage": 603
+    "endPage": 603,
+    "sajdahAyah": null
   },
   {
     "number": 112,
@@ -1229,7 +1354,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 4,
     "startPage": 604,
-    "endPage": 604
+    "endPage": 604,
+    "sajdahAyah": null
   },
   {
     "number": 113,
@@ -1240,7 +1366,8 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 5,
     "startPage": 604,
-    "endPage": 604
+    "endPage": 604,
+    "sajdahAyah": null
   },
   {
     "number": 114,
@@ -1251,6 +1378,7 @@
     "revelationType": "মক্কী",
     "numberOfAyahs": 6,
     "startPage": 604,
-    "endPage": 604
+    "endPage": 604,
+    "sajdahAyah": null
   }
 ]
