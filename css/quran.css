@@ -270,7 +270,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
 .surah-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 14px 16px;
     cursor: pointer;
     transition: all 0.2s;
@@ -292,6 +292,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     width: 40px;
     font-family: 'Noto Sans Bengali', sans-serif;
     font-size: 0.85rem;
+    margin-top: 2px;
 }
 
 .surah-item.active .surah-number {
@@ -302,31 +303,26 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     flex: 1;
 }
 
-/* সূরা নামের লাইন - সিজদা ব্যাজ সহ */
+/* সূরা নাম */
 .surah-item .surah-name {
     font-weight: 600;
     font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 4px;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
 }
 
-/* সিজদা ব্যাজ - ছোট আকারে (হলুদ রং বাদ) */
+/* সিজদা ব্যাজ - সূরা নামের নিচে আলাদা লাইনে */
 .sajdah-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
     background: var(--primary);
     color: white;
     font-size: 0.55rem;
-    font-weight: 600;
-    padding: 2px 8px;
+    font-weight: 500;
+    padding: 3px 10px;
     border-radius: 20px;
     font-family: 'Noto Sans Bengali', sans-serif;
-    vertical-align: middle;
-    white-space: nowrap;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .surah-item.active .sajdah-badge {
@@ -339,8 +335,8 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
     font-size: 0.75rem;
     opacity: 0.75;
-    margin-top: 4px;
     font-weight: 400;
+    margin-top: 2px;
 }
 
 .surah-item.active .surah-name-ar {
@@ -353,6 +349,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     font-size: 0.6rem;
     opacity: 0.65;
     font-family: 'Noto Sans Bengali', sans-serif;
+    margin-top: 2px;
 }
 
 /* Sidebar Overlay */
@@ -410,7 +407,7 @@ body.dark .toggle-surah-btn svg, body.dark .settings-header-btn svg {
     color: var(--text-muted);
 }
 
-/* সিজদা ইনফো ব্যাজ - রিডার পেজে (হলুদ রং বাদ) */
+/* সিজদা ইনফো ব্যাজ - রিডার পেজে */
 .sajdah-info-badge {
     display: inline-flex;
     align-items: center;
@@ -580,7 +577,7 @@ body.dark .bismillah-text {
     font-family: 'Noto Sans Bengali', sans-serif;
 }
 
-/* সিজদা আয়াত হাইলাইট (হলুদ রং বাদ) */
+/* সিজদা আয়াত হাইলাইট */
 .ayah-item.sajdah-ayah {
     background: var(--primary-soft);
     border-right: 3px solid var(--primary);
@@ -969,14 +966,14 @@ body.dark .nav-icon-btn.active img {
         padding: 8px 12px 18px;
     }
     
-    /* ছোট স্ক্রিনে সিজদা ব্যাজ আরও ছোট */
+    /* ছোট স্ক্রিনে সিজদা ব্যাজ */
     .sajdah-badge {
         font-size: 0.5rem;
-        padding: 1px 5px;
+        padding: 2px 8px;
     }
     
     .surah-item .surah-name {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
 }
 
