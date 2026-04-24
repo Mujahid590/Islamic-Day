@@ -27,6 +27,33 @@
     box-sizing: border-box;
 }
 
+/* ========== CSS VARIABLES ========== */
+:root {
+    --primary: #2D6A9F;
+    --primary-dark: #1e4a6f;
+    --primary-soft: rgba(45, 106, 159, 0.08);
+    --bg-light: #f8fafc;
+    --card-light: #ffffff;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --border-light: #e2e8f0;
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+body.dark {
+    --bg-light: #0f172a;
+    --card-light: #1e293b;
+    --text-dark: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-light: #334155;
+}
+
+body {
+    background: var(--bg-light);
+    font-family: 'Noto Sans Bengali', sans-serif;
+    transition: background 0.3s, color 0.3s;
+}
+
 /* Header Styles */
 .quran-header {
   background: linear-gradient(135deg, #eef4fa, #e3edf6, #dae6f2);
@@ -45,6 +72,7 @@ body.dark .quran-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .quran-title {
@@ -309,7 +337,7 @@ body.dark .settings-header-btn svg {
   font-size: 0.9rem;
 }
 
-/* ★★★ সাইডবারের আরবি সূরা নাম - Me Quran ফন্ট ★★★ */
+/* সাইডবারের আরবি সূরা নাম */
 .surah-item .surah-name-ar {
   font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
   font-size: 0.85rem;
@@ -329,14 +357,14 @@ body.dark .settings-header-btn svg {
   font-family: 'Noto Sans Bengali', sans-serif;
 }
 
-/* সিজদা আইকন স্টাইল */
+/* সিজদা ব্যাজ */
 .sajdah-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: #e8a020;
   color: white;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: bold;
   padding: 2px 6px;
   border-radius: 20px;
@@ -401,7 +429,7 @@ body.dark .settings-header-btn svg {
   color: var(--text-muted);
 }
 
-/* ★★★ সূরা আরবি নাম - Me Quran ফন্ট ★★★ */
+/* সূরা আরবি নাম */
 .surah-meta span:first-child {
   font-family: 'MeQuran', 'Noto Naskh Arabic', 'Scheherazade New', serif;
   font-size: 1.2rem;
@@ -556,7 +584,7 @@ body.dark .bismillah-text {
   font-size: 0.9rem;
 }
 
-/* ★★★ প্রধান কুরআন টেক্সট - Me Quran ফন্ট (মদীনা মুশাফ লিপি) ★★★ */
+/* প্রধান কুরআন টেক্সট */
 .ayah-arabic {
   font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
   font-size: 1.9rem;
@@ -617,7 +645,6 @@ body.dark .bismillah-text {
   padding: 12px 16px;
 }
 
-/* ★★★ টুলটিপের আরবি টেক্সট Me Quran ফন্টে ★★★ */
 .tooltip-arabic {
   font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
   font-size: 1.2rem;
@@ -819,7 +846,7 @@ body.dark .tooltip-translation {
   100% { opacity: 0; visibility: hidden; }
 }
 
-/* Bottom Navigation */
+/* ========== BOTTOM NAVIGATION - CORRECTED ========== */
 .bottom-navigation {
   position: fixed;
   bottom: 0;
@@ -829,9 +856,9 @@ body.dark .tooltip-translation {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 16px;
+  padding: 8px 16px 12px;
   border-top: 1px solid var(--border-light);
-  border-radius: 25px 25px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   z-index: 100;
 }
 
@@ -841,12 +868,15 @@ body.dark .tooltip-translation {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   cursor: pointer;
-  padding: 5px 12px;
+  padding: 6px 12px;
   border-radius: 30px;
-  transition: 0.2s;
+  transition: all 0.2s ease;
   opacity: 0.6;
+  flex: 1;
+  max-width: 70px;
 }
 
 .nav-icon-btn.active {
@@ -854,15 +884,31 @@ body.dark .tooltip-translation {
   background: var(--primary-soft);
 }
 
+.nav-icon-btn:hover {
+  opacity: 0.8;
+  background: var(--primary-soft);
+}
+
 .nav-icon-btn img {
   width: 24px;
   height: 24px;
+  object-fit: contain;
 }
 
 .nav-text {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-family: 'Noto Sans Bengali', sans-serif;
   color: var(--text-dark);
+  font-weight: 500;
+}
+
+.nav-icon-btn.active .nav-text {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+body.dark .nav-icon-btn.active .nav-text {
+  color: #6ea8de;
 }
 
 /* Responsive */
@@ -910,6 +956,24 @@ body.dark .tooltip-translation {
   .ayah-tooltip {
     max-width: 260px;
   }
+  
+  .bottom-navigation {
+    padding: 6px 12px 10px;
+  }
+  
+  .nav-icon-btn {
+    padding: 4px 8px;
+    max-width: 60px;
+  }
+  
+  .nav-text {
+    font-size: 0.6rem;
+  }
+  
+  .nav-icon-btn img {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 /* Desktop optimization */
@@ -922,6 +986,15 @@ body.dark .tooltip-translation {
   .ayah-tooltip {
     max-width: 350px;
   }
+  
+  .bottom-navigation {
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 25px 25px 0 0;
+    bottom: 0;
+    right: auto;
+  }
 }
 
 /* Dark mode arabic text */
@@ -930,7 +1003,7 @@ body.dark .tooltip-arabic {
   color: #f0e6d2;
 }
 
-/* ★★★ বেসমাল্লাহ বা অন্য আরবি এলিমেন্টের জন্য Me Quran ফন্ট ★★★ */
+/* অন্যান্য আরবি এলিমেন্টের জন্য */
 .bismillah,
 .quran-arabic-text {
   font-family: 'MeQuran', 'Noto Naskh Arabic', serif;
