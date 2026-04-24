@@ -1,6 +1,5 @@
 [
-  { "number": 1, "name": "সূরা আল-ফাতিহা", "nameArabic": "الفاتحة", "nameEnglish": "Al-Fatiha", "meaning": "উদ্বোধন", "revelationType": "মক্কী", "numberOfAyahs": 7, "startPage": 1, "endPage": 1, "sajdahAyah": null },
-  ... (অন্যান্য সূরা)
+  { "number": 1, "name": "সূরা আল-ফাতিহা", "nameArabic": "الفاتحة", "nameEnglish": "Al-Fatiha", "meaning": "উদ্বোধন", "revelationType": "মক্কী", "numberOfAyahs": 7, "startPage": 1, "endPage": 1, "sajdahAyah": null }
   { "number": 7, "name": "সূরা আল-আরাফ", "nameArabic": "الأعراف", "nameEnglish": "Al-A'raf", "meaning": "উচ্চ স্থানসমূহ", "revelationType": "মক্কী", "numberOfAyahs": 206, "startPage": 151, "endPage": 176, "sajdahAyah": 206, "sajdahSymbol": "۩" },
   { "number": 13, "name": "সূরা আর-রাদ", "nameArabic": "الرعد", "nameEnglish": "Ar-Ra'd", "meaning": "বজ্রধ্বনি", "revelationType": "মাদানী", "numberOfAyahs": 43, "startPage": 249, "endPage": 255, "sajdahAyah": 15, "sajdahSymbol": "۩" },
   { "number": 16, "name": "সূরা আন-নাহল", "nameArabic": "النحل", "nameEnglish": "An-Nahl", "meaning": "মৌমাছি", "revelationType": "মক্কী", "numberOfAyahs": 128, "startPage": 267, "endPage": 281, "sajdahAyah": 49, "sajdahSymbol": "۩" },
