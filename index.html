@@ -11,23 +11,6 @@
 
 <div class="app-container">
 
-<!-- STATUS BAR -->
-<div class="status-bar fade-in">
-  <div class="status-location">
-    <div class="location-dot"></div>
-    <span id="locationLabel">ঢাকা, বাংলাদেশ</span>
-  </div>
-  <div class="status-right">
-    <div class="hijri-badge" id="arabicMonthText">লোড হচ্ছে...</div>
-    <button class="settings-btn" id="openSettingsBtn" aria-label="Settings">
-      <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
-        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
 <!-- MAIN HEADER CARD -->
 <div class="header-card fade-in">
   <div class="header-top">
@@ -61,29 +44,21 @@
   <div class="section-head-title">দ্রুত অ্যাকশন</div>
 </div>
 <div class="actions-grid fade-in">
-  <a href="quran.html" class="action-item" data-feature="আল-কুরআন">
-    <div class="icon-wrap"><img src="image/quran.png" alt="কুরআন"></div>
-    <span class="action-label">আল-কুরআন</span>
-  </a>
   <a href="salah.html" class="action-item" data-feature="নামাজ">
     <div class="icon-wrap"><img src="image/salah.png" alt="নামাজ"></div>
     <span class="action-label">নামাজ</span>
-  </a>
-  <a href="hadith.html" class="action-item" data-feature="হাদিস">
-    <div class="icon-wrap"><img src="image/hadith.png" alt="হাদিস"></div>
-    <span class="action-label">হাদিস</span>
   </a>
   <a href="qibla.html" class="action-item" data-feature="কিবলা">
     <div class="icon-wrap"><img src="image/compass.png" alt="কিবলা"></div>
     <span class="action-label">কিবলা</span>
   </a>
-  <a href="tasbih.html" class="action-item" data-feature="তাসবিহ">
-    <div class="icon-wrap"><img src="image/tasbih.png" alt="তাসবিহ"></div>
-    <span class="action-label">তাসবিহ</span>
-  </a>
   <a href="asmaul-husna.html" class="action-item" data-feature="আসমাউল হুসনা">
     <div class="icon-wrap"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা"></div>
     <span class="action-label">আসমাউল হুসনা</span>
+  </a>
+    <a href="arabiseducation.html" class="action-item" data-feature="আরবি শিক্ষা">
+    <div class="icon-wrap"><img src="imagearabis education.png" alt="আরবি শিক্ষা"></div>
+    <span class="action-label">আরবি শিক্ষা</span>
   </a>
   <a href="oju.html" class="action-item" data-feature="অজু">
     <div class="icon-wrap"><img src="image/oju.png" alt="অজু"></div>
@@ -174,7 +149,7 @@
     <img src="image/hadith.png" alt="হাদিস">
     <span class="nav-label">হাদিস</span>
   </a>
-  <button class="nav-btn" data-nav="profile">
+  <button class="nav-btn" id="profileSettingsBtn" data-nav="profile">
     <img src="image/profile.png" alt="প্রোফাইল">
     <span class="nav-label">প্রোফাইল</span>
   </button>
@@ -194,8 +169,6 @@
         <button class="theme-opt" data-theme="system">📱 সিস্টেম</button>
       </div>
     </div>
-  </div>
-</div>
 
 <!-- RECORD MODAL -->
 <div class="record-overlay" id="recordModal">
