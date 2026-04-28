@@ -13,63 +13,53 @@ let recordModalDateKey = null;
 let currentTimerInterval = null;
 let currentPrayerTimes = null;
 let isOnline = navigator.onLine;
+let currentCity = "Dhaka";
+let currentCountry = "Bangladesh";
 
-// ===== DEFAULT PRAYER TIMES (Dhaka, Bangladesh - Fallback) =====
+// ===== DEFAULT PRAYER TIMES (Fallback for offline) =====
 const defaultPrayerTimes = {
   ফজর: { start: "5:00 AM", end: "6:22 AM", iqamah: "5:30 AM" },
-  যোহর: { start: "11:54 AM", end: "3:20 PM", iqamah: "1:00 PM" },
+  যোহর: { start: "12:00 PM", end: "3:20 PM", iqamah: "1:00 PM" },
   আসর: { start: "3:20 PM", end: "5:25 PM", iqamah: "3:45 PM" },
   মাগরিব: { start: "5:25 PM", end: "6:47 PM", iqamah: "5:30 PM" },
-  ইশা: { start: "6:47 PM", end: "5:00 AM", iqamah: "7:30 PM" }
+  ইশা: { start: "7:30 PM", end: "5:00 AM", iqamah: "8:00 PM" }
 };
 
 // ===== FETCH LIVE PRAYER TIMES FROM API =====
-async function fetchLivePrayerTimes() {
+async function fetchLivePrayerTimes(city = currentCity, country = currentCountry) {
   try {
-    // Using Aladhan API for Dhaka, Bangladesh
-    const city = "Dhaka";
-    const country = "Bangladesh";
-    const method = 2; // Islamic Society of North America (ISNA)
-    
+    const method = 2;
     const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=${method}`);
     const data = await response.json();
     
     if (data.code === 200) {
       const timings = data.data.timings;
       
-      // Map API times to our prayer structure with start/end times
-      // For end times, we calculate based on next prayer's start
-      const prayers = {
-        ফজর: { 
-          start: timings.Fajr, 
-          end: timings.Sunrise,
-          iqamah: timings.Fajr
-        },
-        যোহর: { 
-          start: timings.Dhuhr, 
-          end: timings.Asr,
-          iqamah: timings.Dhuhr
-        },
-        আসর: { 
-          start: timings.Asr, 
-          end: timings.Maghrib,
-          iqamah: timings.Asr
-        },
-        মাগরিব: { 
-          start: timings.Maghrib, 
-          end: timings.Isha,
-          iqamah: timings.Maghrib
-        },
-        ইশা: { 
-          start: timings.Isha, 
-          end: timings.Fajr,
-          iqamah: timings.Isha
+      let nextFajr = timings.Fajr;
+      try {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        const nextDayResponse = await fetch(`https://api.aladhan.com/v1/timings/${tomorrowStr}?city=${city}&country=${country}&method=${method}`);
+        const nextDayData = await nextDayResponse.json();
+        if (nextDayData.code === 200) {
+          nextFajr = nextDayData.data.timings.Fajr;
         }
+      } catch(e) {
+        console.log("Could not fetch next day Fajr, using default");
+        nextFajr = "5:00 AM";
+      }
+      
+      const prayers = {
+        ফজর: { start: timings.Fajr, end: timings.Sunrise, iqamah: timings.Fajr },
+        যোহর: { start: timings.Dhuhr, end: timings.Asr, iqamah: timings.Dhuhr },
+        আসর: { start: timings.Asr, end: timings.Maghrib, iqamah: timings.Asr },
+        মাগরিব: { start: timings.Maghrib, end: timings.Isha, iqamah: timings.Maghrib },
+        ইশা: { start: timings.Isha, end: nextFajr, iqamah: timings.Isha }
       };
       
-      // Store in localStorage as backup
       localStorage.setItem('cachedPrayerTimes', JSON.stringify({
-        times: prayers,
+        times: prayers, city, country,
         date: new Date().toDateString(),
         timestamp: Date.now()
       }));
@@ -85,7 +75,6 @@ async function fetchLivePrayerTimes() {
 
 // ===== GET PRAYER TIMES (Live or Cached or Default) =====
 async function getPrayerTimes() {
-  // Try to get live times first
   if (navigator.onLine) {
     const liveTimes = await fetchLivePrayerTimes();
     if (liveTimes) {
@@ -94,19 +83,15 @@ async function getPrayerTimes() {
     }
   }
   
-  // If offline or API failed, try cached times
   const cached = localStorage.getItem('cachedPrayerTimes');
   if (cached) {
     const cachedData = JSON.parse(cached);
-    // Check if cache is from today (not older than 24 hours)
-    const cacheAge = Date.now() - cachedData.timestamp;
-    if (cacheAge < 24 * 60 * 60 * 1000) {
+    if (Date.now() - cachedData.timestamp < 24 * 60 * 60 * 1000) {
       currentPrayerTimes = cachedData.times;
       return cachedData.times;
     }
   }
   
-  // Fallback to default times
   currentPrayerTimes = defaultPrayerTimes;
   return defaultPrayerTimes;
 }
@@ -130,7 +115,7 @@ function getWeekDates() {
 
 // ===== HIJRI DATE =====
 async function fetchHijriDate() {
-  const hijriElement = document.getElementById('arabicMonthText');
+  const hijriElement = document.getElementById('settingsHijriDate');
   if (!hijriElement) return;
   
   try {
@@ -141,28 +126,23 @@ async function fetchHijriDate() {
         const hijri = data.data.hijri;
         const arabicMonths = ['মুহররম', 'সফর', 'রবিউল আউয়াল', 'রবিউস সানি', 'জমাদিউল আউয়াল', 'জমাদিউস সানি', 'রজব', 'শা\'বান', 'রমজান', 'শাওয়াল', 'জ্বিলকদ', 'জ্বিলহজ'];
         const arabicMonth = arabicMonths[parseInt(hijri.month.number) - 1];
-        hijriElement.innerHTML = `${hijri.day} ${arabicMonth} ${hijri.year}`;
-        
-        // Cache hijri date
-        localStorage.setItem('cachedHijriDate', JSON.stringify({
-          date: `${hijri.day} ${arabicMonth} ${hijri.year}`,
-          timestamp: Date.now()
-        }));
-        return;
+        const hijriText = `${hijri.day} ${arabicMonth} ${hijri.year}`;
+        hijriElement.innerHTML = hijriText;
+        localStorage.setItem('cachedHijriDate', JSON.stringify({ date: hijriText, timestamp: Date.now() }));
+        return hijriText;
       }
     }
     
-    // Try cached hijri date
     const cached = localStorage.getItem('cachedHijriDate');
     if (cached) {
       const cachedData = JSON.parse(cached);
       hijriElement.innerHTML = cachedData.date;
-      return;
+      return cachedData.date;
     }
     
     hijriElement.innerHTML = 'হিজরি তারিখ';
+    return 'হিজরি তারিখ';
   } catch (error) {
-    console.log('Hijri date fetch failed:', error);
     const cached = localStorage.getItem('cachedHijriDate');
     if (cached) {
       const cachedData = JSON.parse(cached);
@@ -214,16 +194,10 @@ function updatePrayerStatus(dateKey, prayerName, status) {
   showToast(message);
 }
 
-// ===== FORMAT TIME (12-hour format with AM/PM) =====
+// ===== FORMAT TIME =====
 function formatTime(timeStr) {
   if (!timeStr) return '--:-- --';
-  
-  // Handle different time formats
-  if (timeStr.includes('AM') || timeStr.includes('PM')) {
-    return timeStr;
-  }
-  
-  // Convert 24-hour to 12-hour format
+  if (timeStr.includes('AM') || timeStr.includes('PM')) return timeStr;
   const match = timeStr.match(/(\d+):(\d+)/);
   if (match) {
     let hour = parseInt(match[1]);
@@ -235,13 +209,9 @@ function formatTime(timeStr) {
   return timeStr;
 }
 
-// ===== TIMER FUNCTIONS =====
 function parseTime(timeStr) {
-  let cleanTime = timeStr;
-  if (timeStr.includes('(')) {
-    cleanTime = timeStr.split('(')[0].trim();
-  }
-  
+  if (!timeStr) return 0;
+  let cleanTime = timeStr.split('(')[0].trim();
   const match = cleanTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
   if (match) {
     let h = parseInt(match[1]);
@@ -251,56 +221,47 @@ function parseTime(timeStr) {
     if (period === 'AM' && h === 12) h = 0;
     return h * 60 + m;
   }
+  const match24 = cleanTime.match(/(\d+):(\d+)/);
+  if (match24) return parseInt(match24[1]) * 60 + parseInt(match24[2]);
   return 0;
 }
 
+// ===== TIMER FUNCTION =====
 function updateTimer() {
   const times = currentPrayerTimes || defaultPrayerTimes;
   const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const currentTime = hours * 60 + minutes;
+  const currentTime = now.getHours() * 60 + now.getMinutes();
   
   let activePrayer = null;
   let nextPrayer = null;
   let prayerList = Object.keys(times);
   
-  // Find active prayer (within time range)
   for (let i = 0; i < prayerList.length; i++) {
     const prayer = prayerList[i];
     const startTime = parseTime(times[prayer].start);
     let endTime = parseTime(times[prayer].end);
     
-    // Handle overnight prayers (like Isha ending after midnight)
     let endTimeAdjusted = endTime;
-    if (endTime < startTime) endTimeAdjusted = endTime + 1440;
+    let startTimeAdjusted = startTime;
     let currentAdjusted = currentTime;
-    if (currentAdjusted < startTime && endTimeAdjusted < startTime) currentAdjusted += 1440;
+    
+    if (endTime < startTime) endTimeAdjusted = endTime + 1440;
+    if (currentAdjusted < startTime && endTimeAdjusted >= startTime) currentAdjusted += 1440;
     
     if (currentAdjusted >= startTime && currentAdjusted < endTimeAdjusted) {
-      activePrayer = { 
-        name: prayer, 
-        start: formatTime(times[prayer].start), 
-        end: formatTime(times[prayer].end), 
-        endMinutes: endTimeAdjusted 
-      };
+      activePrayer = { name: prayer, start: times[prayer].start, end: times[prayer].end, endMinutes: endTimeAdjusted, startMinutes: startTime };
       break;
     }
   }
   
-  // Find next prayer if no active prayer
   if (!activePrayer) {
     for (let i = 0; i < prayerList.length; i++) {
       const prayer = prayerList[i];
       let startTime = parseTime(times[prayer].start);
-      if (startTime < currentTime) startTime += 1440;
-      if (!nextPrayer || startTime < nextPrayer.startMinutes) {
-        nextPrayer = { 
-          name: prayer, 
-          start: formatTime(times[prayer].start), 
-          end: formatTime(times[prayer].end), 
-          startMinutes: startTime 
-        };
+      let startTimeAdjusted = startTime;
+      if (startTimeAdjusted < currentTime) startTimeAdjusted += 1440;
+      if (!nextPrayer || startTimeAdjusted < nextPrayer.startMinutes) {
+        nextPrayer = { name: prayer, start: times[prayer].start, end: times[prayer].end, startMinutes: startTimeAdjusted };
       }
     }
   }
@@ -322,10 +283,14 @@ function updateTimer() {
     const countEl = document.getElementById('timerCountdownText');
     if (countEl) countEl.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     
-    // Calculate progress circle
-    let totalDuration = activePrayer ? (targetPrayer.endMinutes - parseTime(times[targetPrayer.name].start)) * 60 : remainingSeconds;
-    let elapsed = totalDuration > 0 ? Math.min(1, Math.max(0, (totalDuration - remainingSeconds) / totalDuration)) : 0;
-    const radius = 48;
+    let totalDuration = 0, elapsed = 0;
+    if (activePrayer) {
+      totalDuration = (targetPrayer.endMinutes - targetPrayer.startMinutes) * 60;
+      const elapsedSeconds = totalDuration - remainingSeconds;
+      elapsed = totalDuration > 0 ? Math.min(1, Math.max(0, elapsedSeconds / totalDuration)) : 0;
+    }
+    
+    const radius = 54;
     const circumference = 2 * Math.PI * radius;
     const dashOffset = circumference * (1 - elapsed);
     const progressCircle = document.getElementById('timerProgressCircle');
@@ -334,15 +299,12 @@ function updateTimer() {
       progressCircle.style.strokeDashoffset = dashOffset.toFixed(2);
     }
     
-    // Update UI
     const nameEl = document.getElementById('activePrayerName');
     if (nameEl) nameEl.textContent = targetPrayer.name;
-    
     const startTimeEl = document.getElementById('currentPrayerStartTime');
-    if (startTimeEl) startTimeEl.textContent = targetPrayer.start;
-    
+    if (startTimeEl) startTimeEl.textContent = formatTime(targetPrayer.start);
     const endTimeEl = document.getElementById('currentPrayerEndTime');
-    if (endTimeEl) endTimeEl.textContent = targetPrayer.end;
+    if (endTimeEl) endTimeEl.textContent = formatTime(targetPrayer.end);
     
     const chip = document.getElementById('prayerStateChip');
     const chipTxt = document.getElementById('prayerStateTxt');
@@ -351,11 +313,11 @@ function updateTimer() {
       if (chipTxt) chipTxt.textContent = 'নামাজের সময়';
       const sublabel = document.getElementById('timerSublabel');
       if (sublabel) sublabel.textContent = 'বাকি';
-    } else {
+    } else if (nextPrayer) {
       if (chip) chip.className = 'prayer-state-chip waiting';
       if (chipTxt) chipTxt.textContent = `পরবর্তী: ${targetPrayer.name}`;
       const sublabel = document.getElementById('timerSublabel');
-      if (sublabel) sublabel.textContent = 'পরে';
+      if (sublabel) sublabel.textContent = 'বাকি';
     }
   }
 }
@@ -371,14 +333,13 @@ function renderTodayCircles() {
     container.innerHTML = prayerNames.map((prayer, idx) => {
       const status = prayers[prayer] || 'pending';
       if (status === 'completed') done++;
-      const countText = status === 'completed' ? '১/২' : (status === 'missed' ? '২/২' : '০/২');
       return `
         <div class="prayer-item" data-prayer-index="${idx}">
           <div class="p-circle ${status}" data-prayer-index="${idx}">
             <img src="${prayerImages[idx]}" alt="${prayer}">
           </div>
           <div class="p-name">${prayer}</div>
-          <div class="p-count">${countText}</div>
+          <div class="p-count">${status === 'completed' ? '✓' : (status === 'missed' ? '✗' : '○')}</div>
         </div>
       `;
     }).join('');
@@ -400,7 +361,7 @@ function renderTodayCircles() {
     });
   }
   
-  const totalCount = `${done}/৫ (${Math.round(done/5*100)}%)`;
+  const totalCount = `${done}/৫`;
   const badge = document.getElementById('trackerTotalCount');
   if (badge) badge.textContent = totalCount;
   
@@ -471,14 +432,15 @@ function renderWeeklyStats() {
     else consecutiveDays = 0;
   }
   
-  const weekProgress = Math.round((totalCompleted / 35) * 100);
+  const weekProgress = totalCompleted > 0 ? Math.round((totalCompleted / 35) * 100) : 0;
   
   const streakEl = document.getElementById('streakCount');
   const weekEl = document.getElementById('weeklyProgress');
   const totalEl = document.getElementById('totalCompleted');
-  if (streakEl) streakEl.textContent = consecutiveDays;
-  if (weekEl) weekEl.textContent = `${weekProgress}%`;
-  if (totalEl) totalEl.textContent = totalCompleted;
+  
+  if (streakEl) streakEl.textContent = isNaN(consecutiveDays) ? '0' : consecutiveDays;
+  if (weekEl) weekEl.textContent = isNaN(weekProgress) ? '0%' : `${weekProgress}%`;
+  if (totalEl) totalEl.textContent = isNaN(totalCompleted) ? '0' : totalCompleted;
   
   const statsRange = document.getElementById('statsRange');
   if (statsRange) {
@@ -548,6 +510,16 @@ function renderRecordModal(dateKey) {
   });
 }
 
+// ===== LOCATION CHANGE =====
+async function changeLocation(city) {
+  currentCity = city;
+  showToast(`📍 অবস্থান পরিবর্তন: ${city}`);
+  await getPrayerTimes();
+  renderAll();
+  updateTimer();
+  localStorage.setItem('userCity', city);
+}
+
 // ===== THEME =====
 function setThemeMode(mode) {
   if (mode === 'dark') document.body.classList.add('dark');
@@ -593,18 +565,15 @@ function initOfflineStatus() {
     updateTimer();
     renderAll();
   });
-  
   window.addEventListener('offline', () => {
     showToast('📴 অফলাইন মোড। সংরক্ষিত সময় দেখানো হচ্ছে।');
   });
 }
 
-// ===== SERVICE WORKER UPDATE CHECK =====
 function checkForAppUpdates() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
       registration.update();
-      console.log('Checking for app updates...');
     });
   }
 }
@@ -615,26 +584,27 @@ async function init() {
   loadWeeklyData();
   initOfflineStatus();
   
-  // Set gregorian date
+  const savedCity = localStorage.getItem('userCity');
+  if (savedCity) {
+    currentCity = savedCity;
+    const citySelect = document.getElementById('citySelect');
+    if (citySelect) citySelect.value = savedCity;
+  }
+  
   const today = new Date();
   const gregEl = document.getElementById('gregDateText');
   if (gregEl) {
     gregEl.textContent = today.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
   }
   
-  // Fetch hijri date
   fetchHijriDate();
-  
-  // Get prayer times and render
   await getPrayerTimes();
   renderAll();
   updateTimer();
   
-  // Start timer interval
   if (currentTimerInterval) clearInterval(currentTimerInterval);
   currentTimerInterval = setInterval(updateTimer, 1000);
   
-  // Refresh prayer times every hour
   setInterval(async () => {
     if (navigator.onLine) {
       await getPrayerTimes();
@@ -643,50 +613,46 @@ async function init() {
     }
   }, 60 * 60 * 1000);
   
-  // Settings modal
   const settingsModal = document.getElementById('settingsModal');
-  const openBtn = document.getElementById('openSettingsBtn');
+  const profileBtn = document.getElementById('profileSettingsBtn');
   const closeBtn = document.getElementById('closeModalBtn');
-  if (openBtn) openBtn.onclick = () => settingsModal?.classList.add('show');
+  
+  if (profileBtn) {
+    const labelSpan = profileBtn.querySelector('.nav-label');
+    if (labelSpan) labelSpan.textContent = 'সেটিংস';
+    profileBtn.onclick = (e) => {
+      e.preventDefault();
+      settingsModal?.classList.add('show');
+    };
+  }
+  
   if (closeBtn) closeBtn.onclick = () => settingsModal?.classList.remove('show');
   if (settingsModal) settingsModal.onclick = e => { if (e.target === settingsModal) settingsModal.classList.remove('show'); };
   
-  // Record modal close
+  const citySelect = document.getElementById('citySelect');
+  if (citySelect) {
+    citySelect.addEventListener('change', (e) => {
+      changeLocation(e.target.value);
+    });
+  }
+  
   document.getElementById('recordCloseBtn')?.addEventListener('click', closeRecordModal);
   const recModal = document.getElementById('recordModal');
   if (recModal) recModal.onclick = e => { if (e.target === recModal) closeRecordModal(); };
   
-  // Quick action items
   document.querySelectorAll('.action-item').forEach(item => {
     item.addEventListener('click', (e) => {
-      e.preventDefault();
       const href = item.getAttribute('href');
-      if (href) {
-        window.location.href = href;
+      if (href && href !== '#') {
+        // allow navigation
       } else {
+        e.preventDefault();
         showToast(`✨ ${item.dataset.feature || item.querySelector('.action-label')?.textContent} শীঘ্রই আসছে`);
       }
     });
   });
   
-  // Bottom navigation buttons
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const href = btn.getAttribute('href');
-      if (href && href !== '#') {
-        window.location.href = href;
-      } else if (btn.dataset.nav === 'home') {
-        // Already on home
-      } else {
-        const label = btn.querySelector('.nav-label')?.textContent || '';
-        showToast(`🔹 ${label} শীঘ্রই আসছে`);
-      }
-    });
-  });
-  
-  // Auto update check every hour
   setInterval(checkForAppUpdates, 60 * 60 * 1000);
 }
 
-// Start the app
 document.addEventListener('DOMContentLoaded', init);
