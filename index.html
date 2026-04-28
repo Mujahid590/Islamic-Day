@@ -2,22 +2,23 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <div class="app-container">
 
 <!-- STATUS BAR -->
 <div class="status-bar fade-in">
   <div class="status-location">
     <div class="location-dot"></div>
-    <span>ঢাকা, বাংলাদেশ</span>
+    <span id="locationLabel">ঢাকা, বাংলাদেশ</span>
   </div>
   <div class="status-right">
-    <div class="hijri-badge" id="arabicMonthText">لوڈ হচ্ছে...</div>
+    <div class="hijri-badge" id="arabicMonthText">লোড হচ্ছে...</div>
     <button class="settings-btn" id="openSettingsBtn" aria-label="Settings">
       <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none">
         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
@@ -39,13 +40,8 @@
   <div class="header-main">
     <div class="prayer-name-big">
       <div class="prayer-name-bn" id="activePrayerName">ফজর</div>
-      
-      <!-- নামাজ শুরুর সময় (সবুজ) -->
       <div class="prayer-time-big prayer-start-time" id="currentPrayerStartTime">--:-- --</div>
-      
-      <!-- নামাজ শেষের সময় (লাল) -->
       <div class="prayer-time-big prayer-end-time" id="currentPrayerEndTime">--:-- --</div>
-      
     </div>
     <div class="header-timer">
       <svg viewBox="0 0 110 110">
@@ -65,38 +61,38 @@
   <div class="section-head-title">দ্রুত অ্যাকশন</div>
 </div>
 <div class="actions-grid fade-in">
-  <div class="action-item" data-feature="আল-কুরআন">
+  <a href="quran.html" class="action-item" data-feature="আল-কুরআন">
     <div class="icon-wrap"><img src="image/quran.png" alt="কুরআন"></div>
     <span class="action-label">আল-কুরআন</span>
-  </div>
-  <div class="action-item" data-feature="নামাজ">
+  </a>
+  <a href="salah.html" class="action-item" data-feature="নামাজ">
     <div class="icon-wrap"><img src="image/salah.png" alt="নামাজ"></div>
     <span class="action-label">নামাজ</span>
-  </div>
-  <div class="action-item" data-feature="হাদিস">
+  </a>
+  <a href="hadith.html" class="action-item" data-feature="হাদিস">
     <div class="icon-wrap"><img src="image/hadith.png" alt="হাদিস"></div>
     <span class="action-label">হাদিস</span>
-  </div>
-  <div class="action-item" data-feature="কিবলা">
+  </a>
+  <a href="qibla.html" class="action-item" data-feature="কিবলা">
     <div class="icon-wrap"><img src="image/compass.png" alt="কিবলা"></div>
     <span class="action-label">কিবলা</span>
-  </div>
-  <div class="action-item" data-feature="তাসবিহ">
+  </a>
+  <a href="tasbih.html" class="action-item" data-feature="তাসবিহ">
     <div class="icon-wrap"><img src="image/tasbih.png" alt="তাসবিহ"></div>
     <span class="action-label">তাসবিহ</span>
-  </div>
-  <div class="action-item" data-feature="আসমাউল হুসনা">
+  </a>
+  <a href="asmaul-husna.html" class="action-item" data-feature="আসমাউল হুসনা">
     <div class="icon-wrap"><img src="image/asmaul_husna.png" alt="আসমাউল হুসনা"></div>
     <span class="action-label">আসমাউল হুসনা</span>
-  </div>
-  <div class="action-item" data-feature="অজু">
+  </a>
+  <a href="oju.html" class="action-item" data-feature="অজু">
     <div class="icon-wrap"><img src="image/oju.png" alt="অজু"></div>
     <span class="action-label">অজু</span>
-  </div>
-  <div class="action-item" data-feature="মসজিদ">
+  </a>
+  <a href="masjid.html" class="action-item" data-feature="মসজিদ">
     <div class="icon-wrap"><img src="image/mosjid.png" alt="মসজিদ"></div>
     <span class="action-label">মসজিদ</span>
-  </div>
+  </a>
 </div>
 
 <!-- WEEKLY CALENDAR -->
@@ -108,26 +104,6 @@
   <div class="week-strip" id="weekDaysStrip"></div>
 </div>
 
-<!-- RECORD MODAL -->
-<div class="record-overlay" id="recordModal">
-  <div class="record-sheet">
-    <div class="sheet-handle"></div>
-    <div class="record-header">
-      <div>
-        <div class="record-day-name" id="recordModalDayName">--</div>
-        <div class="record-done-count" id="recordModalCount">০/৫ সম্পন্ন</div>
-      </div>
-      <button class="sheet-close" id="recordCloseBtn">✕</button>
-    </div>
-    <div class="record-list" id="recordPrayerList"></div>
-    <div class="legend">
-      <span class="legend-item"><span class="legend-dot done"></span> আদায়</span>
-      <span class="legend-item"><span class="legend-dot missed"></span> কাযা</span>
-      <span class="legend-item"><span class="legend-dot pending"></span> বাকি</span>
-    </div>
-  </div>
-</div>
-
 <!-- TODAY PRAYER TRACKER -->
 <div class="tracker-card fade-in">
   <div class="tracker-header">
@@ -137,42 +113,8 @@
   <div class="progress-track">
     <div class="progress-bar" id="progressFillBar" style="width:0%"></div>
   </div>
-  <div class="prayers-row">
-    <div class="prayer-item" data-prayer-index="0">
-      <div class="p-circle pending" data-prayer-index="0">
-        <img src="image/fozor.png" alt="ফজর">
-      </div>
-      <div class="p-name">ফজর</div>
-      <div class="p-count" id="circleCount0">০/২</div>
-    </div>
-    <div class="prayer-item" data-prayer-index="1">
-      <div class="p-circle pending" data-prayer-index="1">
-        <img src="image/zohor.png" alt="যোহর">
-      </div>
-      <div class="p-name">যোহর</div>
-      <div class="p-count" id="circleCount1">০/২</div>
-    </div>
-    <div class="prayer-item" data-prayer-index="2">
-      <div class="p-circle pending" data-prayer-index="2">
-        <img src="image/asor.png" alt="আসর">
-      </div>
-      <div class="p-name">আসর</div>
-      <div class="p-count" id="circleCount2">০/২</div>
-    </div>
-    <div class="prayer-item" data-prayer-index="3">
-      <div class="p-circle pending" data-prayer-index="3">
-        <img src="image/magrib.png" alt="মাগরিব">
-      </div>
-      <div class="p-name">মাগরিব</div>
-      <div class="p-count" id="circleCount3">০/২</div>
-    </div>
-    <div class="prayer-item" data-prayer-index="4">
-      <div class="p-circle pending" data-prayer-index="4">
-        <img src="image/isa.png" alt="এশা">
-      </div>
-      <div class="p-name">এশা</div>
-      <div class="p-count" id="circleCount4">০/২</div>
-    </div>
+  <div class="prayers-row" id="prayersRowContainer">
+    <!-- JavaScript dynamically generates prayer items -->
   </div>
 </div>
 
@@ -216,22 +158,22 @@
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-btn" data-nav="tasbih">
+  <a href="tasbih.html" class="nav-btn" data-nav="tasbih">
     <img src="image/tasbih.png" alt="তাসবিহ">
     <span class="nav-label">তাসবিহ</span>
-  </button>
-  <button class="nav-btn" data-nav="quran">
+  </a>
+  <a href="quran.html" class="nav-btn" data-nav="quran">
     <img src="image/quran.png" alt="কুরআন">
     <span class="nav-label">কুরআন</span>
-  </button>
+  </a>
   <button class="nav-btn active" data-nav="home">
     <img src="image/home.png" alt="হোম">
     <span class="nav-label">হোম</span>
   </button>
-  <button class="nav-btn" data-nav="hadith">
+  <a href="hadith.html" class="nav-btn" data-nav="hadith">
     <img src="image/hadith.png" alt="হাদিস">
     <span class="nav-label">হাদিস</span>
-  </button>
+  </a>
   <button class="nav-btn" data-nav="profile">
     <img src="image/profile.png" alt="প্রোফাইল">
     <span class="nav-label">প্রোফাইল</span>
@@ -255,7 +197,44 @@
   </div>
 </div>
 
+<!-- RECORD MODAL -->
+<div class="record-overlay" id="recordModal">
+  <div class="record-sheet">
+    <div class="sheet-handle"></div>
+    <div class="record-header">
+      <div>
+        <div class="record-day-name" id="recordModalDayName">--</div>
+        <div class="record-done-count" id="recordModalCount">০/৫ সম্পন্ন</div>
+      </div>
+      <button class="sheet-close" id="recordCloseBtn">✕</button>
+    </div>
+    <div class="record-list" id="recordPrayerList"></div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot done"></span> আদায়</span>
+      <span class="legend-item"><span class="legend-dot missed"></span> কাযা</span>
+      <span class="legend-item"><span class="legend-dot pending"></span> বাকি</span>
+    </div>
+  </div>
 </div>
+
+</div>
+
 <script src="js/main.js"></script>
+
+<!-- Service Worker Registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registered successfully');
+        })
+        .catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
+</script>
+
 </body>
 </html>

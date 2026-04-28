@@ -270,12 +270,12 @@ body.dark .prayer-state-chip.active {
 /* নামাজের সময় স্টাইল */
 .prayer-time-big {
   font-family: 'Poppins', monospace;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 40px;
   display: inline-block;
-  margin: 4px 0;
+  margin: 4px 4px 4px 0;
 }
 
 /* শুরুর সময় - সবুজ */
@@ -304,32 +304,12 @@ body.dark .prayer-end-time {
   border-color: rgba(231, 76, 60, 0.35);
 }
 
-.prayer-time-pills {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.time-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 40px;
-  background: var(--bg2);
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: var(--text2);
-  border: 1px solid var(--border);
-}
-
-/* সার্কুলার টাইমার - বড় বৃত্ত */
+/* সার্কুলার টাইমার */
 .header-timer {
   flex-shrink: 0;
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
 }
 
 .header-timer svg {
@@ -349,8 +329,6 @@ body.dark .prayer-end-time {
   stroke: var(--primary);
   stroke-linecap: round;
   transition: stroke-dashoffset 1s linear;
-  stroke-dasharray: 301.59;
-  stroke-dashoffset: 0;
 }
 
 .timer-overlay {
@@ -364,7 +342,7 @@ body.dark .prayer-end-time {
 
 .timer-countdown {
   font-family: 'Poppins', monospace;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text);
   letter-spacing: 0.5px;
@@ -407,19 +385,6 @@ body.dark .prayer-end-time {
   border-radius: 4px;
 }
 
-.section-head-link {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--primary);
-  cursor: pointer;
-  opacity: 0.8;
-  transition: var(--transition);
-}
-
-.section-head-link:hover {
-  opacity: 1;
-}
-
 /* ===== কুইক অ্যাকশন গ্রিড ===== */
 .actions-grid {
   display: grid;
@@ -435,6 +400,7 @@ body.dark .prayer-end-time {
   gap: 8px;
   cursor: pointer;
   transition: var(--transition);
+  text-decoration: none;
 }
 
 .action-item:active {
@@ -568,7 +534,7 @@ body.dark .prayer-end-time {
   transition: var(--transition);
 }
 
-.cal-day:hover:not(.cal-future) {
+.cal-day:hover {
   background: var(--primary-soft);
   border-color: var(--primary);
   transform: translateY(-2px);
@@ -728,6 +694,7 @@ body.dark .prayer-end-time {
   border: 2px solid var(--border);
   transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.2);
   position: relative;
+  cursor: pointer;
 }
 
 .p-circle.completed {
@@ -761,8 +728,8 @@ body.dark .prayer-end-time {
 }
 
 .p-circle img {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   transition: var(--transition);
 }
@@ -884,6 +851,7 @@ body.dark .stat-value {
   border: none;
   cursor: pointer;
   transition: var(--transition);
+  text-decoration: none;
 }
 
 .nav-btn:hover {
@@ -1151,11 +1119,6 @@ body.dark .stat-value {
   border-color: transparent;
 }
 
-.rec-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .legend {
   display: flex;
   gap: 18px;
@@ -1246,12 +1209,12 @@ body.dark .stat-value {
   }
   
   .prayer-time-big {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
   
   .header-timer {
-    width: 100px;
-    height: 100px;
+    width: 95px;
+    height: 95px;
   }
   
   .p-circle {
@@ -1260,8 +1223,8 @@ body.dark .stat-value {
   }
   
   .p-circle img {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
   
   .icon-wrap {
