@@ -1,2 +1,2 @@
-# Deene Nur - দ্বীনে নূর
+# Islamic Nur" - ইসলামীক নূর
 ## (Islamic Life & Amol)
