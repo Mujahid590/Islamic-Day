@@ -1,47 +1,10 @@
-<!-- In your index.html, update the prayer tracker section -->
-<div class="tracker-container">
-  <div class="tracker-header">
-    <div class="tracker-title">মোট নামাজ</div>
-    <div class="tracker-count" id="trackerTotalCount">0/৫ (0%)</div>
-  </div>
-  <div class="progress-wrapper">
-    <div class="progress-fill" id="progressFillBar" style="width: 0%;"></div>
-  </div>
-  <div class="prayer-circles-row" id="prayerPillsList">
-    <div class="prayer-circle-item" data-prayer-index="0" data-prayer-name="ফজর">
-      <div class="circle-btn pending" data-prayer-index="0">
-        <img src="image/fozor.png" alt="ফজর" class="circle-icon-img">
-      </div>
-      <div class="circle-label">ফজর</div>
-      <div class="circle-count" id="circleCount0">০/২</div>
-    </div>
-    <div class="prayer-circle-item" data-prayer-index="1" data-prayer-name="যোহর">
-      <div class="circle-btn pending" data-prayer-index="1">
-        <img src="image/zohor.png" alt="যোহর" class="circle-icon-img">
-      </div>
-      <div class="circle-label">যোহর</div>
-      <div class="circle-count" id="circleCount1">০/২</div>
-    </div>
-    <div class="prayer-circle-item" data-prayer-index="2" data-prayer-name="আসর">
-      <div class="circle-btn pending" data-prayer-index="2">
-        <img src="image/asor.png" alt="আসর" class="circle-icon-img">
-      </div>
-      <div class="circle-label">আসর</div>
-      <div class="circle-count" id="circleCount2">০/২</div>
-    </div>
-    <div class="prayer-circle-item" data-prayer-index="3" data-prayer-name="মাগরিব">
-      <div class="circle-btn pending" data-prayer-index="3">
-        <img src="image/magrib.png" alt="মাগরিব" class="circle-icon-img">
-      </div>
-      <div class="circle-label">মাগরিব</div>
-      <div class="circle-count" id="circleCount3">০/২</div>
-    </div>
-    <div class="prayer-circle-item" data-prayer-index="4" data-prayer-name="ইশা">
-      <div class="circle-btn pending" data-prayer-index="4">
-        <img src="image/isa.png" alt="ইশা" class="circle-icon-img">
-      </div>
-      <div class="circle-label">ইশা</div>
-      <div class="circle-count" id="circleCount4">০/২</div>
-    </div>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d9488"><link rel="manifest" href="manifest.json"><title>দ্বীন টাইম</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/salah.css"></head>
+<body data-page="salah" data-title="salah"><div class="app-container" id="main">
+<div class="tabs"><button class="tab active" data-tab="l" data-i18n="learn"></button><button class="tab" data-tab="q" data-i18n="qaza"></button><button class="tab" data-tab="f" data-i18n="fasting"></button><button class="tab" data-tab="z" data-i18n="zakat"></button><button class="tab" data-tab="c" data-i18n="calendar"></button></div>
+<div id="tab-l"></div><div id="tab-q" hidden></div><div id="tab-f" hidden></div>
+<div id="tab-z" hidden><div class="item"><div id="zf"></div><button class="btn" id="zc" data-i18n="calc" style="width:100%;margin-top:8px"></button><div id="zr" style="margin-top:10px"></div></div></div>
+<div id="tab-c" hidden></div>
+</div><script src="js/i18n.js"></script><script src="js/salah.js"></script></body></html>
