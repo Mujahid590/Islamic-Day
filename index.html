@@ -9,14 +9,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="app-container">
 
   <div class="topbar fade-in">
-    <div><div class="hello">আসসালামু আলাইকুম 👋</div><div class="hijri" id="settingsHijriDate">হিজরি তারিখ</div></div>
+    <div><div class="hello" data-i18n="greet">আসসালামু আলাইকুম 👋</div><div class="hijri" id="settingsHijriDate">হিজরি তারিখ</div></div>
     <button class="round-btn" id="topSettingsBtn" aria-label="সেটিংস">⚙️</button>
   </div>
 
@@ -37,68 +37,65 @@
           <circle class="timer-bg-circle" cx="55" cy="55" r="48" stroke-width="6"/>
           <circle id="timerProgressCircle" class="timer-progress-circle" cx="55" cy="55" r="48" stroke-width="6"/>
         </svg>
-        <div class="timer-overlay"><div class="timer-countdown" id="timerCountdownText">--:--:--</div><div class="timer-sublabel" id="timerSublabel">বাকি</div></div>
+        <div class="timer-overlay"><div class="timer-countdown" id="timerCountdownText">--:--:--</div><div class="timer-sublabel" id="timerSublabel" data-i18n="pending">বাকি</div></div>
       </div>
     </div>
   </div>
 
-  <div class="section-head fade-in"><div class="section-head-title">দ্রুত অ্যাকশন</div></div>
+  <div class="section-head fade-in"><div class="section-head-title" data-i18n="quick">দ্রুত অ্যাকশন</div></div>
   <div class="actions-grid fade-in">
-    <a href="salah.html" class="action-item"><div class="icon-wrap"><img src="image/salah.png" alt=""></div><span class="action-label">নামাজ</span></a>
-    <a href="qibla.html" class="action-item"><div class="icon-wrap"><img src="image/compass.png" alt=""></div><span class="action-label">কিবলা</span></a>
-    <a href="asmaul-husna.html" class="action-item"><div class="icon-wrap"><img src="image/asmaul_husna.png" alt=""></div><span class="action-label">আসমাউল হুসনা</span></a>
-    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap"><img src="image/arabis%20education.png" alt=""></div><span class="action-label">আরবি শিক্ষা</span></a>
-    <a href="oju.html" class="action-item"><div class="icon-wrap"><img src="image/oju.png" alt=""></div><span class="action-label">অজু</span></a>
-    <a href="masjid.html" class="action-item"><div class="icon-wrap"><img src="image/mosjid.png" alt=""></div><span class="action-label">মসজিদ</span></a>
+    <a href="salah.html" class="action-item"><div class="icon-wrap"><img src="image/salah.png" alt=""></div><span class="action-label" data-i18n="salah">নামাজ</span></a>
+    <a href="qibla.html" class="action-item"><div class="icon-wrap"><img src="image/compass.png" alt=""></div><span class="action-label" data-i18n="qibla">কিবলা</span></a>
+    <a href="asmaul-husna.html" class="action-item"><div class="icon-wrap"><img src="image/asmaul_husna.png" alt=""></div><span class="action-label" data-i18n="asma">আসমাউল হুসনা</span></a>
+    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap"><img src="image/arabis%20education.png" alt=""></div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
+    <a href="oju.html" class="action-item"><div class="icon-wrap"><img src="image/oju.png" alt=""></div><span class="action-label" data-i18n="wudu">অজু</span></a>
+    <a href="masjid.html" class="action-item"><div class="icon-wrap"><img src="image/mosjid.png" alt=""></div><span class="action-label" data-i18n="masjid">মসজিদ</span></a>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">🕌 আজকের নামাজ</div><div class="card-badge" id="trackerTotalCount">০/৫</div></div>
+    <div class="card-header"><div class="card-title" data-i18n="today">🕌 আজকের নামাজ</div><div class="card-badge" id="trackerTotalCount">০/৫</div></div>
     <div class="progress-track"><div class="progress-bar" id="progressFillBar"></div></div>
     <div class="prayers-row" id="prayersRowContainer"></div>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">📅 সাপ্তাহিক নামাজ</div><div class="card-badge" id="weekCalRange">...</div></div>
+    <div class="card-header"><div class="card-title" data-i18n="weekly">📅 সাপ্তাহিক নামাজ</div><div class="card-badge" id="weekCalRange">...</div></div>
     <div class="week-strip" id="weekDaysStrip"></div>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">📊 সাপ্তাহিক পরিসংখ্যান</div><div class="card-badge" id="statsRange">...</div></div>
+    <div class="card-header"><div class="card-title" data-i18n="stats">📊 সাপ্তাহিক পরিসংখ্যান</div><div class="card-badge" id="statsRange">...</div></div>
     <div class="stats-grid">
-      <div class="stat-box"><div class="stat-icon-wrap">🔥</div><div><div class="stat-value" id="streakCount">০</div><div class="stat-label">ধারাবাহিকতা (দিন)</div></div></div>
-      <div class="stat-box"><div class="stat-icon-wrap">📈</div><div><div class="stat-value" id="weeklyProgress">০%</div><div class="stat-label">সপ্তাহের অগ্রগতি</div></div></div>
-      <div class="stat-box"><div class="stat-icon-wrap">✅</div><div><div class="stat-value" id="totalCompleted">০</div><div class="stat-label">এই সপ্তাহে আদায়</div></div></div>
-      <div class="stat-box"><div class="stat-icon-wrap">🎯</div><div><div class="stat-value" id="todayDone">০/৫</div><div class="stat-label">আজকের লক্ষ্য</div></div></div>
+      <div class="stat-box"><div class="stat-icon-wrap">🔥</div><div><div class="stat-value" id="streakCount">০</div><div class="stat-label" data-i18n="streak">ধারাবাহিকতা (দিন)</div></div></div>
+      <div class="stat-box"><div class="stat-icon-wrap">📈</div><div><div class="stat-value" id="weeklyProgress">০%</div><div class="stat-label" data-i18n="progress">সপ্তাহের অগ্রগতি</div></div></div>
+      <div class="stat-box"><div class="stat-icon-wrap">✅</div><div><div class="stat-value" id="totalCompleted">০</div><div class="stat-label" data-i18n="weekDone">এই সপ্তাহে আদায়</div></div></div>
+      <div class="stat-box"><div class="stat-icon-wrap">🎯</div><div><div class="stat-value" id="todayDone">০/৫</div><div class="stat-label" data-i18n="goal">আজকের লক্ষ্য</div></div></div>
     </div>
   </div>
 </div>
 
 <nav class="bottom-nav">
-  <a href="tasbih.html" class="nav-btn"><div class="nav-icon-box"><img src="image/tasbih.png" alt=""></div><span class="nav-label">তাসবিহ</span></a>
-  <a href="quran.html" class="nav-btn"><div class="nav-icon-box"><img src="image/quran.png" alt=""></div><span class="nav-label">কুরআন</span></a>
-  <button class="nav-btn active"><div class="nav-icon-box"><img src="image/home.png" alt=""></div><span class="nav-label">হোম</span></button>
-  <a href="hadith.html" class="nav-btn"><div class="nav-icon-box"><img src="image/hadith.png" alt=""></div><span class="nav-label">হাদিস</span></a>
-  <button class="nav-btn" id="profileSettingsBtn"><div class="nav-icon-box"><img src="image/setting.png" alt=""></div><span class="nav-label">সেটিংস</span></button>
+  <a href="tasbih.html" class="nav-btn"><div class="nav-icon-box"><img src="image/tasbih.png" alt=""></div><span class="nav-label" data-i18n="tasbih">তাসবিহ</span></a>
+  <a href="quran.html" class="nav-btn"><div class="nav-icon-box"><img src="image/quran.png" alt=""></div><span class="nav-label" data-i18n="quran">কুরআন</span></a>
+  <button class="nav-btn active"><div class="nav-icon-box"><img src="image/home.png" alt=""></div><span class="nav-label" data-i18n="home">হোম</span></button>
+  <a href="hadith.html" class="nav-btn"><div class="nav-icon-box"><img src="image/hadith.png" alt=""></div><span class="nav-label" data-i18n="hadith">হাদিস</span></a>
+  <button class="nav-btn" id="profileSettingsBtn"><div class="nav-icon-box"><img src="image/setting.png" alt=""></div><span class="nav-label" data-i18n="settings">সেটিংস</span></button>
 </nav>
 
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-sheet">
     <div class="sheet-handle"></div>
     <button class="sheet-close" id="closeModalBtn">✕</button>
-    <div class="sheet-title">⚙️ সেটিংস</div>
-    <div class="setting-section"><div class="setting-label">🌙 থিম</div>
+    <div class="sheet-title">⚙️ <span data-i18n="settings">সেটিংস</span></div>
+    <div class="setting-section"><div class="setting-label">🌐 <span data-i18n="language">ভাষা</span></div><div class="lang-grid" id="langGrid"></div></div>
+    <div class="setting-section"><div class="setting-label" data-i18n="theme">🌙 থিম</div>
       <div class="theme-row">
-        <button class="theme-opt" data-theme="light">☀️ লাইট</button>
-        <button class="theme-opt" data-theme="dark">🌙 ডার্ক</button>
-        <button class="theme-opt" data-theme="system">📱 সিস্টেম</button>
+        <button class="theme-opt" data-theme="light" data-i18n="light">☀️ লাইট</button>
+        <button class="theme-opt" data-theme="dark" data-i18n="dark">🌙 ডার্ক</button>
+        <button class="theme-opt" data-theme="system" data-i18n="system">📱 সিস্টেম</button>
       </div></div>
-    <div class="setting-section"><div class="setting-label">📍 শহর</div>
-      <select id="citySelect" class="city-select">
-        <option value="Dhaka">ঢাকা</option><option value="Chittagong">চট্টগ্রাম</option><option value="Sylhet">সিলেট</option>
-        <option value="Rajshahi">রাজশাহী</option><option value="Khulna">খুলনা</option><option value="Barisal">বরিশাল</option>
-        <option value="Rangpur">রংপুর</option><option value="Mymensingh">ময়মনসিংহ</option><option value="Comilla">কুমিল্লা</option>
-      </select></div>
+    <div class="setting-section"><div class="setting-label" data-i18n="city">📍 শহর</div>
+      <select id="citySelect" class="city-select"></select></div>
   </div>
 </div>
 
@@ -111,16 +108,17 @@
     </div>
     <div class="record-list" id="recordPrayerList"></div>
     <div class="legend">
-      <span class="legend-item"><span class="legend-dot done"></span> আদায়</span>
-      <span class="legend-item"><span class="legend-dot missed"></span> কাযা</span>
-      <span class="legend-item"><span class="legend-dot pending"></span> বাকি</span>
+      <span class="legend-item"><span class="legend-dot done"></span> <span data-i18n="done">আদায়</span></span>
+      <span class="legend-item"><span class="legend-dot missed"></span> <span data-i18n="qaza">কাযা</span></span>
+      <span class="legend-item"><span class="legend-dot pending"></span> <span data-i18n="pending">বাকি</span></span>
     </div>
   </div>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <script>
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
-</html>
+  </html>
