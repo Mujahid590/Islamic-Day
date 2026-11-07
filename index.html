@@ -42,12 +42,14 @@
     </div>
   </div>
 
+  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🕐 <span data-i18n="times">আজকের সময়সূচি</span></div></div><div id="timesList"></div></div>
+
   <div class="section-head fade-in"><div class="section-head-title" data-i18n="quick">দ্রুত অ্যাকশন</div></div>
   <div class="actions-grid fade-in">
     <a href="salah.html" class="action-item"><div class="icon-wrap"><img src="image/salah.png" alt=""></div><span class="action-label" data-i18n="salah">নামাজ</span></a>
     <a href="qibla.html" class="action-item"><div class="icon-wrap"><img src="image/compass.png" alt=""></div><span class="action-label" data-i18n="qibla">কিবলা</span></a>
     <a href="asmaul-husna.html" class="action-item"><div class="icon-wrap"><img src="image/asmaul_husna.png" alt=""></div><span class="action-label" data-i18n="asma">আসমাউল হুসনা</span></a>
-    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap"><img src="image/arabis%20education.png" alt=""></div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
+    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap" style="font-size:1.5rem">🔤</div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
     <a href="oju.html" class="action-item"><div class="icon-wrap"><img src="image/oju.png" alt=""></div><span class="action-label" data-i18n="wudu">অজু</span></a>
     <a href="masjid.html" class="action-item"><div class="icon-wrap"><img src="image/mosjid.png" alt=""></div><span class="action-label" data-i18n="masjid">মসজিদ</span></a>
   </div>
@@ -72,6 +74,10 @@
       <div class="stat-box"><div class="stat-icon-wrap">🎯</div><div><div class="stat-value" id="todayDone">০/৫</div><div class="stat-label" data-i18n="goal">আজকের লক্ষ্য</div></div></div>
     </div>
   </div>
+
+  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">📖 <span data-i18n="dayAyah">আজকের আয়াত</span></div></div><div id="dailyAyah" class="muted">...</div></div>
+  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">📜 <span data-i18n="dayHadith">আজকের হাদিস</span></div></div><div id="dailyHadith" class="muted">...</div></div>
+  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🏅 <span data-i18n="badges">অর্জন</span></div></div><div class="badge-row" id="badges"></div></div>
 </div>
 
 <nav class="bottom-nav">
@@ -79,7 +85,7 @@
   <a href="quran.html" class="nav-btn"><div class="nav-icon-box"><img src="image/quran.png" alt=""></div><span class="nav-label" data-i18n="quran">কুরআন</span></a>
   <button class="nav-btn active"><div class="nav-icon-box"><img src="image/home.png" alt=""></div><span class="nav-label" data-i18n="home">হোম</span></button>
   <a href="hadith.html" class="nav-btn"><div class="nav-icon-box"><img src="image/hadith.png" alt=""></div><span class="nav-label" data-i18n="hadith">হাদিস</span></a>
-  <button class="nav-btn" id="profileSettingsBtn"><div class="nav-icon-box"><img src="image/setting.png" alt=""></div><span class="nav-label" data-i18n="settings">সেটিংস</span></button>
+  <button class="nav-btn" id="profileSettingsBtn"><div class="nav-icon-box"><img src="image/profile.png" alt=""></div><span class="nav-label" data-i18n="settings">সেটিংস</span></button>
 </nav>
 
 <div class="modal-overlay" id="settingsModal">
@@ -96,6 +102,18 @@
       </div></div>
     <div class="setting-section"><div class="setting-label" data-i18n="city">📍 শহর</div>
       <select id="citySelect" class="city-select"></select></div>
+    <div class="setting-section"><button class="btn ghost" id="gpsBtn" data-i18n="gps" style="width:100%">📍</button></div>
+    <div class="setting-section"><div class="setting-label">🕋 <span data-i18n="madhab">মাযহাব</span></div><select id="schoolSel" class="city-select"><option value="1" data-i18n="hanafi">হানাফি</option><option value="0" data-i18n="shafi">শাফিয়ি</option></select></div>
+    <div class="setting-section"><div class="setting-label">🔔 <span data-i18n="notify">নোটিফিকেশন</span></div>
+      <select id="adhanSel" class="city-select"><option value="off" data-i18n="nOff">বন্ধ</option><option value="beep" data-i18n="nBeep">বিপ</option><option value="file" data-i18n="nAdhan">আযান</option></select>
+      <div class="setting-label" style="margin-top:10px" data-i18n="remind">রিমাইন্ডার</div>
+      <select id="remindSel" class="city-select"><option value="0">—</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="30">30</option></select></div>
+    <div class="setting-section"><div class="setting-label">🎨 <span data-i18n="accent">রঙ</span></div><div class="dots" id="colorRow">
+      <div class="dot" data-c="teal" style="background:#0d9488"></div><div class="dot" data-c="green" style="background:#16a34a"></div><div class="dot" data-c="blue" style="background:#0284c7"></div><div class="dot" data-c="peach" style="background:#ea580c"></div></div></div>
+    <div class="setting-section"><div class="setting-label">💾 <span data-i18n="backup">ব্যাকআপ</span></div><div class="row">
+      <button class="btn ghost" id="exportBtn" data-i18n="exportB">নিন</button><button class="btn ghost" id="importBtn" data-i18n="importB">রিস্টোর</button><button class="btn ghost" id="shareBtn" data-i18n="shareB">শেয়ার</button></div>
+      <input type="file" id="importFile" accept=".json" hidden></div>
+
   </div>
 </div>
 
@@ -121,4 +139,4 @@
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
-  </html>
+</html>
