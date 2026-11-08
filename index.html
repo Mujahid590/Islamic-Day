@@ -11,8 +11,9 @@
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
+<body data-page="home">
 <div class="app-container">
 
   <div class="topbar fade-in">
@@ -41,6 +42,9 @@
       </div>
     </div>
   </div>
+
+  <!-- নামাজের সময়ের স্ক্রল বার: আইকন + নাম + সময় -->
+  <div class="pbar fade-in" id="prayerBar"></div>
 
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🕐 <span data-i18n="times">আজকের সময়সূচি</span></div></div><div id="timesList"></div></div>
 
@@ -79,14 +83,6 @@
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">📜 <span data-i18n="dayHadith">আজকের হাদিস</span></div></div><div id="dailyHadith" class="muted">...</div></div>
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🏅 <span data-i18n="badges">অর্জন</span></div></div><div class="badge-row" id="badges"></div></div>
 </div>
-
-<nav class="bottom-nav">
-  <a href="tasbih.html" class="nav-btn"><div class="nav-icon-box"><img src="image/tasbih.png" alt=""></div><span class="nav-label" data-i18n="tasbih">তাসবিহ</span></a>
-  <a href="quran.html" class="nav-btn"><div class="nav-icon-box"><img src="image/quran.png" alt=""></div><span class="nav-label" data-i18n="quran">কুরআন</span></a>
-  <button class="nav-btn active"><div class="nav-icon-box"><img src="image/home.png" alt=""></div><span class="nav-label" data-i18n="home">হোম</span></button>
-  <a href="hadith.html" class="nav-btn"><div class="nav-icon-box"><img src="image/hadith.png" alt=""></div><span class="nav-label" data-i18n="hadith">হাদিস</span></a>
-  <button class="nav-btn" id="profileSettingsBtn"><div class="nav-icon-box"><img src="image/profile.png" alt=""></div><span class="nav-label" data-i18n="settings">সেটিংস</span></button>
-</nav>
 
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-sheet">
@@ -134,7 +130,10 @@
 </div>
 
 <script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
+<script src="js/reminders.js"></script>
 <script src="js/main.js"></script>
+<script src="js/nav.js"></script>
 <script>
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
