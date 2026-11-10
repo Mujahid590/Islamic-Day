@@ -36,6 +36,8 @@ async function loadTimes(){
   }catch(e){
     const last=Object.keys(localStorage).filter(k=>k.startsWith('pt_'+city)).sort().pop();
     times=last?JSON.parse(localStorage.getItem(last)):defaultTimes;
+    if(!last){showToast(LANG==='en'?'Could not load prayer times (check internet). Showing approximate times.':'নামাজের সময় লোড হয়নি (ইন্টারনেট চেক করুন)। আনুমানিক সময় দেখানো হচ্ছে।');
+      if(!window._ptRetry){window._ptRetry=1;addEventListener('online',async()=>{await loadTimes();updateTimer();renderExtras()})}}
   }
 }
 
@@ -163,11 +165,12 @@ function renderExtras(){
    +[['🍽️','sehri',hm(fj)],['🌅','sunrise',hm(sr)],['✨','ishraq',hm(sr+15)],['☀️','chasht',`${hm(sr+20)} – ${hm(dh-10)}`],['🌇','iftar',hm(mg)],['🌃','tahajjud',hm(tj)]]
      .map(r=>`<div class="trow"><span>${r[0]} ${t(r[1])}</span><b>${r[2]}</b></div>`).join('')
    +`<div class="trow" style="flex-direction:column;gap:4px"><span>⛔ ${t('forbid')}</span><b style="font-size:.8rem">${hm(sr)}–${hm(sr+15)} · ${hm(dh-6)}–${hm(dh)} · ${hm(mg-15)}–${hm(mg)}</b></div>`;
-  $('timesList').innerHTML=rows;
+  if($('timesList'))$('timesList').innerHTML=rows;
   renderPrayerBar();renderInsight();
 }
 // ===== হোমের নামাজ বার (আইকন + নাম + সময়) =====
 function renderPrayerBar(){
+  if(!$('prayerBar'))return;
   const cur=currentSlot();
   $('prayerBar').innerHTML=prayerNames.map((n,i)=>`<div class="pchip ${cur.n===n?'now':''}" data-n="${n}"><img src="${prayerImages[i]}" alt=""><div class="pn">${pnOf(n)}</div><div class="pt">${fmt(times[n].start)}</div></div>`).join('');
 }
@@ -248,28 +251,4 @@ function setupSettings(){
     localStorage.setItem('deen_coords',JSON.stringify({lat:p.coords.latitude,lon:p.coords.longitude}));$('cityLabel').textContent='GPS';
     await loadTimes();updateTimer();renderExtras();showToast('📍 '+t('gpsOk'))},()=>showToast(t('gpsErr')),{timeout:10000}):showToast(t('gpsErr'));
   $('exportBtn').onclick=()=>{const o={};Object.keys(localStorage).filter(k=>!/^(pt_|hijri_|ayah_|hadith_|cal_|asma_cache|q_list)/.test(k)).forEach(k=>o[k]=localStorage.getItem(k));
-    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='deen-time-backup.json';a.click()};
-  $('importBtn').onclick=()=>$('importFile').click();
-  $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);for(const k in o)localStorage.setItem(k,o[k]);showToast('✅ '+t('restored'));setTimeout(()=>location.reload(),900)}catch(x){showToast(t('err'))}};r.readAsText(f)};
-  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
-    try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
-}
-const openSettings=()=>{location.href='settings.html'};
-const closeSettings=()=>{};
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',async()=>{
-  loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
-  $('recordCloseBtn').onclick=closeRecord;
-  $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
-  document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
-  applyI18n();fillLangs();fillCities();
-  renderAll();renderDates();loadDates();
-  updateTimer();renderExtras();
-  await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
-  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
-  if(location.hash==='#settings')location.replace('settings.html');
-  // new day: refresh times + tracker
-  let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
-});
+    const a=document.createElement('a');a.href=URL.
