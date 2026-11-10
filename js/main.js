@@ -260,35 +260,4 @@ function setupSettings(){
   const sch=$('schoolSel');sch.value=localStorage.getItem('deen_school')||'1';
   sch.onchange=async()=>{localStorage.setItem('deen_school',sch.value);await loadTimes();updateTimer();renderExtras()};
   const ad=$('adhanSel'),rm=$('remindSel');ad.value=localStorage.getItem('deen_adhan')||'off';rm.value=localStorage.getItem('deen_remind')||'0';
-  const ask=async()=>{if('Notification' in window&&Notification.permission==='default')try{await Notification.requestPermission()}catch(e){}};
-  ad.onchange=()=>{localStorage.setItem('deen_adhan',ad.value);if(ad.value!=='off'){ask();sound()}};
-  rm.onchange=()=>{localStorage.setItem('deen_remind',rm.value);if(+rm.value)ask()};
-  $('gpsBtn').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(async p=>{
-    localStorage.setItem('deen_coords',JSON.stringify({lat:p.coords.latitude,lon:p.coords.longitude}));$('cityLabel').textContent='GPS';
-    await loadTimes();updateTimer();renderExtras();showToast('📍 '+t('gpsOk'))},()=>showToast(t('gpsErr')),{timeout:10000}):showToast(t('gpsErr'));
-  $('exportBtn').onclick=()=>{const o={};Object.keys(localStorage).filter(k=>!/^(pt_|hijri_|ayah_|hadith_|cal_|asma_cache|q_list)/.test(k)).forEach(k=>o[k]=localStorage.getItem(k));
-    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='deen-time-backup.json';a.click()};
-  $('importBtn').onclick=()=>$('importFile').click();
-  $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);for(const k in o)localStorage.setItem(k,o[k]);showToast('✅ '+t('restored'));setTimeout(()=>location.reload(),900)}catch(x){showToast(t('err'))}};r.readAsText(f)};
-  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
-    try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
-}
-const openSettings=()=>{location.href='settings.html'};
-const closeSettings=()=>{};
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',async()=>{
-  loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
-  $('recordCloseBtn').onclick=closeRecord;
-  $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
-  document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
-  applyI18n();fillLangs();fillCities();
-  renderAll();renderDates();loadDates();
-  updateTimer();renderExtras();
-  await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
-  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
-  if(location.hash==='#settings')location.replace('settings.html');
-  // new day: refresh times + tracker
-  let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
-});
+  const ask=async()=>{if('Notification' in wi
