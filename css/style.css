@@ -157,6 +157,8 @@ body.dark .ai-bg .o3{opacity:.16}
 .glass-card::before,.ai-card::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
 background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(124,92,255,.28) 50%,rgba(34,211,238,.4));
 -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude}
+@supports not ((mask-composite:exclude) or (-webkit-mask-composite:xor)){.glass-card::before,.ai-card::before{display:none}}
+.glass-card>*,.ai-card>*{position:relative;z-index:1}
 body.dark .glass-card::before,body.dark .ai-card::before{background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(124,92,255,.35) 50%,rgba(34,211,238,.4))}
 .glass-card{box-shadow:0 10px 32px rgba(40,60,120,.12)}
 body.dark .glass-card{box-shadow:0 10px 32px rgba(0,0,0,.45)}
