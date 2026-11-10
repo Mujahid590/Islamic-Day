@@ -198,6 +198,7 @@ function renderNextBar(){
   const left=Math.max(0,Math.round((st-now)/60000));
   $('nbLabel').textContent=en?'Next prayer starts':'পরবর্তী নামাজ শুরু';
   $('nbName').textContent=pnOf(n);
+  if($('nbIcon'))$('nbIcon').src=prayerImages[idx];
   $('nbTime').textContent=fmt(times[n].start);
   $('nbLeft').textContent=`${bn(Math.floor(left/60))}${en?'h ':' ঘণ্টা '}${bn(left%60)}${en?'m':' মিনিট'} ${en?'left':'বাকি'}`;
   $('nbFill').style.width=Math.max(0,Math.min(100,(now-pst)/(st-pst)*100))+'%';
