@@ -200,4 +200,28 @@ body.dark .ai-row{background:rgba(255,255,255,.06)}
 .ai-ic{font-size:1.1rem;line-height:1.4}
 
 /* দ্রুত অ্যাকশন */
-.section-he
+.section-head-title::before{content:'';display:inline-block;width:4px;height:1em;margin-inline-end:8px;vertical-align:-2px;border-radius:3px;background:linear-gradient(var(--ai1),var(--ai2))}
+.action-item{position:relative;overflow:hidden}
+.action-item:active{transform:scale(.94)}
+.icon-wrap{background:linear-gradient(135deg,rgba(124,92,255,.16),rgba(34,211,238,.18));box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+
+/* আজকের নামাজ প্রগ্রেস */
+.progress-bar{background:linear-gradient(90deg,var(--ai2),var(--ai1),var(--ai3));box-shadow:0 0 10px rgba(124,92,255,.45)}
+.p-circle{box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.p-circle.completed{box-shadow:0 0 14px rgba(16,185,129,.45)}
+
+/* সময়সূচি টেবিল */
+.trow b{font-family:'Poppins','Noto Sans Bengali',sans-serif;font-weight:600}
+
+/* 🤖 AI-থিমড বটম টাস্কবার (nav.js অপরিবর্তিত; শুধু স্টাইল) */
+.bottom-nav{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));border:1px solid rgba(255,255,255,.85);
+box-shadow:0 14px 38px rgba(76,60,180,.28),inset 0 1px 0 rgba(255,255,255,.7)}
+body.dark .bottom-nav{background:linear-gradient(180deg,rgba(32,40,66,.82),rgba(16,22,40,.82));border:1px solid rgba(124,92,255,.35);
+box-shadow:0 14px 38px rgba(0,0,0,.55),0 0 24px rgba(124,92,255,.2),inset 0 1px 0 rgba(255,255,255,.08)}
+.bottom-nav::before{content:'';position:absolute;top:-1px;left:22%;right:22%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--ai2),var(--ai1),var(--ai3),transparent);opacity:.9}
+.nav-btn.active .nav-icon-box{background:linear-gradient(135deg,var(--ai1),var(--ai2));box-shadow:0 10px 22px rgba(124,92,255,.55),0 0 0 4px rgba(124,92,255,.14)}
+.nav-btn.active .nav-label{background:linear-gradient(90deg,var(--ai1),var(--ai2));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+
+/* মোশন কমানো */
+@media (prefers-reduced-motion:reduce){.ai-bg .orb,.ai-orb,.ai-orb::after,.ai-live,.header-card .header-timer::before{animation:none}}
+@media (max-width:360px){.pchip{flex-basis:68px}.prayer-name-bn{font-size:1.65rem}}
