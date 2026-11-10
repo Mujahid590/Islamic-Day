@@ -11,6 +11,7 @@ const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const todayKey=()=>keyOf(new Date());
 const ddmmyyyy=d=>`${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()}`;
 const clean=s=>(s||'').split(' ')[0]; // "05:00 (+06)" -> "05:00"
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function mins(s){const m=clean(s).match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0}
 function fmt(s){const t=mins(s),h=Math.floor(t/60),m=t%60;return `${bn(h%12||12)}:${bn(pad(m))} ${h>=12?L().pm:L().am}`}
 
@@ -23,7 +24,7 @@ async function api(path){const ac=new AbortController(),h=setTimeout(()=>ac.abor
 async function loadTimes(){
   const sc=localStorage.getItem('deen_school')||'1',co=JSON.parse(localStorage.getItem('deen_coords')||'null');
   const key=`pt_${co?co.lat.toFixed(2)+'_'+co.lon.toFixed(2):city}_${sc}_${todayKey()}`,c=localStorage.getItem(key);
-  if(c){times=JSON.parse(c);return}
+  if(c){try{const t0=JSON.parse(c);if(prayerNames.every(n=>t0[n]&&t0[n].start&&t0[n].end)){times=t0;return}}catch(e){}localStorage.removeItem(key)}
   try{
     const q=co?`latitude=${co.lat}&longitude=${co.lon}&method=1&school=${sc}`:`city=${city}&country=Bangladesh&method=1&school=${sc}`,ep=co?'timings':'timingsByCity';
     const tm=new Date();tm.setDate(tm.getDate()+1);
@@ -85,6 +86,10 @@ function updateTimer(){
   $('prayerStateTxt').textContent=p.active?t('inTime'):t('next',{p:pnOf(p.n)});
   $('timerSublabel').textContent=p.active?t('endsIn'):t('startsIn');
   document.querySelectorAll('.pchip').forEach(c=>c.classList.toggle('now',c.dataset.n===p.n));
+  // ওয়াক্ত বদলালে বার রিফ্রেশ, আর প্রতি ১৫ সেকেন্ডে ইনসাইট/নেক্সট বার আপডেট
+  const sk=p.n+p.active,nw=Date.now();
+  if(sk!==window._slot){window._slot=sk;renderPrayerBar();window._ins=nw;renderInsight()}
+  else if(nw-(window._ins||0)>15000){window._ins=nw;renderInsight()}
 }
 
 // ===== RENDER =====
@@ -181,12 +186,11 @@ async function loadDaily(){
   Object.keys(localStorage).filter(k=>/^(ayah|hadith)_/.test(k)&&!k.includes('_'+day+'_')).forEach(k=>localStorage.removeItem(k));
   try{const ed={bn:'bn.bengali',en:'en.sahih',ur:'ur.jalandhry',ar:'ar.muyassar'}[LANG],n=(day*7)%6236+1;
     const d=await cached(`ayah_${day}_${ed}`,async()=>(await(await fetch(`https://api.alquran.cloud/v1/ayah/${n}/editions/quran-uthmani,${ed}`)).json()).data.map(x=>({t:x.text,s:x.surah.englishName,n:x.numberInSurah})));
-    $('dailyAyah').innerHTML=`<div class="ar-text">${d[0].t}</div><div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${d[1].t}</div><div class="src">${d[0].s} · ${bn(d[0].n)}</div>`}catch(e){}
+    $('dailyAyah').innerHTML=`<div class="ar-text">${esc(d[0].t)}</div><div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${esc(d[1].t)}</div><div class="src">${esc(d[0].s)} · ${bn(d[0].n)}</div>`}catch(e){}
   try{const ed={bn:'ben-bukhari',ar:'ara-bukhari',ur:'urd-bukhari',en:'eng-bukhari'}[LANG],n=(day*13)%7000+1;
     const h=await cached(`hadith_${day}_${ed}`,async()=>(await(await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/${ed}/${n}.json`)).json()).hadiths[0].text);
-    $('dailyHadith').innerHTML=`<div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${h.length>350?h.slice(0,350)+'…':h}</div><div class="src">${t('hsrc')} · ${bn(n)}</div>`}catch(e){}
+    $('dailyHadith').innerHTML=`<div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${esc(h.length>350?h.slice(0,350)+'…':h)}</div><div class="src">${t('hsrc')} · ${bn(n)}</div>`}catch(e){}
 }
-// ===== স্মার্ট সহায়ক (লোকাল ইনসাইট — ইন্টারনেট/এপিআই ছাড়াই) =====
 // ===== পরবর্তী নামাজ কখন শুরু (বার) =====
 function renderNextBar(){
   const box=$('nextBar');if(!box)return;
@@ -204,6 +208,7 @@ function renderNextBar(){
   $('nbFill').style.width=Math.max(0,Math.min(100,(now-pst)/(st-pst)*100))+'%';
 }
 function renderInsight(){try{renderNextBar()}catch(e){console.warn('nextbar',e)}try{renderInsightInner()}catch(e){console.warn('insight',e)}}
+// ===== স্মার্ট সহায়ক (লোকাল ইনসাইট — ইন্টারনেট/এপিআই ছাড়াই) =====
 function renderInsightInner(){
   const box=$('aiInsights');if(!box)return;
   const en=LANG==='en',now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey());
@@ -260,4 +265,35 @@ function setupSettings(){
   const sch=$('schoolSel');sch.value=localStorage.getItem('deen_school')||'1';
   sch.onchange=async()=>{localStorage.setItem('deen_school',sch.value);await loadTimes();updateTimer();renderExtras()};
   const ad=$('adhanSel'),rm=$('remindSel');ad.value=localStorage.getItem('deen_adhan')||'off';rm.value=localStorage.getItem('deen_remind')||'0';
-  const ask=async()=>{if('Notification' in wi
+  const ask=async()=>{if('Notification' in window&&Notification.permission==='default')try{await Notification.requestPermission()}catch(e){}};
+  ad.onchange=()=>{localStorage.setItem('deen_adhan',ad.value);if(ad.value!=='off'){ask();sound()}};
+  rm.onchange=()=>{localStorage.setItem('deen_remind',rm.value);if(+rm.value)ask()};
+  $('gpsBtn').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(async p=>{
+    localStorage.setItem('deen_coords',JSON.stringify({lat:p.coords.latitude,lon:p.coords.longitude}));$('cityLabel').textContent='GPS';
+    await loadTimes();updateTimer();renderExtras();showToast('📍 '+t('gpsOk'))},()=>showToast(t('gpsErr')),{timeout:10000}):showToast(t('gpsErr'));
+  $('exportBtn').onclick=()=>{const o={};Object.keys(localStorage).filter(k=>!/^(pt_|hijri_|ayah_|hadith_|cal_|asma_cache|q_list)/.test(k)).forEach(k=>o[k]=localStorage.getItem(k));
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='deen-time-backup.json';a.click()};
+  $('importBtn').onclick=()=>$('importFile').click();
+  $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);for(const k in o)localStorage.setItem(k,o[k]);showToast('✅ '+t('restored'));setTimeout(()=>location.reload(),900)}catch(x){showToast(t('err'))}};r.readAsText(f)};
+  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
+    try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
+}
+const openSettings=()=>{location.href='settings.html'};
+const closeSettings=()=>{};
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',async()=>{
+  loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
+  $('recordCloseBtn').onclick=closeRecord;
+  $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
+  document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
+  applyI18n();fillLangs();fillCities();
+  renderAll();renderDates();loadDates();
+  updateTimer();renderExtras();
+  await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
+  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
+  if(location.hash==='#settings')location.replace('settings.html');
+  // new day: refresh times + tracker
+  let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
+});
