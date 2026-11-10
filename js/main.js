@@ -19,7 +19,7 @@ function showToast(msg){let t=$('toast');if(!t){t=document.createElement('div');
 t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
 
 // ===== PRAYER TIMES (Hanafi / Karachi method for Bangladesh, cached daily) =====
-async function api(path){const r=await fetch(`https://api.aladhan.com/v1/${path}`);const j=await r.json();if(j.code!==200)throw 0;return j.data}
+async function api(path){const ac=new AbortController(),h=setTimeout(()=>ac.abort(),8000);try{const r=await fetch(`https://api.aladhan.com/v1/${path}`,{signal:ac.signal});const j=await r.json();if(j.code!==200)throw 0;return j.data}finally{clearTimeout(h)}}
 async function loadTimes(){
   const sc=localStorage.getItem('deen_school')||'1',co=JSON.parse(localStorage.getItem('deen_coords')||'null');
   const key=`pt_${co?co.lat.toFixed(2)+'_'+co.lon.toFixed(2):city}_${sc}_${todayKey()}`,c=localStorage.getItem(key);
@@ -184,7 +184,8 @@ async function loadDaily(){
     $('dailyHadith').innerHTML=`<div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${h.length>350?h.slice(0,350)+'…':h}</div><div class="src">${t('hsrc')} · ${bn(n)}</div>`}catch(e){}
 }
 // ===== স্মার্ট সহায়ক (লোকাল ইনসাইট — ইন্টারনেট/এপিআই ছাড়াই) =====
-function renderInsight(){
+function renderInsight(){try{renderInsightInner()}catch(e){console.warn('insight',e)}}
+function renderInsightInner(){
   const box=$('aiInsights');if(!box)return;
   const en=LANG==='en',now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey());
   const ttl=$('aiTitle'),sub=$('aiSub');
@@ -250,4 +251,25 @@ function setupSettings(){
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='deen-time-backup.json';a.click()};
   $('importBtn').onclick=()=>$('importFile').click();
   $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);for(const k in o)localStorage.setItem(k,o[k]);showToast('✅ '+t('restored'));setTimeout(()=>location.reload(),900)}catch(x){showToast(t('err'))}};r.readAsText(f)};
-  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange
+  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
+    try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
+}
+const openSettings=()=>{location.href='settings.html'};
+const closeSettings=()=>{};
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',async()=>{
+  loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
+  $('recordCloseBtn').onclick=closeRecord;
+  $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
+  document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
+  applyI18n();fillLangs();fillCities();
+  renderAll();renderDates();loadDates();
+  updateTimer();renderExtras();
+  await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
+  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
+  if(location.hash==='#settings')location.replace('settings.html');
+  // new day: refresh times + tracker
+  let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
+});
