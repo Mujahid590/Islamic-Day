@@ -248,6 +248,34 @@ background:linear-gradient(135deg,rgba(124,92,255,.2),rgba(34,211,238,.24));box-
 .ai-list::-webkit-scrollbar{display:none}
 .ai-row{flex:0 0 78%;max-width:280px;scroll-snap-align:start;align-items:center;padding:10px 12px;font-size:.8rem;line-height:1.5}
 
+/* 🛠️ রেন্ডারিং ফিক্স — মোবাইলে ব্যাকগ্রাউন্ডে দাগ/ব্যান্ড (ডোরা) ঠিক করা
+   কারণ: fixed ব্যাকগ্রাউন্ড + ভারী blur/backdrop-filter। তাই সবই হালকা করা হলো */
+html{background:var(--bg2)}
+body{background:transparent}
+.ai-bg{background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%);transform:translateZ(0)}
+.ai-bg .orb{filter:none;opacity:.7;animation:orbFloat 22s ease-in-out infinite}
+.ai-bg .o1{width:320px;height:320px;background:radial-gradient(circle,rgba(34,211,238,.45),rgba(34,211,238,0) 68%)}
+.ai-bg .o2{width:360px;height:360px;background:radial-gradient(circle,rgba(124,92,255,.38),rgba(124,92,255,0) 68%)}
+.ai-bg .o3{width:300px;height:300px;background:radial-gradient(circle,rgba(244,114,182,.32),rgba(244,114,182,0) 68%);opacity:.7}
+body.dark .ai-bg .orb{opacity:.45}
+
+/* কার্ড: blur বাদ, একটু গাঢ় ব্যাকগ্রাউন্ড */
+.glass-card,.action-item,.ai-card,.next-bar,.pchip,.item,.round-btn,.modal-overlay{-webkit-backdrop-filter:none;backdrop-filter:none}
+.glass-card,.action-item,.item,.pchip{background:rgba(255,255,255,.78)}
+.ai-card,.next-bar{background:linear-gradient(145deg,rgba(124,92,255,.12),rgba(34,211,238,.1)),rgba(255,255,255,.78)}
+body.dark .glass-card,body.dark .action-item,body.dark .item,body.dark .pchip{background:rgba(26,40,52,.88)}
+body.dark .ai-card,body.dark .next-bar{background:linear-gradient(145deg,rgba(124,92,255,.18),rgba(34,211,238,.1)),rgba(26,40,52,.88)}
+.glass-card,.ai-card,.next-bar,.action-item,.pchip{border:1px solid rgba(124,92,255,.16)}
+body.dark .glass-card,body.dark .ai-card,body.dark .next-bar,body.dark .action-item,body.dark .pchip{border-color:rgba(255,255,255,.1)}
+.pchip.now{background:linear-gradient(145deg,var(--ai1),var(--ai2));border-color:transparent}
+.glass-card::before,.ai-card::before{display:none}
+.header-card .header-timer::before{display:none}
+.modal-overlay{background:rgba(0,0,0,.55)}
+
+/* বটম টাস্কবার: blur বাদ */
+.bottom-nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.98)}
+body.dark .bottom-nav{background:rgba(16,26,36,.98)}
+
 /* মোশন কমানো */
 @media (prefers-reduced-motion:reduce){.ai-bg .orb,.ai-orb,.ai-orb::after,.ai-live,.header-card .header-timer::before{animation:none}}
 @media (max-width:360px){.prayer-name-bn{font-size:1.65rem}}
