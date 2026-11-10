@@ -22,7 +22,6 @@
 
   <div class="topbar fade-in">
     <div><div class="hello" data-i18n="greet">আসসালামু আলাইকুম 👋</div><div class="hijri" id="settingsHijriDate">হিজরি তারিখ</div></div>
-    <button class="round-btn" id="topSettingsBtn" aria-label="সেটিংস">⚙️</button>
   </div>
 
   <div class="header-card fade-in">
@@ -96,35 +95,6 @@
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">📖 <span data-i18n="dayAyah">আজকের আয়াত</span></div></div><div id="dailyAyah" class="muted">...</div></div>
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">📜 <span data-i18n="dayHadith">আজকের হাদিস</span></div></div><div id="dailyHadith" class="muted">...</div></div>
   <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🏅 <span data-i18n="badges">অর্জন</span></div></div><div class="badge-row" id="badges"></div></div>
-</div>
-
-<div class="modal-overlay" id="settingsModal">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <button class="sheet-close" id="closeModalBtn">✕</button>
-    <div class="sheet-title">⚙️ <span data-i18n="settings">সেটিংস</span></div>
-    <div class="setting-section"><div class="setting-label">🌐 <span data-i18n="language">ভাষা</span></div><div class="lang-grid" id="langGrid"></div></div>
-    <div class="setting-section"><div class="setting-label" data-i18n="theme">🌙 থিম</div>
-      <div class="theme-row">
-        <button class="theme-opt" data-theme="light" data-i18n="light">☀️ লাইট</button>
-        <button class="theme-opt" data-theme="dark" data-i18n="dark">🌙 ডার্ক</button>
-        <button class="theme-opt" data-theme="system" data-i18n="system">📱 সিস্টেম</button>
-      </div></div>
-    <div class="setting-section"><div class="setting-label" data-i18n="city">📍 শহর</div>
-      <select id="citySelect" class="city-select"></select></div>
-    <div class="setting-section"><button class="btn ghost" id="gpsBtn" data-i18n="gps" style="width:100%">📍</button></div>
-    <div class="setting-section"><div class="setting-label">🕋 <span data-i18n="madhab">মাযহাব</span></div><select id="schoolSel" class="city-select"><option value="1" data-i18n="hanafi">হানাফি</option><option value="0" data-i18n="shafi">শাফিয়ি</option></select></div>
-    <div class="setting-section"><div class="setting-label">🔔 <span data-i18n="notify">নোটিফিকেশন</span></div>
-      <select id="adhanSel" class="city-select"><option value="off" data-i18n="nOff">বন্ধ</option><option value="beep" data-i18n="nBeep">বিপ</option><option value="file" data-i18n="nAdhan">আযান</option></select>
-      <div class="setting-label" style="margin-top:10px" data-i18n="remind">রিমাইন্ডার</div>
-      <select id="remindSel" class="city-select"><option value="0">—</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="30">30</option></select></div>
-    <div class="setting-section"><div class="setting-label">🎨 <span data-i18n="accent">রঙ</span></div><div class="dots" id="colorRow">
-      <div class="dot" data-c="teal" style="background:#0d9488"></div><div class="dot" data-c="green" style="background:#16a34a"></div><div class="dot" data-c="blue" style="background:#0284c7"></div><div class="dot" data-c="peach" style="background:#ea580c"></div></div></div>
-    <div class="setting-section"><div class="setting-label">💾 <span data-i18n="backup">ব্যাকআপ</span></div><div class="row">
-      <button class="btn ghost" id="exportBtn" data-i18n="exportB">নিন</button><button class="btn ghost" id="importBtn" data-i18n="importB">রিস্টোর</button><button class="btn ghost" id="shareBtn" data-i18n="shareB">শেয়ার</button></div>
-      <input type="file" id="importFile" accept=".json" hidden></div>
-
-  </div>
 </div>
 
 <div class="modal-overlay" id="recordModal">
