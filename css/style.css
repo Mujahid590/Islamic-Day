@@ -135,3 +135,69 @@ html[dir=rtl] .back-btn{transform:scaleX(-1)}
 .badge-row{display:flex;flex-wrap:wrap;gap:8px}.badge{padding:6px 12px;border-radius:20px;background:var(--accent-l);font-size:.8rem;font-weight:600}.badge.locked{opacity:.35;filter:grayscale(1)}
 .dots{display:flex;gap:10px}.dot{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer}.dot.active{border-color:var(--text)}
 .setting-section .btn{margin-top:6px}
+
+/* =====================================================
+   ✨ PREMIUM AI LAYER  (উপরের সব স্টাইল অপরিবর্তিত; এখান থেকে নতুন)
+   ===================================================== */
+:root{--ai1:#7c5cff;--ai2:#22d3ee;--ai3:#f472b6}
+
+/* অরোরা ব্যাকগ্রাউন্ড */
+.ai-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ai-bg .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.42;animation:orbFloat 16s ease-in-out infinite;will-change:transform}
+.ai-bg .o1{width:260px;height:260px;background:var(--ai2);top:-90px;left:-90px}
+.ai-bg .o2{width:300px;height:300px;background:var(--ai1);top:38%;right:-130px;animation-delay:-5s}
+.ai-bg .o3{width:240px;height:240px;background:var(--ai3);bottom:-90px;left:8%;animation-delay:-9s;opacity:.3}
+body.dark .ai-bg .orb{opacity:.26}
+body.dark .ai-bg .o3{opacity:.16}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(26px,-34px) scale(1.12)}}
+.app-container{position:relative;z-index:1}
+
+/* গ্লাস কার্ডে গ্রেডিয়েন্ট হেয়ারলাইন বর্ডার */
+.glass-card,.ai-card{position:relative}
+.glass-card::before,.ai-card::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(124,92,255,.28) 50%,rgba(34,211,238,.4));
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude}
+body.dark .glass-card::before,body.dark .ai-card::before{background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(124,92,255,.35) 50%,rgba(34,211,238,.4))}
+.glass-card{box-shadow:0 10px 32px rgba(40,60,120,.12)}
+body.dark .glass-card{box-shadow:0 10px 32px rgba(0,0,0,.45)}
+.card-title{letter-spacing:.1px}
+.card-badge{background:linear-gradient(135deg,rgba(124,92,255,.16),rgba(34,211,238,.16));color:var(--text)}
+
+/* হেডার কার্ড: গ্লো + শিমার */
+.header-card{background:radial-gradient(120% 90% at 100% 0%,rgba(34,211,238,.35),transparent 55%),radial-gradient(90% 80% at 0% 100%,rgba(124,92,255,.38),transparent 60%),linear-gradient(135deg,var(--hc1,#14b8a6),var(--hc2,#0f766e));
+box-shadow:0 18px 44px rgba(76,60,180,.28),inset 0 1px 0 rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.22)}
+.header-card .header-timer::before{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0) 40%);animation:spin 6s linear infinite;-webkit-mask:radial-gradient(circle,transparent 60%,#000 62%);mask:radial-gradient(circle,transparent 60%,#000 62%);opacity:.7}
+@keyframes spin{to{transform:rotate(360deg)}}
+.timer-countdown{text-shadow:0 0 12px rgba(255,255,255,.55);letter-spacing:.3px}
+.prayer-name-bn{text-shadow:0 2px 14px rgba(0,0,0,.18)}
+
+/* নামাজের টাইম বার (আইকন + নাম + সময়) */
+.pbar{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;scroll-snap-type:x proximity}
+.pbar::-webkit-scrollbar{display:none}
+.pchip{flex:1 0 74px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;border-radius:18px;
+background:var(--card);border:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow);transition:var(--t)}
+.pchip img{width:26px;height:26px;object-fit:contain}
+.pchip .pn{font-size:.74rem;font-weight:700}
+.pchip .pt{font-size:.66rem;color:var(--text2);font-family:'Poppins','Noto Sans Bengali',sans-serif}
+.pchip.now{background:linear-gradient(145deg,var(--ai1),var(--ai2));border-color:transparent;color:#fff;transform:translateY(-3px);box-shadow:0 12px 26px rgba(124,92,255,.42)}
+.pchip.now .pt{color:rgba(255,255,255,.88)}
+.pchip.now img{filter:brightness(0) invert(1)}
+
+/* স্মার্ট সহায়ক কার্ড */
+.ai-card{border-radius:var(--r-lg);padding:16px;background:linear-gradient(145deg,rgba(124,92,255,.14),rgba(34,211,238,.1)),var(--card);
+border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 12px 34px rgba(124,92,255,.18)}
+.ai-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ai-head>div{flex:1;min-width:0}
+.ai-orb{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 0deg,var(--ai1),var(--ai2),var(--ai3),var(--ai1));animation:spin 5s linear infinite;position:relative;box-shadow:0 0 18px rgba(124,92,255,.55)}
+.ai-orb::after{content:'✨';position:absolute;inset:3px;border-radius:50%;background:var(--bg-solid);display:flex;align-items:center;justify-content:center;font-size:.95rem;animation:spin 5s linear infinite reverse}
+.ai-title{font-size:.98rem;font-weight:800}
+.ai-sub{font-size:.72rem;color:var(--text2);margin-top:1px}
+.ai-live{font-size:.6rem;font-weight:800;letter-spacing:1px;padding:3px 8px;border-radius:10px;color:#fff;background:linear-gradient(135deg,var(--ai1),var(--ai2));font-family:'Poppins',sans-serif;animation:glowPulse 2.4s ease-in-out infinite}
+@keyframes glowPulse{50%{box-shadow:0 0 14px rgba(34,211,238,.7)}}
+.ai-list{display:flex;flex-direction:column;gap:8px}
+.ai-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.4);font-size:.85rem;line-height:1.55;animation:fi .4s ease both}
+body.dark .ai-row{background:rgba(255,255,255,.06)}
+.ai-ic{font-size:1.1rem;line-height:1.4}
+
+/* দ্রুত অ্যাকশন */
+.section-he
