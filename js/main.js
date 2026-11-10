@@ -140,12 +140,13 @@ function setTheme(m){
   document.querySelector('meta[name=theme-color]').content=dark?'#0b2428':'#0d9488';
   document.querySelectorAll('.theme-opt').forEach(b=>b.classList.toggle('active',b.dataset.theme===m));
 }
-function fillCities(){const sel=$('citySelect');sel.innerHTML=Object.keys(L().cities).map(k=>`<option value="${k}">${L().cities[k]}</option>`).join('');sel.value=city;$('cityLabel').textContent=L().cities[city]}
+function fillCities(){const sel=$('citySelect');if(sel){sel.innerHTML=Object.keys(L().cities).map(k=>`<option value="${k}">${L().cities[k]}</option>`).join('');sel.value=city}$('cityLabel').textContent=L().cities[city]}
 async function changeCity(c){
   city=c;localStorage.setItem('userCity',c);localStorage.removeItem('deen_coords');$('cityLabel').textContent=L().cities[c];
   await loadTimes();updateTimer();renderExtras();showToast(`📍 ${L().cities[c]}`);
 }
 function fillLangs(){
+  if(!$('langGrid'))return;
   $('langGrid').innerHTML=Object.keys(LANGS).map(k=>`<button class="lang-opt ${k===LANG?'active':''}" data-l="${k}"><span class="flag">${LANGS[k].flag}</span>${LANGS[k].name}</button>`).join('');
   document.querySelectorAll('.lang-opt').forEach(b=>b.onclick=()=>changeLang(b.dataset.l));
 }
@@ -235,6 +236,7 @@ function setColor(c){localStorage.setItem('deen_color',c);document.body.dataset.
 function setupSettings(){
   setColor(localStorage.getItem('deen_color')||'teal');
   document.querySelectorAll('.dot').forEach(d=>d.onclick=()=>setColor(d.dataset.c));
+  if(!$('schoolSel'))return; // সেটিংস এখন আলাদা পেজে
   const sch=$('schoolSel');sch.value=localStorage.getItem('deen_school')||'1';
   sch.onchange=async()=>{localStorage.setItem('deen_school',sch.value);await loadTimes();updateTimer();renderExtras()};
   const ad=$('adhanSel'),rm=$('remindSel');ad.value=localStorage.getItem('deen_adhan')||'off';rm.value=localStorage.getItem('deen_remind')||'0';
@@ -251,22 +253,20 @@ function setupSettings(){
   $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
     try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
 }
-const openSettings=()=>$('settingsModal').classList.add('show');
-const closeSettings=()=>$('settingsModal').classList.remove('show');
+const openSettings=()=>{location.href='settings.html'};
+const closeSettings=()=>{};
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded',async()=>{
   loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
-  $('topSettingsBtn').onclick=()=>location.href='settings.html';
-  $('closeModalBtn').onclick=closeSettings;$('recordCloseBtn').onclick=closeRecord;
-  $('settingsModal').onclick=e=>{if(e.target.id==='settingsModal')closeSettings()};
+  $('recordCloseBtn').onclick=closeRecord;
   $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
   document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
-  applyI18n();fillLangs();fillCities();$('citySelect').onchange=e=>changeCity(e.target.value);
+  applyI18n();fillLangs();fillCities();
   renderAll();renderDates();loadDates();
   await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
   setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
-  if(location.hash==='#settings')openSettings();
+  if(location.hash==='#settings')location.replace('settings.html');
   // new day: refresh times + tracker
   let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
