@@ -113,7 +113,7 @@ function renderStats(){
   if(Object.values(weeklyData[keyOf(d)]||{}).filter(s=>s==='completed').length<5)d.setDate(d.getDate()-1);
   while(Object.values(weeklyData[keyOf(d)]||{}).filter(s=>s==='completed').length===5){streak++;d.setDate(d.getDate()-1)}
   window.curStreak=streak;$('streakCount').textContent=bn(streak);$('weeklyProgress').textContent=`${bn(Math.round(total/35*100))}%`;$('totalCompleted').textContent=bn(total);
-  $('statsRange').textContent=$('weekCalRange').textContent;renderBadges();
+  $('statsRange').textContent=$('weekCalRange').textContent;renderBadges();renderInsight();
 }
 function renderAll(){renderWeek();renderToday();renderStats()}
 
@@ -163,7 +163,7 @@ function renderExtras(){
      .map(r=>`<div class="trow"><span>${r[0]} ${t(r[1])}</span><b>${r[2]}</b></div>`).join('')
    +`<div class="trow" style="flex-direction:column;gap:4px"><span>⛔ ${t('forbid')}</span><b style="font-size:.8rem">${hm(sr)}–${hm(sr+15)} · ${hm(dh-6)}–${hm(dh)} · ${hm(mg-15)}–${hm(mg)}</b></div>`;
   $('timesList').innerHTML=rows;
-  renderPrayerBar();
+  renderPrayerBar();renderInsight();
 }
 // ===== হোমের নামাজ বার (আইকন + নাম + সময়) =====
 function renderPrayerBar(){
@@ -181,6 +181,35 @@ async function loadDaily(){
   try{const ed={bn:'ben-bukhari',ar:'ara-bukhari',ur:'urd-bukhari',en:'eng-bukhari'}[LANG],n=(day*13)%7000+1;
     const h=await cached(`hadith_${day}_${ed}`,async()=>(await(await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/${ed}/${n}.json`)).json()).hadiths[0].text);
     $('dailyHadith').innerHTML=`<div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${h.length>350?h.slice(0,350)+'…':h}</div><div class="src">${t('hsrc')} · ${bn(n)}</div>`}catch(e){}
+}
+// ===== স্মার্ট সহায়ক (লোকাল ইনসাইট — ইন্টারনেট/এপিআই ছাড়াই) =====
+function renderInsight(){
+  const box=$('aiInsights');if(!box)return;
+  const en=LANG==='en',now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey());
+  const ttl=$('aiTitle'),sub=$('aiSub');
+  if(ttl)ttl.textContent=en?'Deen Smart Assistant':'দ্বীন স্মার্ট সহায়ক';
+  if(sub)sub.textContent=en?'Live insights for your day':'আপনার আজকের ইবাদতের লাইভ ইনসাইট';
+  const left=Math.max(0,Math.round(((cur.active?cur.e:cur.s)-now)/60000));
+  const dur=`${bn(Math.floor(left/60))}${en?'h ':' ঘণ্টা '}${bn(left%60)}${en?'m':' মিনিট'}`;
+  const rows=[];
+  rows.push(['⏳',cur.active
+    ?(en?`${pnOf(cur.n)} time is running — ${dur} left`:`${pnOf(cur.n)} এর ওয়াক্ত চলছে — ${dur} বাকি`)
+    :(en?`Next prayer ${pnOf(cur.n)} in ${dur}`:`পরবর্তী ওয়াক্ত ${pnOf(cur.n)} — ${dur} পরে`)]);
+  const done=prayerNames.filter(n=>pr[n]==='completed').length;
+  const past=prayerNames.filter(n=>pr[n]==='pending'&&atMs(times[n].start,0)<=now&&!(cur.active&&cur.n===n));
+  if(past.length){
+    const names=past.map(pnOf).join(en?', ':'، ');
+    rows.push(['📝',en?`Not marked yet: ${names}. Tap below to update your tracker.`:`এখনও চিহ্নিত করা হয়নি: ${names}। নিচের ট্র্যাকারে আপডেট করুন।`]);
+  }else if(done===5){
+    rows.push(['🎉',en?'All five prayers done today. Alhamdulillah!':'আলহামদুলিল্লাহ! আজকের পাঁচ ওয়াক্তই আদায় হয়েছে।']);
+  }else{
+    rows.push(['✅',en?`${bn(done)} of ${bn(5)} prayers done today`:`আজ ${bn(done)}/${bn(5)} ওয়াক্ত আদায় হয়েছে`]);
+  }
+  const st=window.curStreak||0;
+  rows.push([st>0?'🔥':'🌱',st>0
+    ?(en?`${bn(st)}-day streak — keep it going!`:`টানা ${bn(st)} দিনের ধারাবাহিকতা — চালিয়ে যান!`)
+    :(en?'Complete all five today to start a streak':'আজ পাঁচ ওয়াক্ত পূর্ণ করলেই ধারাবাহিকতা শুরু হবে')]);
+  box.innerHTML=rows.map(r=>`<div class="ai-row"><span class="ai-ic">${r[0]}</span><span class="ai-tx">${r[1]}</span></div>`).join('');
 }
 // ===== অর্জন =====
 function renderBadges(){
@@ -236,7 +265,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   applyI18n();fillLangs();fillCities();$('citySelect').onchange=e=>changeCity(e.target.value);
   renderAll();renderDates();loadDates();
   await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
-  setInterval(updateTimer,1000);setInterval(Reminders.check,20000);Reminders.check();
+  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
   if(location.hash==='#settings')openSettings();
   // new day: refresh times + tracker
   let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
