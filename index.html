@@ -14,6 +14,10 @@
 
 </head>
 <body data-page="home">
+
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
 <div class="app-container">
 
   <div class="topbar fade-in">
@@ -46,7 +50,15 @@
   <!-- নামাজের সময়ের স্ক্রল বার: আইকন + নাম + সময় -->
   <div class="pbar fade-in" id="prayerBar"></div>
 
-  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🕐 <span data-i18n="times">আজকের সময়সূচি</span></div></div><div id="timesList"></div></div>
+  <!-- স্মার্ট সহায়ক কার্ড -->
+  <div class="ai-card fade-in" id="aiCard">
+    <div class="ai-head">
+      <span class="ai-orb"></span>
+      <div><div class="ai-title" id="aiTitle">দ্বীন স্মার্ট সহায়ক</div><div class="ai-sub" id="aiSub">আপনার আজকের ইবাদতের লাইভ ইনসাইট</div></div>
+      <span class="ai-live">LIVE</span>
+    </div>
+    <div class="ai-list" id="aiInsights"></div>
+  </div>
 
   <div class="section-head fade-in"><div class="section-head-title" data-i18n="quick">দ্রুত অ্যাকশন</div></div>
   <div class="actions-grid fade-in">
@@ -63,6 +75,8 @@
     <div class="progress-track"><div class="progress-bar" id="progressFillBar"></div></div>
     <div class="prayers-row" id="prayersRowContainer"></div>
   </div>
+
+  <div class="glass-card fade-in"><div class="card-header"><div class="card-title">🕐 <span data-i18n="times">আজকের সময়সূচি</span></div></div><div id="timesList"></div></div>
 
   <div class="glass-card fade-in">
     <div class="card-header"><div class="card-title" data-i18n="weekly">📅 সাপ্তাহিক নামাজ</div><div class="card-badge" id="weekCalRange">...</div></div>
