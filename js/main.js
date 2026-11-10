@@ -187,7 +187,22 @@ async function loadDaily(){
     $('dailyHadith').innerHTML=`<div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${h.length>350?h.slice(0,350)+'…':h}</div><div class="src">${t('hsrc')} · ${bn(n)}</div>`}catch(e){}
 }
 // ===== স্মার্ট সহায়ক (লোকাল ইনসাইট — ইন্টারনেট/এপিআই ছাড়াই) =====
-function renderInsight(){try{renderInsightInner()}catch(e){console.warn('insight',e)}}
+// ===== পরবর্তী নামাজ কখন শুরু (বার) =====
+function renderNextBar(){
+  const box=$('nextBar');if(!box)return;
+  const en=LANG==='en',now=Date.now();
+  let idx=prayerNames.findIndex(n=>atMs(times[n].start,0)>now),off=0;
+  if(idx<0){idx=0;off=1}
+  const n=prayerNames[idx],st=atMs(times[n].start,off);
+  const pst=atMs(times[prayerNames[(idx+4)%5]].start,idx===0?(off?0:-1):0);
+  const left=Math.max(0,Math.round((st-now)/60000));
+  $('nbLabel').textContent=en?'Next prayer starts':'পরবর্তী নামাজ শুরু';
+  $('nbName').textContent=pnOf(n);
+  $('nbTime').textContent=fmt(times[n].start);
+  $('nbLeft').textContent=`${bn(Math.floor(left/60))}${en?'h ':' ঘণ্টা '}${bn(left%60)}${en?'m':' মিনিট'} ${en?'left':'বাকি'}`;
+  $('nbFill').style.width=Math.max(0,Math.min(100,(now-pst)/(st-pst)*100))+'%';
+}
+function renderInsight(){try{renderNextBar()}catch(e){console.warn('nextbar',e)}try{renderInsightInner()}catch(e){console.warn('insight',e)}}
 function renderInsightInner(){
   const box=$('aiInsights');if(!box)return;
   const en=LANG==='en',now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey());
@@ -251,4 +266,28 @@ function setupSettings(){
     localStorage.setItem('deen_coords',JSON.stringify({lat:p.coords.latitude,lon:p.coords.longitude}));$('cityLabel').textContent='GPS';
     await loadTimes();updateTimer();renderExtras();showToast('📍 '+t('gpsOk'))},()=>showToast(t('gpsErr')),{timeout:10000}):showToast(t('gpsErr'));
   $('exportBtn').onclick=()=>{const o={};Object.keys(localStorage).filter(k=>!/^(pt_|hijri_|ayah_|hadith_|cal_|asma_cache|q_list)/.test(k)).forEach(k=>o[k]=localStorage.getItem(k));
-    const a=document.createElement('a');a.href=URL.
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='deen-time-backup.json';a.click()};
+  $('importBtn').onclick=()=>$('importFile').click();
+  $('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);for(const k in o)localStorage.setItem(k,o[k]);showToast('✅ '+t('restored'));setTimeout(()=>location.reload(),900)}catch(x){showToast(t('err'))}};r.readAsText(f)};
+  $('shareBtn').onclick=async()=>{const txt=`🕌 দ্বীন টাইম\n${t('weekly')} (${$('weekCalRange').textContent})\n✅ ${$('totalCompleted').textContent}/${bn(35)}  📈 ${$('weeklyProgress').textContent}  🔥 ${$('streakCount').textContent}`;
+    try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),showToast(t('copied')))}catch(e){}};
+}
+const openSettings=()=>{location.href='settings.html'};
+const closeSettings=()=>{};
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',async()=>{
+  loadData();setTheme(localStorage.getItem('deen_theme')||'dark');
+  $('recordCloseBtn').onclick=closeRecord;
+  $('recordModal').onclick=e=>{if(e.target.id==='recordModal')closeRecord()};
+  document.querySelectorAll('.theme-opt').forEach(b=>b.onclick=()=>setTheme(b.dataset.theme));
+  applyI18n();fillLangs();fillCities();
+  renderAll();renderDates();loadDates();
+  updateTimer();renderExtras();
+  await loadTimes();updateTimer();renderExtras();loadDaily();setupSettings();
+  setInterval(updateTimer,1000);setInterval(renderInsight,30000);setInterval(Reminders.check,20000);Reminders.check();
+  if(location.hash==='#settings')location.replace('settings.html');
+  // new day: refresh times + tracker
+  let day=todayKey();setInterval(async()=>{if(todayKey()!==day){day=todayKey();await loadTimes();loadDates();renderAll()}},30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateTimer()});
+});
