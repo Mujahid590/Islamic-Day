@@ -25,7 +25,7 @@
     <div><div class="page-title" data-k="title">সেটিংস</div><div class="muted" data-k="subtitle">অ্যাপ আপনার মতো সাজিয়ে নিন</div></div>
   </div>
 
-  <!-- ১) ভাষা + থিম + রঙ: এক কন্ট্রোল বারে -->
+  <!-- ১) চেহারা: ভাষা + লাইট/ডার্ক মুড + কালার -->
   <section class="glass-card set-card fade-in" aria-labelledby="secLookT">
     <div class="card-header"><div class="card-title" id="secLookT">🎨 <span data-k="secLook">চেহারা ও ভাষা</span></div></div>
     <div class="set-group">
@@ -34,70 +34,24 @@
     </div>
     <div class="set-group">
       <div class="setting-label" data-k="theme">থিম</div>
-      <div class="theme-row">
-        <button type="button" class="theme-opt" data-theme="dark" data-k="themeDark">🌙 ডার্ক</button>
-        <button type="button" class="theme-opt" data-theme="light" data-k="themeLight">☀️ লাইট</button>
-        <button type="button" class="theme-opt" data-theme="system" data-k="themeSystem">📱 সিস্টেম</button>
+      <div class="theme-row" id="themeRow" role="radiogroup">
+        <button type="button" class="theme-opt" data-theme="light" role="radio" data-k="themeLight">☀️ লাইট</button>
+        <button type="button" class="theme-opt" data-theme="dark" role="radio" data-k="themeDark">🌙 ডার্ক</button>
+        <button type="button" class="theme-opt" data-theme="system" role="radio" data-k="themeSystem">📱 সিস্টেম</button>
       </div>
     </div>
     <div class="set-group">
-      <div class="setting-label" data-k="color">অ্যাকসেন্ট রঙ</div>
-      <div class="dots" id="colorDots">
-        <button type="button" class="dot" data-c="teal" aria-label="Teal"></button>
-        <button type="button" class="dot" data-c="green" aria-label="Green"></button>
-        <button type="button" class="dot" data-c="blue" aria-label="Blue"></button>
-        <button type="button" class="dot" data-c="peach" aria-label="Peach"></button>
+      <div class="setting-label"><span data-k="color">অ্যাকসেন্ট রঙ</span> <span class="color-name" id="colorName"></span></div>
+      <div class="dots" id="colorDots" role="radiogroup">
+        <button type="button" class="dot" data-c="teal" role="radio" aria-label="Teal"></button>
+        <button type="button" class="dot" data-c="green" role="radio" aria-label="Green"></button>
+        <button type="button" class="dot" data-c="blue" role="radio" aria-label="Blue"></button>
+        <button type="button" class="dot" data-c="peach" role="radio" aria-label="Peach"></button>
       </div>
     </div>
   </section>
 
-  <!-- ২) লোকেশন -->
-  <section class="glass-card set-card fade-in" aria-labelledby="secLocT">
-    <div class="card-header"><div class="card-title" id="secLocT">📍 <span data-k="secLoc">লোকেশন</span></div><div class="card-badge" id="locStatus">--</div></div>
-    <div class="set-group">
-      <label class="setting-label" for="citySelect" data-k="city">শহর</label>
-      <select class="city-select" id="citySelect"></select>
-    </div>
-    <div class="btn-row">
-      <button type="button" class="btn" id="gpsBtn" data-k="gps">📡 GPS দিয়ে লোকেশন নিন</button>
-      <button type="button" class="btn ghost" id="gpsClearBtn" data-k="gpsClear">GPS মুছুন</button>
-    </div>
-    <p class="set-note" data-k="gpsNote">GPS চালু থাকলে শহরের বদলে আপনার সঠিক অবস্থানের সময় দেখানো হবে।</p>
-  </section>
-
-  <!-- ৩) হিসাব পদ্ধতি -->
-  <section class="glass-card set-card fade-in" aria-labelledby="secCalcT">
-    <div class="card-header"><div class="card-title" id="secCalcT">🧮 <span data-k="secCalc">নামাজের সময় হিসাব</span></div></div>
-    <div class="set-group">
-      <label class="setting-label" for="schoolSel" data-k="school">আসরের মাযহাব</label>
-      <select class="city-select" id="schoolSel"></select>
-    </div>
-    <p class="set-note" data-k="schoolNote">বাংলাদেশে সাধারণত হানাফী (আসর দেরিতে) ব্যবহৃত হয়। পদ্ধতি: Karachi (University of Islamic Sciences)।</p>
-  </section>
-
-  <!-- ৪) আযান ও রিমাইন্ডার -->
-  <section class="glass-card set-card fade-in" aria-labelledby="secAdhanT">
-    <div class="card-header"><div class="card-title" id="secAdhanT">🔔 <span data-k="secAdhan">আযান ও রিমাইন্ডার</span></div></div>
-    <div class="set-group">
-      <label class="setting-label" for="adhanSel" data-k="adhanMode">আযানের শব্দ</label>
-      <div class="inline-row"><select class="city-select" id="adhanSel"></select><button type="button" class="btn ghost" id="testSoundBtn" data-k="testSound">▶ টেস্ট</button></div>
-    </div>
-    <div class="set-group">
-      <label class="setting-label" for="remindSel" data-k="remBefore">ওয়াক্ত শুরুর আগে রিমাইন্ডার</label>
-      <select class="city-select" id="remindSel"></select>
-    </div>
-    <div class="set-group">
-      <label class="setting-label" for="remindAfterSel" data-k="remAfter">ওয়াক্ত শুরুর পরে রিমাইন্ডার</label>
-      <select class="city-select" id="remindAfterSel"></select>
-    </div>
-    <div class="set-group">
-      <div class="setting-label" data-k="notif">নোটিফিকেশন অনুমতি</div>
-      <div class="inline-row"><span class="status-pill" id="notifStatus">--</span><button type="button" class="btn ghost" id="notifBtn" data-k="notifBtn">অনুমতি দিন</button></div>
-    </div>
-    <p class="set-note" data-k="remNote">রিমাইন্ডার সর্বোচ্চ ১ ঘণ্টা আগে বা পরে সেট করা যায়। অ্যাপ খোলা বা ব্যাকগ্রাউন্ডে থাকলে কাজ করে।</p>
-  </section>
-
-  <!-- ৫) ডেটা -->
+  <!-- ২) ডেটা -->
   <section class="glass-card set-card fade-in" aria-labelledby="secDataT">
     <div class="card-header"><div class="card-title" id="secDataT">💾 <span data-k="secData">ডেটা ও ব্যাকআপ</span></div><div class="card-badge" id="dataInfo">--</div></div>
     <div class="btn-row">
@@ -117,34 +71,34 @@
     </div>
   </section>
 
-  <!-- ৬) যোগাযোগ -->
+  <!-- ৩) যোগাযোগ -->
   <section class="glass-card set-card fade-in" aria-labelledby="secContactT" id="contactCard">
     <div class="card-header"><div class="card-title" id="secContactT">📞 <span data-k="secContact">যোগাযোগ</span></div></div>
     <div class="contact-row">
       <div class="contact-ic" aria-hidden="true">✉️</div>
       <div class="contact-body"><div class="contact-lbl" data-k="email">ইমেইল</div>
-        <a class="contact-val" id="emailLink" href="mailto:Mujahid590@gmail.com">Mujahid590@gmail.com</a></div>
-      <button type="button" class="btn ghost contact-copy" id="copyEmailBtn" data-k="copy" data-aria="copyEmail">কপি</button>
+        <a class="contact-val" id="emailLink" href="mailto:mujahid590.bd@gmail.com">mujahid590.bd@gmail.com</a></div>
+      <button type="button" class="btn ghost contact-copy" id="copyEmailBtn" data-k="copy">কপি</button>
     </div>
-    <!-- মোবাইল নম্বর এখনো দেওয়া হয়নি। নম্বর হলে নিচের .contact-row টি এভাবে বদলান:
-         <a class="contact-val" href="tel:+8801XXXXXXXXX">+8801XXXXXXXXX</a> (আর "disabled" ক্লাস ও data-k="phoneSoon" সরিয়ে দিন) -->
+    <!-- মোবাইল নম্বর হলে নিচের সারিটি এভাবে বদলান:
+         <a class="contact-val" href="tel:+8801XXXXXXXXX">+8801XXXXXXXXX</a> ("disabled" ক্লাস ও data-k="phoneSoon" সরিয়ে দিন) -->
     <div class="contact-row disabled">
       <div class="contact-ic" aria-hidden="true">📱</div>
       <div class="contact-body"><div class="contact-lbl" data-k="phone">মোবাইল</div>
         <div class="contact-val soon" data-k="phoneSoon">শীঘ্রই যুক্ত হবে</div></div>
     </div>
     <div class="btn-row">
-      <a class="btn" id="mailBtn" href="mailto:Mujahid590@gmail.com" data-k="sendMail">✉️ ইমেইল পাঠান</a>
-      <a class="btn ghost" id="reportBtn" href="mailto:Mujahid590@gmail.com" data-k="report">🐞 সমস্যা/পরামর্শ জানান</a>
+      <a class="btn" id="mailBtn" href="mailto:mujahid590.bd@gmail.com" data-k="sendMail">✉️ ইমেইল পাঠান</a>
+      <a class="btn ghost" id="reportBtn" href="mailto:mujahid590.bd@gmail.com" data-k="report">🐞 সমস্যা/পরামর্শ জানান</a>
     </div>
     <p class="set-note" data-k="contactNote">সমস্যা জানালে অ্যাপের সংস্করণ ও ডিভাইসের তথ্য ইমেইলে আপনা-আপনি যুক্ত হবে, যাতে দ্রুত সমাধান করা যায়।</p>
   </section>
 
-  <!-- ৭) সম্পর্কে -->
+  <!-- ৪) সম্পর্কে -->
   <section class="glass-card set-card fade-in about" aria-labelledby="secAboutT">
     <div class="card-header"><div class="card-title" id="secAboutT">ℹ️ <span data-k="secAbout">অ্যাপ সম্পর্কে</span></div></div>
     <div class="trow"><span data-k="appName">অ্যাপ</span><b>দ্বীন টাইম · Islamic Nur</b></div>
-    <div class="trow"><span data-k="version">সংস্করণ</span><b>1.0</b></div>
+    <div class="trow"><span data-k="version">সংস্করণ</span><b id="appVer">1.0</b></div>
     <div class="trow"><span data-k="dataSrc">সময়ের উৎস</span><b>Aladhan API</b></div>
   </section>
 </div>
