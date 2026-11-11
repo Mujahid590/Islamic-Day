@@ -39,3 +39,28 @@ body.dark .status-pill.ok{background:rgba(16,185,129,.18);color:#6ee7b7}body.dar
 .about .trow b{font-size:.85rem;text-align:end}
 .toast{max-width:calc(100% - 32px);text-align:center}
 @media (max-width:360px){.btn-row .btn{flex-basis:100%}}
+
+/* ===== ভাষা: এক বাটনে (পতাকা + নাম), চাপলে তালিকা খোলে ===== */
+.lang-pick .lang-current{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:var(--r-md);font-weight:700;font-family:inherit;font-size:.95rem;cursor:pointer;transition:var(--t)}
+.lang-pick .lang-current .flag{font-size:1.5rem;line-height:1}
+.lang-pick .lang-current .lang-name{flex:1;text-align:start}
+.lang-pick .lang-current .chev{color:var(--text2);transition:transform .25s}
+.lang-pick.open .lang-current{border-color:var(--accent)}
+.lang-pick.open .lang-current .chev{transform:rotate(180deg)}
+.lang-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.lang-menu[hidden]{display:none}
+.lang-menu .lang-opt{justify-content:flex-start}
+.lang-current:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ===== যোগাযোগ ===== */
+.contact-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border)}
+.contact-row:last-of-type{border-bottom:none}
+.contact-ic{width:42px;height:42px;border-radius:14px;background:var(--accent-l);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.contact-body{flex:1;min-width:0}
+.contact-lbl{font-size:.72rem;color:var(--text2)}
+.contact-val{display:block;font-size:.95rem;font-weight:700;color:var(--text);word-break:break-all;-webkit-user-select:text;user-select:text;text-decoration:none;font-family:'Poppins','Noto Sans Bengali',sans-serif}
+a.contact-val{color:var(--accent)}
+.contact-val.soon{font-family:inherit;font-weight:600;color:var(--text2);font-size:.85rem}
+.contact-row.disabled{opacity:.75}
+.contact-copy{padding:8px 14px;font-size:.8rem;flex-shrink:0}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
