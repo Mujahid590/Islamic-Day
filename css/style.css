@@ -1,4 +1,3 @@
-
 :root{--bg1:#c9f1ec;--bg2:#f6fbfa;--bg3:#ffe0d0;--card:rgba(255,255,255,.58);--border:rgba(255,255,255,.8);
 --text:#16303a;--text2:#5d7580;--accent:#0d9488;--accent-l:rgba(13,148,136,.13);--bg-solid:#eef7f5;
 --done:#10b981;--done-bg:#d1fae5;--missed:#ef4444;--missed-bg:#fee2e2;--pending:#f59e0b;
@@ -305,3 +304,35 @@ html:has(body.dark){background:#101a24}
 .modal-sheet{max-height:85vh;max-height:85dvh}
 /* ৭) কীবোর্ড ফোকাস দৃশ্যমান */
 .prayer-item:focus-visible,.cal-day:focus-visible,.nav-btn:focus-visible,.sheet-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
+
+/* ===== ভাষা: হিন্দি ফন্ট + লম্বা লেখা (ar/hi/ur/en) যেন বক্সের বাইরে না যায় ===== */
+html[lang=hi] body{font-family:'Noto Sans Devanagari','Noto Sans Bengali','Poppins',sans-serif;line-height:1.55}
+html[lang=hi] .pn,html[lang=hi] .action-label{line-height:1.45}
+.app-container,.glass-card,.header-card,.ai-card,.next-bar{min-width:0;max-width:100%}
+/* আইকন/গোল চিহ্ন কখনো চেপে ছোট হবে না; শুধু লেখার ঘর সংকুচিত হতে পারবে */
+.stat-icon-wrap,.icon-wrap,.nb-icon,.ai-ic,.ai-orb,.p-circle,.state-dot,.contact-ic,.sheet-close,.round-btn,.header-timer,.flag,.pchip img,.nb-icon img,.icon-wrap img{flex-shrink:0}
+.stat-box>div:last-child,.ai-row>.ai-tx,.nb-left-grp>div:last-child,.contact-body,.record-header>div:first-child{min-width:0;flex:1 1 auto}
+.hello,.hijri,.greg-date-header,.prayer-name-bn,.prayer-time-big,.city-line,.ai-title,.ai-sub,.ai-tx,.nb-lbl,.nb-name,.nb-left,
+.card-title,.card-badge,.stat-label,.trow span,.badge,.src,.tr-text,.legend-item,.record-day-name,.record-done-count{overflow-wrap:anywhere;word-break:normal}
+.header-top{gap:8px;flex-wrap:wrap}
+.prayer-state-chip{max-width:100%}.prayer-state-chip span{overflow-wrap:anywhere;line-height:1.35}
+.greg-date-header{text-align:end;flex:1 1 auto}
+.header-main{gap:10px}.header-main>div:first-child{flex:1 1 0;min-width:0}
+.header-timer{flex:0 0 auto}
+.timer-sublabel{max-width:70px;text-align:center;line-height:1.2;overflow-wrap:anywhere}
+.card-header{gap:8px;flex-wrap:wrap}.card-title{flex:1 1 auto;min-width:0}.card-badge{flex:0 1 auto;max-width:100%;white-space:normal;text-align:center}
+.action-item{min-width:0;padding-inline:4px}
+.action-label{display:block;max-width:100%;overflow-wrap:anywhere;hyphens:auto;line-height:1.35;text-align:center}
+.nb-row{gap:8px}.nb-left-grp{min-width:0;flex:1 1 auto}.nb-right{flex:0 0 auto;text-align:end;max-width:45%}
+.nb-left{white-space:normal;line-height:1.3}
+.stat-box{min-width:0}.stat-label{line-height:1.35}
+.pchip{flex:0 0 auto;min-width:64px}.pchip .pn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78px}
+.ai-row{min-width:0}.ai-tx{min-width:0}
+.trow{gap:10px}.trow span{min-width:0}.trow b{flex-shrink:0;white-space:nowrap}
+.badge{max-width:100%;white-space:normal}
+.legend{flex-wrap:wrap;gap:8px}
+.week-strip .cal-day{min-width:0}.cal-name{overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.prayer-item span,.p-name{overflow-wrap:anywhere;text-align:center;line-height:1.3}
+#dailyAyah,#dailyHadith{overflow-wrap:anywhere}
+/* উর্দুর উচ্চ line-height যেন ইমোজি আইকনের বক্স ছাপিয়ে না যায় */
+.stat-icon-wrap,.ai-ic,.ai-orb,.ai-orb::after,.icon-wrap,.contact-ic,.nb-icon,.state-dot{line-height:1}
