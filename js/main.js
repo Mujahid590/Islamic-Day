@@ -156,8 +156,9 @@ function fillLangs(){
   $('langGrid').innerHTML=Object.keys(LANGS).map(k=>`<button class="lang-opt ${k===LANG?'active':''}" data-l="${k}"><span class="flag">${LANGS[k].flag}</span>${LANGS[k].name}</button>`).join('');
   document.querySelectorAll('.lang-opt').forEach(b=>b.onclick=()=>changeLang(b.dataset.l));
 }
+function setSettingsLabel(){const e=$('settingsLabel');if(e)e.textContent=LANG==='en'?'Settings':'সেটিংস'}
 function changeLang(c){
-  setLang(c);fillLangs();fillCities();renderDates();renderAll();updateTimer();renderExtras();loadDaily();
+  setLang(c);setSettingsLabel();fillLangs();fillCities();renderDates();renderAll();updateTimer();renderExtras();loadDaily();
   if(recordKey)renderRecord(recordKey);
 }
 // ===== অতিরিক্ত সময় (সাহরি/ইফতার/ইশরাক/চাশত/তাহাজ্জুদ/নিষিদ্ধ) =====
@@ -312,6 +313,7 @@ function dayRollover(){
 }
 async function initDeen(){
   loadData();
+  setSettingsLabel();
   try{if(typeof setLang==='function')setLang(LANG)}catch(e){}
   setTheme(localStorage.getItem('deen_theme')||'dark');
   try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{if((localStorage.getItem('deen_theme')||'dark')==='system')setTheme('system')})}catch(e){}
