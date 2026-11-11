@@ -12,14 +12,18 @@
 </head>
 <body data-page="qibla">
 
-<!-- AI অরোরা ব্যাকগ্রাউন্ড (হোম ও সেটিংস পেজের মতো) -->
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
 <div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
 
 <div class="app-container">
 
-  <!-- পেজ হেডার (হোম/সেটিংস পেজের সাব-পেজ স্টাইলের আদলে) -->
+  <!-- পেজ হেডার (উন্নত ব্যাক বাটন সহ) -->
   <div class="page-head fade-in">
-    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">←</a>
+    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </a>
     <div>
       <div class="page-title">কিবলা দিকনির্দেশক</div>
       <div class="muted">কাবা শরীফের সঠিক দিক নির্ণয় করুন</div>
@@ -30,7 +34,7 @@
   <section class="glass-card compass-card fade-in">
     <div class="compass-wrapper">
       <div class="compass" id="compass">
-        <div class="compass-inner">
+        <div class="compass-inner" id="compassDisc">
           <div class="direction-markers">
             <span class="dir-n">N</span>
             <span class="dir-ne">NE</span>
@@ -41,7 +45,7 @@
             <span class="dir-w">W</span>
             <span class="dir-nw">NW</span>
           </div>
-          <div class="needle" id="needle">
+          <div class="needle">
             <div class="needle-north"></div>
             <div class="needle-south"></div>
           </div>
@@ -86,33 +90,8 @@
 
 </div>
 
-<!-- ফিক্সড বটম নেভবার (হোম ও সেটিংস পেজের স্টাইল অনুযায়ী) -->
-<nav class="bottom-nav" aria-label="Bottom Navigation">
-  <button type="button" class="nav-btn" onclick="window.location.href='salah.html'">
-    <div class="nav-icon-box"><img src="image/salah.png" alt=""></div>
-    <span class="nav-label">নামাজ</span>
-  </button>
-  <button type="button" class="nav-btn active" onclick="window.location.href='qibla.html'">
-    <div class="nav-icon-box"><img src="image/compass.png" alt=""></div>
-    <span class="nav-label">কিবলা</span>
-  </button>
-  <button type="button" class="nav-btn" onclick="window.location.href='index.html'">
-    <div class="nav-icon-box"><img src="image/home.png" alt=""></div>
-    <span class="nav-label">হোম</span>
-  </button>
-  <button type="button" class="nav-btn" onclick="window.location.href='hadith.html'">
-    <div class="nav-icon-box"><img src="image/hadith.png" alt=""></div>
-    <span class="nav-label">হাদিস</span>
-  </button>
-  <button type="button" class="nav-btn" onclick="window.location.href='setting.html'">
-    <div class="nav-icon-box"><img src="image/profile.png" alt=""></div>
-    <span class="nav-label">সেটিংস</span>
-  </button>
-</nav>
-
 <script src="js/i18n.js"></script>
 <script src="js/i18n-extra.js"></script>
 <script src="js/qibla.js"></script>
-<script src="js/nav.js"></script>
 </body>
 </html>
