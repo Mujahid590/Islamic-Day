@@ -27,6 +27,11 @@
   background: var(--accent-l);
 }
 
+.map-wrapper {
+  background: var(--bg-solid);
+  touch-action: pan-x pan-y; /* মোবাইলে ম্যাপ স্মুথলি ডানে-বামে, ওপরে-নিচে সরানোর জন্য */
+}
+
 .masjid-list {
   display: flex;
   flex-direction: column;
