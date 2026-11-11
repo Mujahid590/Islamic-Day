@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const compass = document.getElementById('compass');
-  const needle = document.getElementById('needle');
+  const compassDisc = document.getElementById('compassDisc');
   const kiblaMarker = document.getElementById('kiblaMarker');
   const currentDirection = document.getElementById('currentDirection');
   const kiblaDegrees = document.getElementById('kiblaDegrees');
@@ -8,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const locateBtn = document.getElementById('locateBtn');
   const locStatusBadge = document.getElementById('locStatusBadge');
 
-  let kaabaLat = 21.4225;
-  let kaabaLng = 39.8262;
-  let kiblaAngle = 280; // বাংলাদেশের জন্য ডিফল্ট আনুমানিক কিবলার দিক
+  const kaabaLat = 21.4225;
+  const kaabaLng = 39.8262;
+  let kiblaAngle = 280; // বাংলাদেশে আনুমানিক ডিফল্ট কিবলা কোণ
 
-  // ইউজার লোকেশন হিসাব করা
+  // কিবলা কোণ গণনা
   function calculateQibla(lat, lng) {
     const phiK = (kaabaLat * Math.PI) / 180;
     const lambdaK = (kaabaLng * Math.PI) / 180;
@@ -26,7 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return qibla;
   }
 
-  // জিপিএস লোকেশন নেওয়া
+  // কিবলা মার্কার পজিশন সেটআপ
+  function positionKiblaMarker() {
+    if (kiblaMarker) {
+      kiblaMarker.style.transform = `translate(-50%, -50%) rotate(${kiblaAngle}deg) translateY(-100px)`;
+    }
+  }
+
+  // লোকেশন প্রাপ্তি
   function getLocation() {
     if (navigator.geolocation) {
       locationCoords.textContent = "লোকেশন খোঁজা হচ্ছে...";
@@ -40,52 +46,49 @@ document.addEventListener('DOMContentLoaded', () => {
           
           kiblaAngle = calculateQibla(lat, lng);
           kiblaDegrees.textContent = kiblaAngle.toFixed(1);
-          updateCompass(0);
+          positionKiblaMarker();
         },
-        (error) => {
+        () => {
           locationCoords.textContent = "লোকেশন পাওয়া যায়নি। ডিফল্ট ব্যবহার করা হচ্ছে।";
-          locStatusBadge.textContent = "ব্যর্থ";
+          locStatusBadge.textContent = "অফলাইন";
           kiblaDegrees.textContent = kiblaAngle.toFixed(1);
+          positionKiblaMarker();
         },
         { enableHighAccuracy: true }
       );
     } else {
-      locationCoords.textContent = "আপনার ব্রাউজার জিপিএস সমর্থন করে না।";
+      locationCoords.textContent = "আপনার ডিভাইসে জিপিএস সমর্থিত নয়।";
+      kiblaDegrees.textContent = kiblaAngle.toFixed(1);
+      positionKiblaMarker();
     }
   }
 
   locateBtn.addEventListener('click', getLocation);
   getLocation();
 
-  // কম্পাস সেন্সর হ্যান্ডেল (মোবাইল ওরিয়েন্টেশন)
+  // ডিভাইস ঘোরালে পুরো কম্পাস ডিস্ক ঘোরানো (Dynamic Compass Handling)
   function handleOrientation(event) {
-    let heading = event.alpha; // iOS বা Android এর কম্পাস ডাটা
+    let heading = event.alpha;
+
     if (event.webkitCompassHeading) {
-      heading = event.webkitCompassHeading; // iOS এর জন্য
+      heading = event.webkitCompassHeading; // iOS-এর জন্য
+    } else if (event.alpha !== null) {
+      // Android-এর জন্য (Absolute Orientation fallback)
+      heading = 360 - event.alpha;
     }
 
     if (heading !== null && heading !== undefined) {
-      updateCompass(heading);
+      const roundedHeading = Math.round(heading);
+      currentDirection.textContent = `${roundedHeading}°`;
+      
+      // ডাইনামিক কম্পাস ঘূর্ণন: ফোন ঘোরালে ডায়াল্টি উল্টো দিকে ঘুরে উত্তর দিক নির্দেশ করবে
+      if (compassDisc) {
+        compassDisc.style.transform = `rotate(${-heading}deg)`;
+      }
     }
   }
 
-  function updateCompass(heading) {
-    const rotation = 360 - heading;
-    compass.style.transform = `rotate(${rotation}deg)`;
-    
-    // কিবলার সুনির্দিষ্ট দিকে আইকন ও নিডেল সেট করা
-    const needleRotation = heading;
-    if (needle) needle.style.transform = `translate(-50%, -50%) rotate(${needleRotation}deg)`;
-    
-    const markerRotation = kiblaAngle;
-    if (kiblaMarker) {
-      kiblaMarker.style.transform = `translate(-50%, -50%) rotate(${markerRotation}deg) translateY(-100px)`;
-    }
-
-    currentDirection.textContent = `${Math.round(heading)}°`;
-  }
-
-  // ডিভাইস ওরিয়েন্টেশন পারমিশন চেক
+  // সেন্সরের অনুভূতি পারমিশন পরীক্ষা (বিশেষ করে iOS-এর জন্য)
   if (window.DeviceOrientationEvent) {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
       locateBtn.addEventListener('click', () => {
@@ -94,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response === 'granted') {
               window.addEventListener('deviceorientation', handleOrientation, true);
             }
-          }).catch(console.error);
+          })
+          .catch(console.error);
       });
     } else {
       window.addEventListener('deviceorientation', handleOrientation, true);
