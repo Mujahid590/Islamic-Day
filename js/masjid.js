@@ -1,6 +1,6 @@
-// ========== MASJID LOCATOR SCRIPT ==========
+// ========== LIVE GPS & GOOGLE MAPS MASJID LOCATOR ==========
 document.addEventListener('DOMContentLoaded', () => {
-  // ১. সেটিংসের থিম ও কালার সিঙ্ক করা
+  // ১. সেটিংসের থিম, রঙ ও ভাষা সিঙ্ক করা (কিবলা ও অন্যান্য পেজের মতো)
   const savedTheme = localStorage.getItem('deen_theme') || 'system';
   const savedColor = localStorage.getItem('deen_color') || 'teal';
   
@@ -14,97 +14,65 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.setAttribute('data-color', savedColor);
   }
 
-  const dhakaMosques = [
-    { name: "বায়তুল মোকাররম জাতীয় মসজিদ", lat: 23.7312, lng: 90.4146, address: "পল্টন, ঢাকা" },
-    { name: "স্টার মসজিদ", lat: 23.7229, lng: 90.3979, address: "আবুল খায়েরাত রোড, ঢাকা" },
-    { name: "চকবাজার শাহী মসজিদ", lat: 23.7146, lng: 90.3979, address: "চকবাজার, ঢাকা" },
-    { name: "খান মোহাম্মদ মৃধা মসজিদ", lat: 23.7237, lng: 90.3874, address: "লালবাগ, ঢাকা" },
-    { name: "সাত গম্বুজ মসজিদ", lat: 23.7185, lng: 90.3892, address: "মোহাম্মদপুর, ঢাকা" },
-    { name: "বিনত বিবির মসজিদ", lat: 23.7262, lng: 90.3934, address: "নারিন্দা, ঢাকা" },
-    { name: "হোসেনি দালান", lat: 23.7218, lng: 90.3996, address: "বকশীবাজার, ঢাকা" }
-  ];
-
-  let userLat = null;
-  let userLng = null;
   const locStatusBadge = document.getElementById('locStatusBadge');
+  const mapFrame = document.getElementById('mapFrame');
+  const masjidListContainer = document.getElementById('masjidList');
+  const locateBtn = document.getElementById('locateMasjidBtn');
 
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-  }
+  // ইউজার লোকেশন দিয়ে গুগল ম্যাপ ও ডাইনামিক মসজিদ সার্চ আপডেট করা
+  function updateLiveMapAndList(lat, lng) {
+    locStatusBadge.textContent = "সক্রিয়";
+    locStatusBadge.style.color = "var(--done)";
 
-  function getNearbyMosques() {
-    if (!userLat || !userLng) return dhakaMosques;
-    
-    const withDistance = dhakaMosques.map(mosque => ({
-      ...mosque,
-      distance: calculateDistance(userLat, userLng, mosque.lat, mosque.lng)
-    }));
-    
-    return withDistance.sort((a, b) => a.distance - b.distance);
-  }
+    // ১. Google Maps Embed URL আপডেট (ইউজারের লাইভ পজিশন কেন্দ্র করে আশপাশের মসজিদ সার্চ করবে)
+    mapFrame.src = `https://www.google.com/maps/embed/v1/search?key=&q=mosque+near+${lat},${lng}&center=${lat},${lng}&zoom=15`;
 
-  function renderMosques() {
-    const container = document.getElementById('masjidList');
-    const mosques = getNearbyMosques();
-    
-    container.innerHTML = mosques.map(mosque => `
+    // ২. নিচে লাইভ তালিকা দেখানোর জন্য Google Maps Directions / Search লিঙ্ক সহ কার্ড জেনারেট করা
+    // যেহেতু ব্রাউজারে সরাসরি Places API কি ছাড়া নিখুঁত লিস্ট ফেচ করা যায় না, তাই Google Maps Search URL দিয়ে ডাইনামিক লিস্ট ও ডিরেকশন বাটন তৈরি করা হলো:
+    masjidListContainer.innerHTML = `
       <div class="masjid-card">
         <div class="masjid-icon">🕌</div>
         <div class="masjid-info">
-          <div class="masjid-name">${mosque.name}</div>
-          <div class="masjid-address">📍 ${mosque.address}</div>
-          ${mosque.distance !== undefined ? `<div class="masjid-distance">📏 ${mosque.distance.toFixed(2)} কিমি দূরে</div>` : ''}
+          <div class="masjid-name">আপনার আশপাশের সকল মসজিদ</div>
+          <div class="masjid-address">📍 বর্তমান জিপিএস অবস্থান (${lat.toFixed(4)}, ${lng.toFixed(4)})</div>
         </div>
-        <button class="map-btn" data-lat="${mosque.lat}" data-lng="${mosque.lng}">🗺 ম্যাপ</button>
+        <a href="https://www.google.com/maps/search/mosque/@${lat},${lng},15z" target="_blank" class="map-btn">🗺 ম্যাপে দেখুন</a>
       </div>
-    `).join('');
-    
-    document.querySelectorAll('.map-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lat = parseFloat(btn.dataset.lat);
-        const lng = parseFloat(btn.dataset.lng);
-        const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-        window.open(url, '_blank');
-      });
-    });
+      <div class="masjid-card">
+        <div class="masjid-icon">🧭</div>
+        <div class="masjid-info">
+          <div class="masjid-name">নিকটস্থ মসজিদে যাওয়ার রাস্তা</div>
+          <div class="masjid-address">টার্ন-বাই-টার্ন নেভিগেশন ও রুট</div>
+        </div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=mosque&travelmode=walking" target="_blank" class="map-btn">🚶‍♂️ রাস্তা দেখুন</a>
+      </div>
+    `;
   }
 
-  function getUserLocation() {
-    const spinner = document.getElementById('loadingSpinner');
-    spinner.style.display = 'block';
-    
-    if (!navigator.geolocation) {
-      spinner.style.display = 'none';
-      locStatusBadge.textContent = "ব্যর্থ";
-      renderMosques();
-      return;
+  // জিপিএস লোকেশন নেওয়া
+  function getLiveLocation() {
+    if (navigator.geolocation) {
+      locStatusBadge.textContent = "খোঁজা হচ্ছে...";
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          updateLiveMapAndList(lat, lng);
+        },
+        () => {
+          locStatusBadge.textContent = "ব্যর্থ";
+          // ফেইল করলে ডিফল্ট ঢাকা (বায়তুল মোকাররম) লোকেشن দেখাবে
+          updateLiveMapAndList(23.7312, 90.4146);
+          masjidListContainer.innerHTML = `<div class="info-message">⚠️ জিপিএস অনুমতি পাওয়া যায়নি। ঢাকার ডিফল্ট ম্যাপ দেখানো হচ্ছে।</div>`;
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      locStatusBadge.textContent = "অসমর্থিত";
+      updateLiveMapAndList(23.7312, 90.4146);
     }
-    
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLat = position.coords.latitude;
-        userLng = position.coords.longitude;
-        spinner.style.display = 'none';
-        locStatusBadge.textContent = "সক্রিয়";
-        locStatusBadge.style.color = "var(--done)";
-        renderMosques();
-      },
-      () => {
-        spinner.style.display = 'none';
-        locStatusBadge.textContent = "ডিফল্ট";
-        renderMosques();
-      },
-      { enableHighAccuracy: true }
-    );
   }
 
-  renderMosques();
-  document.getElementById('locateMasjidBtn').addEventListener('click', getUserLocation);
+  locateBtn.addEventListener('click', getLiveLocation);
+  getLiveLocation(); // পেজ লোড হওয়ার সাথেই অটো কল হবে
 });
