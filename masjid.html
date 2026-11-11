@@ -5,31 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d9488">
 <title>নিকটস্থ মসজিদ - দ্বীন টাইম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/masjid.css">
-
-<!-- Leaflet CSS ফাইল -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body data-page="masjid">
 
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
 <div class="app-container">
+
+  <!-- পেজ হেডার -->
   <div class="page-head fade-in">
-    <a href="index.html" class="back-btn round-btn">←</a>
+    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </a>
     <div>
       <div class="page-title">নিকটস্থ মসজিদ</div>
-      <div class="muted">ফ্রি ওপেনস্ট্রিট ম্যাপ</div>
+      <div class="muted">গুগল লাইভ ম্যাপ ও নেভিগেশন</div>
     </div>
   </div>
 
-  <!-- ম্যাপ দেখানোর কন্টেইনার -->
+  <!-- গুগল ম্যাপ কার্ড (সঠিক ইন্টারেক্টিভ মোড: ডানে-বামে স্লাইড ও জুম করা যাবে) -->
   <section class="glass-card fade-in" style="padding: 10px;">
-    <div id="map" style="height: 380px; width: 100%; border-radius: 14px;"></div>
+    <div class="card-header" style="padding: 6px 10px; margin-bottom: 8px;">
+      <div class="card-title">🗺 লাইভ জিপিএস ম্যাপ</div>
+      <div class="card-badge" id="locStatusBadge">অফলাইন</div>
+    </div>
+    
+    <!-- ফুল ইন্টারেক্টিভ ম্যাপ কন্টেইনার -->
+    <div class="map-wrapper" style="position:relative; width:100%; height:400px; border-radius:var(--r-md); overflow:hidden; border:1px solid var(--border);">
+      <iframe id="mapFrame" width="100%" height="100%" style="border:0;" loading="lazy" allowfullscreen src=""></iframe>
+    </div>
+
+    <div style="margin-top: 12px; display: flex; gap: 8px;">
+      <button class="btn" id="locateMasjidBtn" style="flex:1;">📡 আমার লোকেশন খুঁজুন</button>
+      <a id="openGoogleMapsApp" href="#" target="_blank" class="btn ghost" style="flex:1; text-align:center;">🗺 গুগল ম্যাপ অ্যাপে খুলুন</a>
+    </div>
   </section>
+
+  <!-- মসজিদের তালিকা ও ডিরেকশন গাইড -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">🕌 আপনার এলাকার মসজিদ ও রুট</div>
+    </div>
+    <div class="masjid-list" id="masjidList">
+      <div class="info-message">
+        আপনার জিপিএস লোকেশন চালু করলে ম্যাপে আপনার আশপাশের গুগল ম্যাপে রেজিস্ট্রিকৃত সকল ছোট-বড় মসজিদ দেখা যাবে। যেকোনো মসজিদে যেতে ম্যাপের পিনে বা নিচের রুটে ক্লিক করুন।
+      </div>
+    </div>
+  </section>
+
+  <!-- মসজিদের ফজিলত কার্ড -->
+  <section class="glass-card fade-in">
+    <div class="card-header"><div class="card-title">📖 মসজিদের ফজিলত</div></div>
+    <div class="set-note" style="margin-top:0; color:var(--text); line-height:1.6;">
+      রাসূলুল্লাহ (সা.) বলেছেন: "যে ব্যক্তি সকাল-সন্ধ্যা মসজিদে যায়, আল্লাহ তার জন্য জান্নাতে একটি করে ঘর তৈরি করেন।"[cite: 7] (সহীহ বুখারী ও মুসলিম)
+    </div>
+  </section>
+
 </div>
 
-<!-- Leaflet JS ফাইল -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
 <script src="js/masjid.js"></script>
 </body>
 </html>
