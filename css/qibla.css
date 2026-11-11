@@ -1,4 +1,35 @@
-/* ===== QIBLA PAGE STYLES (Style.css ভ্যারিয়েবল ও গ্লাস ডিজাইন সমর্থিত) ===== */
+/* ===== QIBLA PAGE STYLES ===== */
+
+/* ব্যাক বাটন সুন্দর করার স্টাইল */
+.back-btn.round-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: var(--t);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.back-btn.round-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.back-btn.round-btn:active {
+  transform: scale(0.92);
+  background: var(--accent-l);
+}
+
+/* কম্পাস লেআউট */
 .compass-card {
   display: flex;
   flex-direction: column;
@@ -27,6 +58,8 @@
   position: relative;
   border-radius: 50%;
   overflow: hidden;
+  transition: transform 0.1s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
 }
 
 .direction-markers {
@@ -42,7 +75,7 @@
   color: var(--text2);
 }
 
-.dir-n { top: 10px; left: 50%; transform: translateX(-50%); color: var(--missed); }
+.dir-n { top: 10px; left: 50%; transform: translateX(-50%); color: var(--missed); font-weight: 800; }
 .dir-ne { top: 22px; right: 30px; }
 .dir-e { top: 50%; right: 10px; transform: translateY(-50%); }
 .dir-se { bottom: 22px; right: 30px; }
@@ -57,10 +90,9 @@
   left: 50%;
   width: 4px;
   height: 110px;
-  transform-origin: center;
-  transform: translate(-50%, -50%) rotate(0deg);
+  transform: translate(-50%, -50%);
   z-index: 2;
-  transition: transform 0.1s ease-out;
+  pointer-events: none;
 }
 
 .needle-north {
@@ -101,11 +133,9 @@
   top: 50%;
   left: 50%;
   transform-origin: center;
-  transform: translate(-50%, -50%) rotate(0deg) translateY(-110px);
   z-index: 1;
   font-size: 1.8rem;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-  transition: transform 0.1s ease-out;
 }
 
 .qibla-info {
@@ -140,8 +170,5 @@
   .compass {
     width: 220px;
     height: 220px;
-  }
-  .kibla-marker {
-    transform: translate(-50%, -50%) rotate(0deg) translateY(-90px);
   }
 }
