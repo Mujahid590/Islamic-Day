@@ -1,4 +1,4 @@
-// ========== INTERACTIVE GOOGLE MAPS & LIVE ROUTE SCRIPT ==========
+// ========== INTERACTIVE GOOGLE MAPS & LIVE ROUTE SCRIPT (No API Key Required) ==========
 document.addEventListener('DOMContentLoaded', () => {
   // ১. সেটিংসের থিম, রঙ ও ভাষা সিঙ্ক করা
   const savedTheme = localStorage.getItem('deen_theme') || 'system';
@@ -25,11 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     locStatusBadge.textContent = "সক্রিয়";
     locStatusBadge.style.color = "var(--done)";
 
-    // সঠিক জুম লেভেল (z=16) এবং সার্চ কুয়েরি 'mosque' ব্যবহার করা হয়েছে যাতে আপনার এলাকার ছোট-বড় সব মসজিদ গুগল ম্যাপে পিন আকারে ভেসে ওঠে।
-    // এই ম্যাপটি ব্যবহারকারী যেকোনো দিকে (ডানে, বামে, ওপরে, নিচে) স্লাইড করতে পারবেন এবং জুম করতে পারবেন।
-    mapFrame.src = `https://www.google.com/maps/embed/v1/search?key=&q=mosque&center=${lat},${lng}&zoom=16`;
+    // এপিআই কি ছাড়াই গুগল ম্যাপের অফিশিয়াল ভিউ লোড করার নিরাপদ লিংক
+    mapFrame.src = `https://maps.google.com/maps?q=mosque&sll=${lat},${lng}&sspn=0.05,0.05&t=m&z=16&output=embed`;
 
-    // সরাসরি গুগল ম্যাপ অ্যাপে বা ব্রাউজারে ফুল স্ক্রিনে ওপেন করার লিংক
+    // ফুল স্ক্রিন বা অ্যাপে ওপেন করার লিংক
     openGoogleMapsApp.href = `https://www.google.com/maps/search/mosque/@${lat},${lng},16z`;
 
     // নিচে ডিরেকশন এবং রুট কার্ড জেনারেট করা
@@ -65,8 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         () => {
           locStatusBadge.textContent = "ব্যর্থ";
-          // লোকেশন না পেলে ঢাকার ডিফল্ট পিন (বায়তুল মোকাররম এলাকা) দেখাবে
-          updateInteractiveMap(23.7312, 90.4146);
+          updateInteractiveMap(23.7312, 90.4146); // ডিফল্ট ঢাকা
           masjidListContainer.innerHTML = `<div class="info-message">⚠️ জিপিএস অনুমতি পাওয়া যায়নি। ঢাকার ডিফল্ট এলাকার ম্যাপ দেখানো হচ্ছে।</div>`;
         },
         { enableHighAccuracy: true }
@@ -78,5 +76,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   locateBtn.addEventListener('click', getLiveLocation);
-  getLiveLocation(); // পেজ ওপেন হওয়ার সাথে সাথেই ইউজার লোকেশন নিয়ে ম্যাপ লোড হবে
+  getLiveLocation();
 });
