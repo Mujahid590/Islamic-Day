@@ -1,66 +1,309 @@
-/* ===== সেটিংস পেজ — style.css এর ভ্যারিয়েবল/কার্ড ব্যবহার করে; শুধু অতিরিক্ত স্টাইল ===== */
-.page-head{margin-bottom:2px}
-.back-btn{display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);font-size:1.2rem;flex-shrink:0}
-.back-btn:active{transform:scale(.92)}
-.set-card .card-header{margin-bottom:10px}
-.set-group{margin-top:14px}.set-group:first-of-type{margin-top:4px}
-.set-card .setting-label{display:block;margin-bottom:8px}
-.set-note{font-size:.76rem;line-height:1.6;color:var(--text2);margin-top:10px}
+/* ===== সেটিংস পেজ — js/setting.js =====
+   ভাষা, থিম, রঙ, ডেটা ব্যাকআপ/রিস্টোর, যোগাযোগ।
+   নিচের KEYS যদি আপনার main.js/i18n.js এ ভিন্ন নামে থাকে, শুধু এখানে বদলে নিন। */
+(function () {
+  'use strict';
 
-/* সব সিলেক্ট বক্স */
-select.city-select{appearance:none;-webkit-appearance:none;width:100%;padding:11px 14px;font-size:.92rem;
-background-image:linear-gradient(45deg,transparent 50%,var(--text2) 50%),linear-gradient(135deg,var(--text2) 50%,transparent 50%);
-background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;
-background-color:var(--card);padding-inline-end:36px;-webkit-user-select:text;user-select:text}
-html[dir=rtl] select.city-select{background-position:20px 50%,14px 50%}
-select.city-select option{color:#16303a;background:#fff}
-body.dark select.city-select option{color:#f1f7f8;background:#16232d}
-select.city-select:focus-visible,.btn:focus-visible,.theme-opt:focus-visible,.lang-opt:focus-visible,.dot:focus-visible,.back-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  var EMAIL = 'mujahid590.bd@gmail.com';
+  var VERSION = '1.0';
+  var KEYS = { lang: 'lang', theme: 'theme', color: 'accent' };
 
-.inline-row{display:flex;gap:8px;align-items:center}.inline-row select{flex:1;min-width:0}.inline-row .btn{white-space:nowrap}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn-row .btn{flex:1 1 140px;text-align:center}
-.btn:disabled{opacity:.5;pointer-events:none}
-.file-btn{display:inline-flex;align-items:center;justify-content:center}
-.btn.danger{background:var(--missed-bg);color:var(--missed);border:1px solid rgba(239,68,68,.35)}
-body.dark .btn.danger{background:rgba(239,68,68,.15)}
-.danger-zone{margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)}
-.danger-zone .setting-label{color:var(--missed)}
+  var COLORS = {
+    teal:  { c: '#0d9488', n: { bn: 'টিল', en: 'Teal', ar: 'تركوازي', ur: 'ٹیل', hi: 'टील' } },
+    green: { c: '#16a34a', n: { bn: 'সবুজ', en: 'Green', ar: 'أخضر', ur: 'سبز', hi: 'हरा' } },
+    blue:  { c: '#0284c7', n: { bn: 'নীল', en: 'Blue', ar: 'أزرق', ur: 'نیلا', hi: 'नीला' } },
+    peach: { c: '#ea580c', n: { bn: 'পিচ', en: 'Peach', ar: 'خوخي', ur: 'آڑو', hi: 'पीच' } }
+  };
 
-/* রঙ ডট (style.css এ .dot এর ব্যাকগ্রাউন্ড ছিল না) */
-.dots{flex-wrap:wrap}
-.dot{padding:0;background:var(--accent);transition:var(--t)}
-.dot[data-c=teal]{background:#0d9488}.dot[data-c=green]{background:#16a34a}.dot[data-c=blue]{background:#0284c7}.dot[data-c=peach]{background:#ea580c}
-.dot.active{border-color:var(--text);transform:scale(1.12)}
+  var LANGS = [
+    { id: 'bn', flag: '🇧🇩', name: 'বাংলা', dir: 'ltr' },
+    { id: 'en', flag: '🇬🇧', name: 'English', dir: 'ltr' },
+    { id: 'ar', flag: '🇸🇦', name: 'العربية', dir: 'rtl' },
+    { id: 'ur', flag: '🇵🇰', name: 'اردو', dir: 'rtl' },
+    { id: 'hi', flag: '🇮🇳', name: 'हिन्दी', dir: 'ltr' }
+  ];
 
-.theme-row .theme-opt{font-size:.85rem}
-.status-pill{flex:1;font-size:.8rem;font-weight:700;padding:9px 12px;border-radius:var(--r-md);background:var(--accent-l);color:var(--text);text-align:center}
-.status-pill.ok{background:var(--done-bg);color:#047857}.status-pill.bad{background:var(--missed-bg);color:#b91c1c}
-body.dark .status-pill.ok{background:rgba(16,185,129,.18);color:#6ee7b7}body.dark .status-pill.bad{background:rgba(239,68,68,.18);color:#fca5a5}
-.about .trow b{font-size:.85rem;text-align:end}
-.toast{max-width:calc(100% - 32px);text-align:center}
-@media (max-width:360px){.btn-row .btn{flex-basis:100%}}
+  var T = {
+    bn: { title: 'সেটিংস', subtitle: 'অ্যাপ আপনার মতো সাজিয়ে নিন', back: 'ফিরে যান', secLook: 'চেহারা ও ভাষা', lang: 'ভাষা', theme: 'থিম', themeDark: '🌙 ডার্ক', themeLight: '☀️ লাইট', themeSystem: '📱 সিস্টেম', color: 'অ্যাকসেন্ট রঙ',
+      secData: 'ডেটা ও ব্যাকআপ', export: '⬇ ব্যাকআপ নিন', import: '⬆ রিস্টোর করুন', share: '🔗 অ্যাপ শেয়ার করুন', danger: 'বিপদজনক এলাকা', resetTracker: 'নামাজের হিসাব মুছুন', resetAll: 'সব সেটিংস রিসেট',
+      secContact: 'যোগাযোগ', email: 'ইমেইল', copy: 'কপি', phone: 'মোবাইল', phoneSoon: 'শীঘ্রই যুক্ত হবে', sendMail: '✉️ ইমেইল পাঠান', report: '🐞 সমস্যা/পরামর্শ জানান',
+      contactNote: 'সমস্যা জানালে অ্যাপের সংস্করণ ও ডিভাইসের তথ্য ইমেইলে আপনা-আপনি যুক্ত হবে, যাতে দ্রুত সমাধান করা যায়।',
+      secAbout: 'অ্যাপ সম্পর্কে', appName: 'অ্যাপ', version: 'সংস্করণ', dataSrc: 'সময়ের উৎস',
+      items: 'টি তথ্য', copied: 'ইমেইল কপি হয়েছে', copyFail: 'কপি করা যায়নি', exported: 'ব্যাকআপ ফাইল তৈরি হয়েছে', imported: 'রিস্টোর সফল হয়েছে', importFail: 'ফাইলটি সঠিক নয়', shared: 'লিংক কপি হয়েছে',
+      confTracker: 'নামাজের সব হিসাব মুছে যাবে। নিশ্চিত?', confAll: 'সব সেটিংস ও ডেটা মুছে রিসেট হবে। নিশ্চিত?', done: 'সম্পন্ন হয়েছে', shareText: 'দ্বীন টাইম — নামাজের সময়, কুরআন ও আরও অনেক কিছু',
+      mailSubject: 'দ্বীন টাইম — যোগাযোগ', repSubject: 'দ্বীন টাইম — সমস্যা/পরামর্শ', repBody: 'আসসালামু আলাইকুম,\n\n(এখানে আপনার সমস্যা/পরামর্শ লিখুন)\n\n--- অ্যাপের তথ্য ---' },
+    en: { title: 'Settings', subtitle: 'Make the app your own', back: 'Go back', secLook: 'Appearance & Language', lang: 'Language', theme: 'Theme', themeDark: '🌙 Dark', themeLight: '☀️ Light', themeSystem: '📱 System', color: 'Accent color',
+      secData: 'Data & Backup', export: '⬇ Back up', import: '⬆ Restore', share: '🔗 Share app', danger: 'Danger zone', resetTracker: 'Clear prayer tracker', resetAll: 'Reset all settings',
+      secContact: 'Contact', email: 'Email', copy: 'Copy', phone: 'Mobile', phoneSoon: 'Coming soon', sendMail: '✉️ Send email', report: '🐞 Report issue / feedback',
+      contactNote: 'When you report an issue, the app version and device info are added to the email automatically so it can be fixed faster.',
+      secAbout: 'About', appName: 'App', version: 'Version', dataSrc: 'Time source',
+      items: ' items', copied: 'Email copied', copyFail: 'Could not copy', exported: 'Backup file created', imported: 'Restore successful', importFail: 'Invalid file', shared: 'Link copied',
+      confTracker: 'All prayer tracker data will be deleted. Sure?', confAll: 'All settings and data will be erased. Sure?', done: 'Done', shareText: 'Deen Time — prayer times, Quran and more',
+      mailSubject: 'Deen Time — Contact', repSubject: 'Deen Time — Issue / Feedback', repBody: 'Assalamu alaikum,\n\n(Write your issue / feedback here)\n\n--- App info ---' },
+    ar: { title: 'الإعدادات', subtitle: 'خصّص التطبيق على ذوقك', back: 'رجوع', secLook: 'المظهر واللغة', lang: 'اللغة', theme: 'السمة', themeDark: '🌙 داكن', themeLight: '☀️ فاتح', themeSystem: '📱 النظام', color: 'لون التمييز',
+      secData: 'البيانات والنسخ الاحتياطي', export: '⬇ نسخ احتياطي', import: '⬆ استعادة', share: '🔗 مشاركة التطبيق', danger: 'منطقة الخطر', resetTracker: 'مسح سجل الصلاة', resetAll: 'إعادة ضبط الإعدادات',
+      secContact: 'التواصل', email: 'البريد الإلكتروني', copy: 'نسخ', phone: 'الجوال', phoneSoon: 'سيُضاف قريباً', sendMail: '✉️ إرسال بريد', report: '🐞 إبلاغ عن مشكلة / اقتراح',
+      contactNote: 'عند الإبلاغ عن مشكلة تُضاف نسخة التطبيق ومعلومات الجهاز تلقائياً إلى البريد لتسريع الحل.',
+      secAbout: 'حول التطبيق', appName: 'التطبيق', version: 'الإصدار', dataSrc: 'مصدر الأوقات',
+      items: ' عنصر', copied: 'تم نسخ البريد', copyFail: 'تعذّر النسخ', exported: 'تم إنشاء النسخة الاحتياطية', imported: 'تمت الاستعادة بنجاح', importFail: 'ملف غير صالح', shared: 'تم نسخ الرابط',
+      confTracker: 'سيتم حذف كل سجل الصلاة. هل أنت متأكد؟', confAll: 'سيتم مسح كل الإعدادات والبيانات. هل أنت متأكد؟', done: 'تم', shareText: 'دين تايم — أوقات الصلاة والقرآن والمزيد',
+      mailSubject: 'دين تايم — تواصل', repSubject: 'دين تايم — مشكلة / اقتراح', repBody: 'السلام عليكم،\n\n(اكتب مشكلتك / اقتراحك هنا)\n\n--- معلومات التطبيق ---' },
+    ur: { title: 'سیٹنگز', subtitle: 'ایپ کو اپنی پسند کے مطابق بنائیں', back: 'واپس', secLook: 'ظاہری شکل اور زبان', lang: 'زبان', theme: 'تھیم', themeDark: '🌙 ڈارک', themeLight: '☀️ لائٹ', themeSystem: '📱 سسٹم', color: 'نمایاں رنگ',
+      secData: 'ڈیٹا اور بیک اپ', export: '⬇ بیک اپ لیں', import: '⬆ بحال کریں', share: '🔗 ایپ شیئر کریں', danger: 'خطرناک حصہ', resetTracker: 'نماز کا ریکارڈ مٹائیں', resetAll: 'تمام سیٹنگز ری سیٹ',
+      secContact: 'رابطہ', email: 'ای میل', copy: 'کاپی', phone: 'موبائل', phoneSoon: 'جلد شامل ہوگا', sendMail: '✉️ ای میل بھیجیں', report: '🐞 مسئلہ / مشورہ بھیجیں',
+      contactNote: 'مسئلہ بتانے پر ایپ کا ورژن اور ڈیوائس کی معلومات خود بخود ای میل میں شامل ہو جائیں گی تاکہ جلد حل ہو سکے۔',
+      secAbout: 'ایپ کے بارے میں', appName: 'ایپ', version: 'ورژن', dataSrc: 'اوقات کا ماخذ',
+      items: ' آئٹمز', copied: 'ای میل کاپی ہو گئی', copyFail: 'کاپی نہیں ہو سکی', exported: 'بیک اپ فائل بن گئی', imported: 'بحالی کامیاب', importFail: 'فائل درست نہیں', shared: 'لنک کاپی ہو گیا',
+      confTracker: 'نماز کا تمام ریکارڈ مٹ جائے گا۔ کیا آپ کو یقین ہے؟', confAll: 'تمام سیٹنگز اور ڈیٹا مٹ جائے گا۔ کیا آپ کو یقین ہے؟', done: 'ہو گیا', shareText: 'دین ٹائم — نماز کے اوقات، قرآن اور بہت کچھ',
+      mailSubject: 'دین ٹائم — رابطہ', repSubject: 'دین ٹائم — مسئلہ / مشورہ', repBody: 'السلام علیکم،\n\n(یہاں اپنا مسئلہ / مشورہ لکھیں)\n\n--- ایپ کی معلومات ---' },
+    hi: { title: 'सेटिंग्स', subtitle: 'ऐप को अपने अनुसार सजाएँ', back: 'वापस', secLook: 'रूप और भाषा', lang: 'भाषा', theme: 'थीम', themeDark: '🌙 डार्क', themeLight: '☀️ लाइट', themeSystem: '📱 सिस्टम', color: 'एक्सेंट रंग',
+      secData: 'डेटा और बैकअप', export: '⬇ बैकअप लें', import: '⬆ रीस्टोर करें', share: '🔗 ऐप शेयर करें', danger: 'खतरनाक क्षेत्र', resetTracker: 'नमाज़ का रिकॉर्ड मिटाएँ', resetAll: 'सभी सेटिंग्स रीसेट',
+      secContact: 'संपर्क', email: 'ईमेल', copy: 'कॉपी', phone: 'मोबाइल', phoneSoon: 'जल्द जोड़ा जाएगा', sendMail: '✉️ ईमेल भेजें', report: '🐞 समस्या / सुझाव भेजें',
+      contactNote: 'समस्या बताने पर ऐप का संस्करण और डिवाइस की जानकारी ईमेल में अपने-आप जुड़ जाएगी ताकि जल्दी समाधान हो सके।',
+      secAbout: 'ऐप के बारे में', appName: 'ऐप', version: 'संस्करण', dataSrc: 'समय का स्रोत',
+      items: ' आइटम', copied: 'ईमेल कॉपी हो गया', copyFail: 'कॉपी नहीं हो सका', exported: 'बैकअप फ़ाइल बन गई', imported: 'रीस्टोर सफल', importFail: 'फ़ाइल सही नहीं है', shared: 'लिंक कॉपी हो गया',
+      confTracker: 'नमाज़ का सारा रिकॉर्ड मिट जाएगा। क्या आप निश्चित हैं?', confAll: 'सभी सेटिंग्स और डेटा मिट जाएगा। क्या आप निश्चित हैं?', done: 'हो गया', shareText: 'दीन टाइम — नमाज़ के समय, क़ुरआन और बहुत कुछ',
+      mailSubject: 'दीन टाइम — संपर्क', repSubject: 'दीन टाइम — समस्या / सुझाव', repBody: 'अस्सलामु अलैकुम,\n\n(यहाँ अपनी समस्या / सुझाव लिखें)\n\n--- ऐप की जानकारी ---' }
+  };
 
-/* ===== ভাষা: এক বাটনে (পতাকা + নাম), চাপলে তালিকা খোলে ===== */
-.lang-pick .lang-current{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:var(--r-md);font-weight:700;font-family:inherit;font-size:.95rem;cursor:pointer;transition:var(--t)}
-.lang-pick .lang-current .flag{font-size:1.5rem;line-height:1}
-.lang-pick .lang-current .lang-name{flex:1;text-align:start}
-.lang-pick .lang-current .chev{color:var(--text2);transition:transform .25s}
-.lang-pick.open .lang-current{border-color:var(--accent)}
-.lang-pick.open .lang-current .chev{transform:rotate(180deg)}
-.lang-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.lang-menu[hidden]{display:none}
-.lang-menu .lang-opt{justify-content:flex-start}
-.lang-current:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  var $ = function (id) { return document.getElementById(id); };
+  var doc = document.documentElement;
 
-/* ===== যোগাযোগ ===== */
-.contact-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border)}
-.contact-row:last-of-type{border-bottom:none}
-.contact-ic{width:42px;height:42px;border-radius:14px;background:var(--accent-l);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
-.contact-body{flex:1;min-width:0}
-.contact-lbl{font-size:.72rem;color:var(--text2)}
-.contact-val{display:block;font-size:.95rem;font-weight:700;color:var(--text);word-break:break-all;-webkit-user-select:text;user-select:text;text-decoration:none;font-family:'Poppins','Noto Sans Bengali',sans-serif}
-a.contact-val{color:var(--accent)}
-.contact-val.soon{font-family:inherit;font-weight:600;color:var(--text2);font-size:.85rem}
-.contact-row.disabled{opacity:.75}
-.contact-copy{padding:8px 14px;font-size:.8rem;flex-shrink:0}
-a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {} return null; }
+
+  var lang = store(KEYS.lang) || 'bn';
+  if (!T[lang]) lang = 'bn';
+  var theme = store(KEYS.theme) || 'dark';
+  var color = store(KEYS.color) || 'teal';
+  if (!COLORS[color]) color = 'teal';
+
+  function t(k) { return (T[lang] && T[lang][k]) || T.bn[k] || ''; }
+
+  /* ---------- টোস্ট ---------- */
+  var toastEl, toastTimer;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'sx-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+  }
+
+  /* ---------- ভাষা ---------- */
+  function applyLangText() {
+    var d = T[lang];
+    document.querySelectorAll('[data-k]').forEach(function (el) {
+      var v = d[el.getAttribute('data-k')];
+      if (v !== undefined) el.textContent = v;
+    });
+    var back = $('backBtn'); if (back) back.setAttribute('aria-label', t('back'));
+    document.title = t('title') + ' - ' + (lang === 'bn' ? 'দ্বীন টাইম' : 'Deen Time');
+    updateColorName();
+    renderData();
+    buildMailLinks();
+  }
+
+  function setLang(id) {
+    var L = LANGS.filter(function (x) { return x.id === id; })[0] || LANGS[0];
+    lang = L.id;
+    store(KEYS.lang, lang);
+    doc.lang = lang;
+    doc.dir = L.dir;
+    document.body.classList.toggle('rtl', L.dir === 'rtl');
+    renderLang();
+    applyLangText();
+    try { window.dispatchEvent(new CustomEvent('langchange', { detail: { lang: lang } })); } catch (e) {}
+  }
+
+  function renderLang() {
+    var box = $('langGrid');
+    var cur = LANGS.filter(function (x) { return x.id === lang; })[0];
+    var open = box.classList.contains('open');
+    var h = '<button type="button" class="lang-current" id="langBtn" aria-haspopup="listbox" aria-expanded="' + open + '">' +
+      '<span class="flag">' + cur.flag + '</span><span class="lang-name">' + cur.name + '</span><span class="chev" aria-hidden="true">▾</span></button>' +
+      '<div class="lang-menu" id="langMenu" role="listbox"' + (open ? '' : ' hidden') + '>';
+    LANGS.forEach(function (L) {
+      h += '<button type="button" class="lang-opt' + (L.id === lang ? ' active' : '') + '" role="option" aria-selected="' + (L.id === lang) + '" data-l="' + L.id + '">' +
+        '<span class="flag">' + L.flag + '</span><span class="lang-name">' + L.name + '</span><span class="tick" aria-hidden="true">✓</span></button>';
+    });
+    box.innerHTML = h + '</div>';
+  }
+
+  function toggleLangMenu(force) {
+    var box = $('langGrid'), menu = $('langMenu'), btn = $('langBtn');
+    var open = force === undefined ? menu.hidden : force;
+    menu.hidden = !open;
+    box.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+  }
+
+  /* ---------- থিম ---------- */
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function applyTheme() {
+    var dark = theme === 'dark' || (theme === 'system' && mq && mq.matches);
+    document.body.classList.toggle('dark', dark);
+    document.body.classList.toggle('light', !dark);
+    doc.setAttribute('data-theme', dark ? 'dark' : 'light');
+    var m = document.querySelector('meta[name=theme-color]');
+    if (m) m.setAttribute('content', dark ? '#0b1a20' : COLORS[color].c);
+  }
+  function renderTheme() {
+    var row = $('themeRow'), idx = 0;
+    row.querySelectorAll('.theme-opt').forEach(function (b, i) {
+      var on = b.getAttribute('data-theme') === theme;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-checked', on);
+      if (on) idx = i;
+    });
+    var s = row.querySelector('.slider');
+    if (!s) { s = document.createElement('span'); s.className = 'slider'; s.setAttribute('aria-hidden', 'true'); row.insertBefore(s, row.firstChild); }
+    s.style.transform = 'translateX(' + (doc.dir === 'rtl' ? -idx : idx) * 100 + '%)';
+  }
+  function setTheme(v) { theme = v; store(KEYS.theme, v); applyTheme(); renderTheme(); }
+  if (mq) { var onMq = function () { if (theme === 'system') applyTheme(); }; mq.addEventListener ? mq.addEventListener('change', onMq) : mq.addListener(onMq); }
+
+  /* ---------- রঙ ---------- */
+  function hexToRgba(hex, a) {
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+  function applyColor() {
+    var c = COLORS[color].c;
+    doc.setAttribute('data-accent', color);
+    doc.style.setProperty('--accent', c);
+    doc.style.setProperty('--accent-l', hexToRgba(c, 0.14));
+    var m = document.querySelector('meta[name=theme-color]');
+    if (m && !document.body.classList.contains('dark')) m.setAttribute('content', c);
+  }
+  function updateColorName() { var e = $('colorName'); if (e) e.textContent = '· ' + COLORS[color].n[lang]; }
+  function renderColor() {
+    document.querySelectorAll('#colorDots .dot').forEach(function (d) {
+      var k = d.getAttribute('data-c'), on = k === color;
+      d.classList.toggle('active', on);
+      d.setAttribute('aria-checked', on);
+      d.setAttribute('aria-label', COLORS[k].n[lang]);
+      d.title = COLORS[k].n[lang];
+    });
+  }
+  function setColor(k) { color = k; store(KEYS.color, k); applyColor(); renderColor(); updateColorName(); }
+
+  /* ---------- ডেটা ---------- */
+  function allData() {
+    var o = {};
+    try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); o[k] = localStorage.getItem(k); } } catch (e) {}
+    return o;
+  }
+  function renderData() {
+    var d = allData(), n = Object.keys(d).length, size = 0;
+    Object.keys(d).forEach(function (k) { size += (k.length + (d[k] || '').length) * 2; });
+    var kb = size < 1024 ? '<1 KB' : Math.round(size / 1024) + ' KB';
+    $('dataInfo').textContent = n + t('items') + ' · ' + kb;
+  }
+
+  function exportData() {
+    var payload = { app: 'deen-time', version: VERSION, date: new Date().toISOString(), data: allData() };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'deen-time-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1500);
+    toast(t('exported'));
+  }
+
+  function importData(file) {
+    if (!file) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var p = JSON.parse(r.result);
+        var d = p && p.data;
+        if (!d || typeof d !== 'object' || Array.isArray(d)) throw new Error('bad');
+        Object.keys(d).forEach(function (k) { if (typeof d[k] === 'string') store(k, d[k]); });
+        toast(t('imported'));
+        setTimeout(function () { location.reload(); }, 900);
+      } catch (e) { toast(t('importFail')); }
+    };
+    r.onerror = function () { toast(t('importFail')); };
+    r.readAsText(file);
+  }
+
+  function resetTracker() {
+    if (!confirm(t('confTracker'))) return;
+    try {
+      Object.keys(allData()).forEach(function (k) { if (/track|namaz|prayer|salah|salat/i.test(k)) localStorage.removeItem(k); });
+    } catch (e) {}
+    renderData(); toast(t('done'));
+  }
+  function resetAll() {
+    if (!confirm(t('confAll'))) return;
+    try { localStorage.clear(); } catch (e) {}
+    toast(t('done'));
+    setTimeout(function () { location.reload(); }, 700);
+  }
+
+  function shareApp() {
+    var url = location.origin && location.origin !== 'null' ? location.origin + location.pathname.replace(/[^\/]*$/, '') : location.href;
+    if (navigator.share) { navigator.share({ title: 'Deen Time', text: t('shareText'), url: url }).catch(function () {}); return; }
+    copyText(url, t('shared'));
+  }
+
+  /* ---------- যোগাযোগ ---------- */
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); toast(ok ? okMsg : t('copyFail'));
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
+    else fallback();
+  }
+
+  /* mailto: ক্লিক করলে ইমেইল অ্যাপে ঠিকানা সহ কম্পোজ স্ক্রিন খোলে */
+  function mailto(subject, body) {
+    var q = [];
+    if (subject) q.push('subject=' + encodeURIComponent(subject));
+    if (body) q.push('body=' + encodeURIComponent(body));
+    return 'mailto:' + EMAIL + (q.length ? '?' + q.join('&') : '');
+  }
+  function buildMailLinks() {
+    $('mailBtn').href = mailto(t('mailSubject'));
+    var info = '\n' + t('version') + ': ' + VERSION + '\n' + t('lang') + ': ' + lang + '\n' + (navigator.userAgent || '') + '\n' + screen.width + 'x' + screen.height;
+    $('reportBtn').href = mailto(t('repSubject'), t('repBody') + info);
+    $('emailLink').href = 'mailto:' + EMAIL;
+  }
+
+  /* ---------- ইভেন্ট ---------- */
+  function bind() {
+    $('langGrid').addEventListener('click', function (e) {
+      var opt = e.target.closest('.lang-opt');
+      if (opt) { $('langGrid').classList.remove('open'); setLang(opt.getAttribute('data-l')); return; }
+      if (e.target.closest('#langBtn')) toggleLangMenu();
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('#langGrid')) { var m = $('langMenu'); if (m && !m.hidden) toggleLangMenu(false); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { var m = $('langMenu'); if (m && !m.hidden) { toggleLangMenu(false); $('langBtn').focus(); } } });
+
+    $('themeRow').addEventListener('click', function (e) { var b = e.target.closest('.theme-opt'); if (b) setTheme(b.getAttribute('data-theme')); });
+    $('colorDots').addEventListener('click', function (e) { var d = e.target.closest('.dot'); if (d) setColor(d.getAttribute('data-c')); });
+
+    $('exportBtn').addEventListener('click', exportData);
+    $('importFile').addEventListener('change', function (e) { importData(e.target.files[0]); e.target.value = ''; });
+    $('shareBtn').addEventListener('click', shareApp);
+    $('resetTrackerBtn').addEventListener('click', resetTracker);
+    $('resetAllBtn').addEventListener('click', resetAll);
+    $('copyEmailBtn').addEventListener('click', function () { copyText(EMAIL, t('copied')); });
+  }
+
+  function init() {
+    var verEl = $('appVer'); if (verEl) verEl.textContent = VERSION;
+    bind();
+    applyTheme(); applyColor();
+    setLang(lang);
+    renderTheme(); renderColor();
+  }
+
+  init();
+  window.addEventListener('load', function () { setLang(lang); renderTheme(); });
+})();
