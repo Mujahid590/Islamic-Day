@@ -1,12 +1,13 @@
 /* ===== সেটিংস পেজ — js/setting.js =====
-   ভাষা, থিম, রঙ, ডেটা ব্যাকআপ/রিস্টোর, যোগাযোগ।
+   ভাষা, থিম, রঙ, যোগাযোগ।
    নিচের KEYS যদি আপনার main.js/i18n.js এ ভিন্ন নামে থাকে, শুধু এখানে বদলে নিন। */
 (function () {
   'use strict';
 
   var EMAIL = 'mujahid590.bd@gmail.com';
   var VERSION = '1.0';
-  var KEYS = { lang: 'lang', theme: 'theme', color: 'accent' };
+  /* অ্যাপের বাকি পেজ যে কী ব্যবহার করে (theme = deen_theme নিশ্চিত); lang/color এর সম্ভাব্য নামগুলোতে একসাথে সেভ হয় */
+  var KEYS = { lang: ['deen_lang', 'lang', 'language'], theme: ['deen_theme', 'theme'], color: ['deen_color', 'deen_accent', 'accent'] };
 
   var COLORS = {
     teal:  { c: '#0d9488', n: { bn: 'টিল', en: 'Teal', ar: 'تركوازي', ur: 'ٹیل', hi: 'टील' } },
@@ -69,7 +70,14 @@
   var $ = function (id) { return document.getElementById(id); };
   var doc = document.documentElement;
 
-  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {} return null; }
+  function store(k, v) {
+    var list = Array.isArray(k) ? k : [k];
+    try {
+      if (v === undefined) { for (var i = 0; i < list.length; i++) { var x = localStorage.getItem(list[i]); if (x) return x; } return null; }
+      list.forEach(function (n) { localStorage.setItem(n, v); });
+    } catch (e) {}
+    return null;
+  }
 
   var lang = store(KEYS.lang) || 'bn';
   if (!T[lang]) lang = 'bn';
@@ -99,7 +107,6 @@
     var back = $('backBtn'); if (back) back.setAttribute('aria-label', t('back'));
     document.title = t('title') + ' - ' + (lang === 'bn' ? 'দ্বীন টাইম' : 'Deen Time');
     updateColorName();
-    renderData();
     buildMailLinks();
   }
 
@@ -187,67 +194,6 @@
   }
   function setColor(k) { color = k; store(KEYS.color, k); applyColor(); renderColor(); updateColorName(); }
 
-  /* ---------- ডেটা ---------- */
-  function allData() {
-    var o = {};
-    try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); o[k] = localStorage.getItem(k); } } catch (e) {}
-    return o;
-  }
-  function renderData() {
-    var d = allData(), n = Object.keys(d).length, size = 0;
-    Object.keys(d).forEach(function (k) { size += (k.length + (d[k] || '').length) * 2; });
-    var kb = size < 1024 ? '<1 KB' : Math.round(size / 1024) + ' KB';
-    $('dataInfo').textContent = n + t('items') + ' · ' + kb;
-  }
-
-  function exportData() {
-    var payload = { app: 'deen-time', version: VERSION, date: new Date().toISOString(), data: allData() };
-    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'deen-time-backup-' + new Date().toISOString().slice(0, 10) + '.json';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1500);
-    toast(t('exported'));
-  }
-
-  function importData(file) {
-    if (!file) return;
-    var r = new FileReader();
-    r.onload = function () {
-      try {
-        var p = JSON.parse(r.result);
-        var d = p && p.data;
-        if (!d || typeof d !== 'object' || Array.isArray(d)) throw new Error('bad');
-        Object.keys(d).forEach(function (k) { if (typeof d[k] === 'string') store(k, d[k]); });
-        toast(t('imported'));
-        setTimeout(function () { location.reload(); }, 900);
-      } catch (e) { toast(t('importFail')); }
-    };
-    r.onerror = function () { toast(t('importFail')); };
-    r.readAsText(file);
-  }
-
-  function resetTracker() {
-    if (!confirm(t('confTracker'))) return;
-    try {
-      Object.keys(allData()).forEach(function (k) { if (/track|namaz|prayer|salah|salat/i.test(k)) localStorage.removeItem(k); });
-    } catch (e) {}
-    renderData(); toast(t('done'));
-  }
-  function resetAll() {
-    if (!confirm(t('confAll'))) return;
-    try { localStorage.clear(); } catch (e) {}
-    toast(t('done'));
-    setTimeout(function () { location.reload(); }, 700);
-  }
-
-  function shareApp() {
-    var url = location.origin && location.origin !== 'null' ? location.origin + location.pathname.replace(/[^\/]*$/, '') : location.href;
-    if (navigator.share) { navigator.share({ title: 'Deen Time', text: t('shareText'), url: url }).catch(function () {}); return; }
-    copyText(url, t('shared'));
-  }
-
   /* ---------- যোগাযোগ ---------- */
   function copyText(text, okMsg) {
     function fallback() {
@@ -288,11 +234,6 @@
     $('themeRow').addEventListener('click', function (e) { var b = e.target.closest('.theme-opt'); if (b) setTheme(b.getAttribute('data-theme')); });
     $('colorDots').addEventListener('click', function (e) { var d = e.target.closest('.dot'); if (d) setColor(d.getAttribute('data-c')); });
 
-    $('exportBtn').addEventListener('click', exportData);
-    $('importFile').addEventListener('change', function (e) { importData(e.target.files[0]); e.target.value = ''; });
-    $('shareBtn').addEventListener('click', shareApp);
-    $('resetTrackerBtn').addEventListener('click', resetTracker);
-    $('resetAllBtn').addEventListener('click', resetAll);
     $('copyEmailBtn').addEventListener('click', function () { copyText(EMAIL, t('copied')); });
   }
 
