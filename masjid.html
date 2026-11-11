@@ -2,76 +2,71 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>মসজিদ - দ্বীন টাইম</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d9488">
+<title>নিকটস্থ মসজিদ - দ্বীন টাইম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/masjid.css">
 </head>
-<body>
+<body data-page="masjid">
 
-<div class="masjid-header">
-  <div class="header-row">
-    <button class="back-btn" onclick="window.location.href='index.html'">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
+<div class="app-container">
+
+  <!-- পেজ হেডার -->
+  <div class="page-head fade-in">
+    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 18l-6-6 6-6"/>
       </svg>
-    </button>
-    <h2>🕌 নিকটস্থ মসজিদ</h2>
-    <div style="width: 40px;"></div>
+    </a>
+    <div>
+      <div class="page-title">নিকটস্থ মসজিদ</div>
+      <div class="muted">আপনার আশপাশের মসজিদ খুঁজুন</div>
+    </div>
   </div>
-</div>
 
-<div class="masjid-container">
-  <div class="location-control">
-    <button class="locate-masjid-btn" id="locateMasjidBtn">
-      📍 আমার অবস্থান দেখুন
-    </button>
-  </div>
-  
-  <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+  <!-- লোকেশন কন্ট্রোল কার্ড -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">📍 জিপিএস লোকেশন</div>
+      <div class="card-badge" id="locStatusBadge">অফলাইন</div>
+    </div>
+    <button class="btn" id="locateMasjidBtn" style="width:100%;">আমার অবস্থান অনুযায়ী খুঁজুন</button>
+  </section>
+
+  <!-- লোডিং স্পিনার -->
+  <div class="loading-spinner glass-card fade-in" id="loadingSpinner" style="display: none;">
     <div class="spinner"></div>
-    <span>মসজিদ খুঁজে বের করা হচ্ছে...</span>
+    <span style="font-size: 0.85rem; color: var(--text2);">মসজিদ খুঁজে বের করা হচ্ছে...</span>
   </div>
-  
-  <div class="masjid-list" id="masjidList">
-    <div class="info-message">
-      🕌 নিকটস্থ মসজিদ দেখতে "আমার অবস্থান দেখুন" বাটনে ক্লিক করুন
+
+  <!-- মসজিদ তালিকা কার্ড -->
+  <section class="glass-card fade-in">
+    <div class="card-header"><div class="card-title">🕌 মসজিদের তালিকা</div></div>
+    <div class="masjid-list" id="masjidList">
+      <div class="info-message">
+        নিকটস্থ মসজিদ দেখতে ওপরের বাটনে ক্লিক করুন।
+      </div>
     </div>
-  </div>
-  
-  <div class="masjid-note">
-    <div class="note-title">📖 মসজিদের ফজিলত</div>
-    <div class="note-text">
-      রাসূলুল্লাহ (সা.) বলেছেন: "যে ব্যক্তি সকাল-সন্ধ্যা মসজিদে যায়, 
-      আল্লাহ তার জন্য জান্নাতে একটি করে ঘর তৈরি করেন।" (সহীহ বুখারী ও মুসলিম)
+  </section>
+
+  <!-- মসজিদের ফজিলত কার্ড -->
+  <section class="glass-card fade-in">
+    <div class="card-header"><div class="card-title">📖 মসজিদের ফজিলত</div></div>
+    <div class="set-note" style="margin-top:0; color:var(--text); line-height:1.6;">
+      রাসূলুল্লাহ (সা.) বলেছেন: "যে ব্যক্তি সকাল-সন্ধ্যা মসজিদে যায়, আল্লাহ তার জন্য জান্নাতে একটি করে ঘর তৈরি করেন।" (সহীহ বুখারী ও মুসলিম)
     </div>
-  </div>
+  </section>
+
 </div>
 
-<div class="bottom-navigation">
-  <button class="nav-icon-btn" onclick="window.location.href='tasbih.html'">
-    <img src="image/tasbih.png" alt="তাসবিহ">
-    <span class="nav-text">তাসবিহ</span>
-  </button>
-  <button class="nav-icon-btn" onclick="window.location.href='quran.html'">
-    <img src="image/quran.png" alt="কুরআন">
-    <span class="nav-text">কুরআন</span>
-  </button>
-  <button class="nav-icon-btn active" onclick="window.location.href='index.html'">
-    <img src="image/home.png" alt="হোম">
-    <span class="nav-text">হোম</span>
-  </button>
-  <button class="nav-icon-btn" onclick="window.location.href='hadith.html'">
-    <img src="image/hadith.png" alt="হাদিস">
-    <span class="nav-text">হাদিস</span>
-  </button>
-  <button class="nav-icon-btn" onclick="window.location.href='profile.html'">
-    <img src="image/profile.png" alt="প্রোফাইল">
-    <span class="nav-text">প্রোফাইল</span>
-  </button>
-</div>
-
+<script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
 <script src="js/masjid.js"></script>
 </body>
 </html>
