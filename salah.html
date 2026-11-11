@@ -1,10 +1,100 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d9488"><link rel="manifest" href="manifest.json"><title>দ্বীন টাইম</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/salah.css"></head>
-<body data-page="salah" data-title="salah"><div class="app-container" id="main">
-<div class="tabs"><button class="tab active" data-tab="l" data-i18n="learn"></button><button class="tab" data-tab="q" data-i18n="qaza"></button><button class="tab" data-tab="f" data-i18n="fasting"></button><button class="tab" data-tab="z" data-i18n="zakat"></button><button class="tab" data-tab="c" data-i18n="calendar"></button></div>
-<div id="tab-l"></div><div id="tab-q" hidden></div><div id="tab-f" hidden></div>
-<div id="tab-z" hidden><div class="item"><div id="zf"></div><button class="btn" id="zc" data-i18n="calc" style="width:100%;margin-top:8px"></button><div id="zr" style="margin-top:10px"></div></div></div>
-<div id="tab-c" hidden></div>
-</div><script src="js/i18n.js"></script><script src="js/salah.js"></script></body></html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d9488">
+<title>নামাজের হিসাব ও অ্যালার্ট - দ্বীন টাইম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/salah.css">
+</head>
+<body data-page="salah">
+
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
+<div class="app-container">
+
+  <!-- পেজ হেডার -->
+  <div class="page-head fade-in">
+    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </a>
+    <div>
+      <div class="page-title">নামাজ ও আযান অ্যালার্ট</div>
+      <div class="muted">মনমতো সময় ও সাউন্ড রিমাইন্ডার সেটআপ</div>
+    </div>
+  </div>
+
+  <!-- ১) আযান ও ওয়াক্ত অ্যালার্ট সেটিংস কার্ড -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">🔔 আযান ও সাউন্ড অ্যালার্ট</div>
+      <div class="card-badge" id="alertStatusBadge">সক্রিয়</div>
+    </div>
+    
+    <div class="set-group" style="margin-bottom: 14px;">
+      <label class="setting-label" for="prayerSoundSelect">আযানের বা রিমাইন্ডারের শব্দ</label>
+      <select class="city-select" id="prayerSoundSelect">
+        <option value="adhan">মদিনার মিষ্টি আযান</option>
+        <option value="beep">সাধারণ বিপ সাউন্ড</option>
+        <option value="soft">নরম রিমাইন্ডার বেল</option>
+      </select>
+    </div>
+
+    <div class="btn-row" style="display: flex; gap: 8px;">
+      <button type="button" class="btn" id="testSoundBtn" style="flex:1;">▶ সাউন্ড টেস্ট করুন</button>
+      <button type="button" class="btn ghost" id="toggleAlertsBtn" style="flex:1;">সতর্কবার্তা অন/অফ</button>
+    </div>
+  </section>
+
+  <!-- ২) মনমতো কাস্টম সময় দিয়ে অ্যালার্ট সেটআপ অপশন -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">⏰ মনমতো সময় দিয়ে অ্যালার্ট সেটআপ</div>
+    </div>
+
+    <div class="set-group" style="margin-bottom: 12px;">
+      <label class="setting-label" for="customPrayerSelect">নামাজের ওয়াক্ত নির্বাচন</label>
+      <select class="city-select" id="customPrayerSelect">
+        <option value="fajr">ফজর</option>
+        <option value="dhuhr">যোহর</option>
+        <option value="asr">আসর</option>
+        <option value="maghrib">মাগরিব</option>
+        <option value="isha">ইশা</option>
+      </select>
+    </div>
+
+    <div class="set-group" style="margin-bottom: 14px;">
+      <label class="setting-label" for="customTimeInput">ওয়াক্তের কত মিনিট আগে বা পরে অ্যালার্ট চান?</label>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="number" id="customTimeInput" class="input" value="10" min="0" max="60" style="flex:1;">
+        <span style="font-size: 0.85rem; color: var(--text2); font-weight: 600;">মিনিট আগে</span>
+      </div>
+    </div>
+
+    <button type="button" class="btn" id="saveCustomAlertBtn" style="width:100%;">💾 কাস্টম অ্যালার্ট সেভ করুন</button>
+  </section>
+
+  <!-- ৩) আজকের নামাজের ট্র্যাকার লিস্ট -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">🕌 আজকের সালাহ ট্র্যাকার</div>
+      <div class="card-badge" id="salahCountBadge">০/৫</div>
+    </div>
+    <div class="record-list" id="salahTrackerList">
+      <!-- জাভাস্ক্রিপ্ট দিয়ে ওয়াক্তগুলো লোড হবে -->
+    </div>
+  </section>
+
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
+<script src="js/salah.js"></script>
+</body>
+</html>
