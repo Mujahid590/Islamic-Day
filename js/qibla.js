@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ১. সেটিংসের থিম, রঙ ও ভাষা সিঙ্ক করার জন্য লোকাল স্টোরেজ থেকে ডেটা লোড করা
+  const savedTheme = localStorage.getItem('deen_theme') || 'system';
+  const savedColor = localStorage.getItem('deen_color') || 'teal';
+  
+  if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+  
+  if (savedColor) {
+    document.body.setAttribute('data-color', savedColor);
+  }
+
   const compassDisc = document.getElementById('compassDisc');
   const kiblaMarker = document.getElementById('kiblaMarker');
   const currentDirection = document.getElementById('currentDirection');
@@ -9,9 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const kaabaLat = 21.4225;
   const kaabaLng = 39.8262;
-  let kiblaAngle = 280; // বাংলাদেশে আনুমানিক ডিফল্ট কিবলা কোণ
+  let kiblaAngle = 280; // ডিফল্ট কোণ (বাংলাদেশ এর জন্য)
+  let userLat = 23.8103; // ডিফল্ট ঢাকা
+  let userLng = 90.4125;
 
-  // কিবলা কোণ গণনা
+  // নিখুঁত কিবলা কোণ (Bearing) গণনার সঠিক স্ফেরিক্যাল ফর্মুলা
   function calculateQibla(lat, lng) {
     const phiK = (kaabaLat * Math.PI) / 180;
     const lambdaK = (kaabaLng * Math.PI) / 180;
@@ -25,10 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return qibla;
   }
 
-  // কিবলা মার্কার পজিশন সেটআপ
-  function positionKiblaMarker() {
+  // কিবলা মার্কার পজিশন আপডেট করা
+  function updateKiblaMarkerPosition() {
     if (kiblaMarker) {
-      kiblaMarker.style.transform = `translate(-50%, -50%) rotate(${kiblaAngle}deg) translateY(-100px)`;
+      // কম্পাসের ভেতরের উত্তর (0°) সাপেক্ষে কিবলার সঠিক কোণে মার্কার বসানো
+      kiblaMarker.style.transform = `translate(-50%, -50%) rotate(${kiblaAngle}deg) translateY(-92px)`;
     }
   }
 
@@ -38,59 +55,61 @@ document.addEventListener('DOMContentLoaded', () => {
       locationCoords.textContent = "লোকেশন খোঁজা হচ্ছে...";
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          locationCoords.textContent = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+          userLat = position.coords.latitude;
+          userLng = position.coords.longitude;
+          locationCoords.textContent = `Lat: ${userLat.toFixed(4)}, Lng: ${userLng.toFixed(4)}`;
           locStatusBadge.textContent = "সক্রিয়";
           locStatusBadge.style.color = "var(--done)";
           
-          kiblaAngle = calculateQibla(lat, lng);
+          kiblaAngle = calculateQibla(userLat, userLng);
           kiblaDegrees.textContent = kiblaAngle.toFixed(1);
-          positionKiblaMarker();
+          updateKiblaMarkerPosition();
         },
         () => {
-          locationCoords.textContent = "লোকেশন পাওয়া যায়নি। ডিফল্ট ব্যবহার করা হচ্ছে।";
-          locStatusBadge.textContent = "অফলাইন";
+          locationCoords.textContent = "লোকেশন পাওয়া যায়নি। ডিফল্ট (ঢাকা) ব্যবহৃত হচ্ছে।";
+          locStatusBadge.textContent = "ডিফল্ট";
+          kiblaAngle = calculateQibla(userLat, userLng);
           kiblaDegrees.textContent = kiblaAngle.toFixed(1);
-          positionKiblaMarker();
+          updateKiblaMarkerPosition();
         },
         { enableHighAccuracy: true }
       );
     } else {
       locationCoords.textContent = "আপনার ডিভাইসে জিপিএস সমর্থিত নয়।";
+      kiblaAngle = calculateQibla(userLat, userLng);
       kiblaDegrees.textContent = kiblaAngle.toFixed(1);
-      positionKiblaMarker();
+      updateKiblaMarkerPosition();
     }
   }
 
   locateBtn.addEventListener('click', getLocation);
   getLocation();
 
-  // ডিভাইস ঘোরালে পুরো কম্পাস ডিস্ক ঘোরানো (Dynamic Compass Handling)
+  // ডিভাইস ওরিয়েন্টেশন হ্যান্ডেল (সঠিক দিক নির্দেশনার মূল লজিক)
   function handleOrientation(event) {
-    let heading = event.alpha;
+    let heading = null;
 
-    if (event.webkitCompassHeading) {
-      heading = event.webkitCompassHeading; // iOS-এর জন্য
+    if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+      heading = event.webkitCompassHeading; // iOS ডিভাইসের জন্য সঠিক নর্থ হেডিং
     } else if (event.alpha !== null) {
-      // Android-এর জন্য (Absolute Orientation fallback)
-      heading = 360 - event.alpha;
+      heading = 360 - event.alpha; // অ্যান্ড্রয়েড ডিভাইসের জন্য
     }
 
-    if (heading !== null && heading !== undefined) {
+    if (heading !== null && !isNaN(heading)) {
       const roundedHeading = Math.round(heading);
       currentDirection.textContent = `${roundedHeading}°`;
       
-      // ডাইনামিক কম্পাস ঘূর্ণন: ফোন ঘোরালে ডায়াল্টি উল্টো দিকে ঘুরে উত্তর দিক নির্দেশ করবে
+      // কম্পাস ডিস্ক ঘোরানো যাতে 'N' সবসময় উত্তর দিক নির্দেশ করে
       if (compassDisc) {
         compassDisc.style.transform = `rotate(${-heading}deg)`;
       }
     }
   }
 
-  // সেন্সরের অনুভূতি পারমিশন পরীক্ষা (বিশেষ করে iOS-এর জন্য)
+  // ডিভাইস সেন্সর পারমিশন এবং ইভেন্ট বাইন্ডিং
   if (window.DeviceOrientationEvent) {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS 13+ পারমিশন রিকোয়েস্ট বাটন বা ইউজার ইন্টারেকশন
       locateBtn.addEventListener('click', () => {
         DeviceOrientationEvent.requestPermission()
           .then(response => {
@@ -101,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
           .catch(console.error);
       });
     } else {
+      // সাধারণ অ্যান্ড্রয়েড বা ব্রাউজার
+      window.addEventListener('deviceorientationabsolute', handleOrientation, true);
       window.addEventListener('deviceorientation', handleOrientation, true);
     }
   }
