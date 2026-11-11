@@ -12,7 +12,7 @@ select.city-select{appearance:none;-webkit-appearance:none;width:100%;padding:11
 background-image:linear-gradient(45deg,transparent 50%,var(--text2) 50%),linear-gradient(135deg,var(--text2) 50%,transparent 50%);
 background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;
 background-color:var(--card);padding-inline-end:36px;-webkit-user-select:text;user-select:text}
-html[dir=rtl] select.city-select{background-position:20px 50%,14px 50%}
+html[dir=rtl] select.city-select{background-position:14px 50%,20px 50%}
 select.city-select option{color:#16303a;background:#fff}
 body.dark select.city-select option{color:#f1f7f8;background:#16232d}
 select.city-select:focus-visible,.btn:focus-visible,.theme-opt:focus-visible,.lang-opt:focus-visible,.dot:focus-visible,.back-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -64,3 +64,12 @@ a.contact-val{color:var(--accent)}
 .contact-row.disabled{opacity:.75}
 .contact-copy{padding:8px 14px;font-size:.8rem;flex-shrink:0}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+
+/* RTL (ar/ur): ইমেইল সবসময় LTR, কিন্তু ডানে সারিবদ্ধ */
+html[dir=rtl] #emailLink{text-align:right;unicode-bidi:isolate}
+.contact-val,.contact-lbl,.set-note,.setting-label,.status-pill{overflow-wrap:anywhere}
+.lang-menu .lang-opt{min-width:0;overflow-wrap:anywhere}
+.btn-row .btn{line-height:1.35}
+
+/* ইমেইল: শব্দের মাঝখানে নয়, শুধু @ এর পরে ভাঙবে */
+#emailLink{word-break:normal;overflow-wrap:normal;font-size:.84rem}
