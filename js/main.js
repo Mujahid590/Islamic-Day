@@ -252,11 +252,11 @@ function swNotify(body){
   return Promise.race([ready,timeout]);
 }
 function notifyTick(){
-  const mode=localStorage.getItem('deen_adhan')||'off',rem=+(localStorage.getItem('deen_remind')||0);
-  if(mode==='off'&&!rem)return;const now=Math.floor(Date.now()/60000);
+  const mode=localStorage.getItem('deen_adhan')||'off',rem=+(localStorage.getItem('deen_remind')||0),aft=+(localStorage.getItem('deen_remind_after')||0);
+  if(mode==='off'&&!rem&&!aft)return;const now=Math.floor(Date.now()/60000);
   prayerNames.forEach(n=>{const s=Math.floor(atMs(times[n].start,0)/60000);
-    [[s,0],[s-rem,1]].forEach(([m,pre])=>{const k=n+m+pre;if((pre&&!rem)||now<m||now-m>2||fired[k])return;fired[k]=1;
-      const body=pre?t('remindMsg',{p:pnOf(n),m:bn(rem)}):t('prayerNow',{p:pnOf(n)});if(!pre)sound();
+    [[s,0],[s-rem,1],[s+aft,2]].forEach(([m,pre])=>{const k=n+m+pre;if((pre===1&&!rem)||(pre===2&&!aft)||now<m||now-m>2||fired[k])return;fired[k]=1;
+      const body=pre===1?t('remindMsg',{p:pnOf(n),m:bn(rem)}):pre===2?(LANG==='en'?`${pnOf(n)} started ${bn(aft)} min ago — have you prayed?`:`${pnOf(n)} শুরু হয়েছে ${bn(aft)} মিনিট হলো — নামাজ পড়েছেন তো?`):t('prayerNow',{p:pnOf(n)});if(pre===0)sound();
       if('Notification' in window&&Notification.permission==='granted'){
         swNotify(body).catch(()=>{try{new Notification('দ্বীন টাইম',{body})}catch(e){}})}
       else showToast(body)})})
