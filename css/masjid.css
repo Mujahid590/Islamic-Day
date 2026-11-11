@@ -1,4 +1,4 @@
-/* ===== MASJID PAGE STYLES (Style.css এর ভ্যারিয়েবল ও গ্লাস ডিজাইন অনুযায়ী) ===== */
+/* ===== MASJID PAGE STYLES ===== */
 
 .back-btn.round-btn {
   display: flex;
@@ -27,25 +27,6 @@
   background: var(--accent-l);
 }
 
-.loading-spinner {
-  text-align: center;
-  padding: 24px;
-}
-
-.loading-spinner .spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 10px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 .masjid-list {
   display: flex;
   flex-direction: column;
@@ -71,7 +52,7 @@
 }
 
 .masjid-icon {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   width: 40px;
   height: 40px;
   display: flex;
@@ -92,33 +73,36 @@
   font-size: 0.92rem;
   color: var(--text);
   margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .masjid-address {
   font-size: 0.76rem;
   color: var(--text2);
-  margin-bottom: 4px;
-}
-
-.masjid-distance {
-  font-size: 0.72rem;
-  color: var(--accent);
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .map-btn {
-  background: var(--accent-l);
+  background: var(--accent);
   border: none;
   padding: 8px 14px;
   border-radius: var(--r-sm);
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #fff;
   cursor: pointer;
   transition: var(--t);
   white-space: nowrap;
   font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .map-btn:active {
