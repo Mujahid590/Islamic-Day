@@ -30,7 +30,7 @@
     <div class="card-header"><div class="card-title" id="secLookT">🎨 <span data-k="secLook">চেহারা ও ভাষা</span></div></div>
     <div class="set-group">
       <div class="setting-label" data-k="lang">ভাষা</div>
-      <div class="lang-grid" id="langGrid"></div>
+      <div class="lang-pick" id="langGrid"></div>
     </div>
     <div class="set-group">
       <div class="setting-label" data-k="theme">থিম</div>
@@ -117,7 +117,30 @@
     </div>
   </section>
 
-  <!-- ৬) সম্পর্কে -->
+  <!-- ৬) যোগাযোগ -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secContactT" id="contactCard">
+    <div class="card-header"><div class="card-title" id="secContactT">📞 <span data-k="secContact">যোগাযোগ</span></div></div>
+    <div class="contact-row">
+      <div class="contact-ic" aria-hidden="true">✉️</div>
+      <div class="contact-body"><div class="contact-lbl" data-k="email">ইমেইল</div>
+        <a class="contact-val" id="emailLink" href="mailto:Mujahid590@gmail.com">Mujahid590@gmail.com</a></div>
+      <button type="button" class="btn ghost contact-copy" id="copyEmailBtn" data-k="copy" data-aria="copyEmail">কপি</button>
+    </div>
+    <!-- মোবাইল নম্বর এখনো দেওয়া হয়নি। নম্বর হলে নিচের .contact-row টি এভাবে বদলান:
+         <a class="contact-val" href="tel:+8801XXXXXXXXX">+8801XXXXXXXXX</a> (আর "disabled" ক্লাস ও data-k="phoneSoon" সরিয়ে দিন) -->
+    <div class="contact-row disabled">
+      <div class="contact-ic" aria-hidden="true">📱</div>
+      <div class="contact-body"><div class="contact-lbl" data-k="phone">মোবাইল</div>
+        <div class="contact-val soon" data-k="phoneSoon">শীঘ্রই যুক্ত হবে</div></div>
+    </div>
+    <div class="btn-row">
+      <a class="btn" id="mailBtn" href="mailto:Mujahid590@gmail.com" data-k="sendMail">✉️ ইমেইল পাঠান</a>
+      <a class="btn ghost" id="reportBtn" href="mailto:Mujahid590@gmail.com" data-k="report">🐞 সমস্যা/পরামর্শ জানান</a>
+    </div>
+    <p class="set-note" data-k="contactNote">সমস্যা জানালে অ্যাপের সংস্করণ ও ডিভাইসের তথ্য ইমেইলে আপনা-আপনি যুক্ত হবে, যাতে দ্রুত সমাধান করা যায়।</p>
+  </section>
+
+  <!-- ৭) সম্পর্কে -->
   <section class="glass-card set-card fade-in about" aria-labelledby="secAboutT">
     <div class="card-header"><div class="card-title" id="secAboutT">ℹ️ <span data-k="secAbout">অ্যাপ সম্পর্কে</span></div></div>
     <div class="trow"><span data-k="appName">অ্যাপ</span><b>দ্বীন টাইম · Islamic Nur</b></div>
@@ -134,4 +157,4 @@
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
-    </html>
+</html>
