@@ -1,0 +1,41 @@
+/* ===== সেটিংস পেজ — style.css এর ভ্যারিয়েবল/কার্ড ব্যবহার করে; শুধু অতিরিক্ত স্টাইল ===== */
+.page-head{margin-bottom:2px}
+.back-btn{display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);font-size:1.2rem;flex-shrink:0}
+.back-btn:active{transform:scale(.92)}
+.set-card .card-header{margin-bottom:10px}
+.set-group{margin-top:14px}.set-group:first-of-type{margin-top:4px}
+.set-card .setting-label{display:block;margin-bottom:8px}
+.set-note{font-size:.76rem;line-height:1.6;color:var(--text2);margin-top:10px}
+
+/* সব সিলেক্ট বক্স */
+select.city-select{appearance:none;-webkit-appearance:none;width:100%;padding:11px 14px;font-size:.92rem;
+background-image:linear-gradient(45deg,transparent 50%,var(--text2) 50%),linear-gradient(135deg,var(--text2) 50%,transparent 50%);
+background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;
+background-color:var(--card);padding-inline-end:36px;-webkit-user-select:text;user-select:text}
+html[dir=rtl] select.city-select{background-position:20px 50%,14px 50%}
+select.city-select option{color:#16303a;background:#fff}
+body.dark select.city-select option{color:#f1f7f8;background:#16232d}
+select.city-select:focus-visible,.btn:focus-visible,.theme-opt:focus-visible,.lang-opt:focus-visible,.dot:focus-visible,.back-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.inline-row{display:flex;gap:8px;align-items:center}.inline-row select{flex:1;min-width:0}.inline-row .btn{white-space:nowrap}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn-row .btn{flex:1 1 140px;text-align:center}
+.btn:disabled{opacity:.5;pointer-events:none}
+.file-btn{display:inline-flex;align-items:center;justify-content:center}
+.btn.danger{background:var(--missed-bg);color:var(--missed);border:1px solid rgba(239,68,68,.35)}
+body.dark .btn.danger{background:rgba(239,68,68,.15)}
+.danger-zone{margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)}
+.danger-zone .setting-label{color:var(--missed)}
+
+/* রঙ ডট (style.css এ .dot এর ব্যাকগ্রাউন্ড ছিল না) */
+.dots{flex-wrap:wrap}
+.dot{padding:0;background:var(--accent);transition:var(--t)}
+.dot[data-c=teal]{background:#0d9488}.dot[data-c=green]{background:#16a34a}.dot[data-c=blue]{background:#0284c7}.dot[data-c=peach]{background:#ea580c}
+.dot.active{border-color:var(--text);transform:scale(1.12)}
+
+.theme-row .theme-opt{font-size:.85rem}
+.status-pill{flex:1;font-size:.8rem;font-weight:700;padding:9px 12px;border-radius:var(--r-md);background:var(--accent-l);color:var(--text);text-align:center}
+.status-pill.ok{background:var(--done-bg);color:#047857}.status-pill.bad{background:var(--missed-bg);color:#b91c1c}
+body.dark .status-pill.ok{background:rgba(16,185,129,.18);color:#6ee7b7}body.dark .status-pill.bad{background:rgba(239,68,68,.18);color:#fca5a5}
+.about .trow b{font-size:.85rem;text-align:end}
+.toast{max-width:calc(100% - 32px);text-align:center}
+@media (max-width:360px){.btn-row .btn{flex-basis:100%}}
