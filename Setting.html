@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d9488">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<title>সেটিংস - দ্বীন টাইম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/setting.css">
+</head>
+<body data-page="settings">
+
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
+<div class="app-container">
+
+  <div class="page-head fade-in">
+    <a href="index.html" class="back-btn round-btn" id="backBtn" data-aria="back" aria-label="ফিরে যান">←</a>
+    <div><div class="page-title" data-k="title">সেটিংস</div><div class="muted" data-k="subtitle">অ্যাপ আপনার মতো সাজিয়ে নিন</div></div>
+  </div>
+
+  <!-- ১) ভাষা + থিম + রঙ: এক কন্ট্রোল বারে -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secLookT">
+    <div class="card-header"><div class="card-title" id="secLookT">🎨 <span data-k="secLook">চেহারা ও ভাষা</span></div></div>
+    <div class="set-group">
+      <div class="setting-label" data-k="lang">ভাষা</div>
+      <div class="lang-grid" id="langGrid"></div>
+    </div>
+    <div class="set-group">
+      <div class="setting-label" data-k="theme">থিম</div>
+      <div class="theme-row">
+        <button type="button" class="theme-opt" data-theme="dark" data-k="themeDark">🌙 ডার্ক</button>
+        <button type="button" class="theme-opt" data-theme="light" data-k="themeLight">☀️ লাইট</button>
+        <button type="button" class="theme-opt" data-theme="system" data-k="themeSystem">📱 সিস্টেম</button>
+      </div>
+    </div>
+    <div class="set-group">
+      <div class="setting-label" data-k="color">অ্যাকসেন্ট রঙ</div>
+      <div class="dots" id="colorDots">
+        <button type="button" class="dot" data-c="teal" aria-label="Teal"></button>
+        <button type="button" class="dot" data-c="green" aria-label="Green"></button>
+        <button type="button" class="dot" data-c="blue" aria-label="Blue"></button>
+        <button type="button" class="dot" data-c="peach" aria-label="Peach"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ২) লোকেশন -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secLocT">
+    <div class="card-header"><div class="card-title" id="secLocT">📍 <span data-k="secLoc">লোকেশন</span></div><div class="card-badge" id="locStatus">--</div></div>
+    <div class="set-group">
+      <label class="setting-label" for="citySelect" data-k="city">শহর</label>
+      <select class="city-select" id="citySelect"></select>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="gpsBtn" data-k="gps">📡 GPS দিয়ে লোকেশন নিন</button>
+      <button type="button" class="btn ghost" id="gpsClearBtn" data-k="gpsClear">GPS মুছুন</button>
+    </div>
+    <p class="set-note" data-k="gpsNote">GPS চালু থাকলে শহরের বদলে আপনার সঠিক অবস্থানের সময় দেখানো হবে।</p>
+  </section>
+
+  <!-- ৩) হিসাব পদ্ধতি -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secCalcT">
+    <div class="card-header"><div class="card-title" id="secCalcT">🧮 <span data-k="secCalc">নামাজের সময় হিসাব</span></div></div>
+    <div class="set-group">
+      <label class="setting-label" for="schoolSel" data-k="school">আসরের মাযহাব</label>
+      <select class="city-select" id="schoolSel"></select>
+    </div>
+    <p class="set-note" data-k="schoolNote">বাংলাদেশে সাধারণত হানাফী (আসর দেরিতে) ব্যবহৃত হয়। পদ্ধতি: Karachi (University of Islamic Sciences)।</p>
+  </section>
+
+  <!-- ৪) আযান ও রিমাইন্ডার -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secAdhanT">
+    <div class="card-header"><div class="card-title" id="secAdhanT">🔔 <span data-k="secAdhan">আযান ও রিমাইন্ডার</span></div></div>
+    <div class="set-group">
+      <label class="setting-label" for="adhanSel" data-k="adhanMode">আযানের শব্দ</label>
+      <div class="inline-row"><select class="city-select" id="adhanSel"></select><button type="button" class="btn ghost" id="testSoundBtn" data-k="testSound">▶ টেস্ট</button></div>
+    </div>
+    <div class="set-group">
+      <label class="setting-label" for="remindSel" data-k="remBefore">ওয়াক্ত শুরুর আগে রিমাইন্ডার</label>
+      <select class="city-select" id="remindSel"></select>
+    </div>
+    <div class="set-group">
+      <label class="setting-label" for="remindAfterSel" data-k="remAfter">ওয়াক্ত শুরুর পরে রিমাইন্ডার</label>
+      <select class="city-select" id="remindAfterSel"></select>
+    </div>
+    <div class="set-group">
+      <div class="setting-label" data-k="notif">নোটিফিকেশন অনুমতি</div>
+      <div class="inline-row"><span class="status-pill" id="notifStatus">--</span><button type="button" class="btn ghost" id="notifBtn" data-k="notifBtn">অনুমতি দিন</button></div>
+    </div>
+    <p class="set-note" data-k="remNote">রিমাইন্ডার সর্বোচ্চ ১ ঘণ্টা আগে বা পরে সেট করা যায়। অ্যাপ খোলা বা ব্যাকগ্রাউন্ডে থাকলে কাজ করে।</p>
+  </section>
+
+  <!-- ৫) ডেটা -->
+  <section class="glass-card set-card fade-in" aria-labelledby="secDataT">
+    <div class="card-header"><div class="card-title" id="secDataT">💾 <span data-k="secData">ডেটা ও ব্যাকআপ</span></div><div class="card-badge" id="dataInfo">--</div></div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="exportBtn" data-k="export">⬇ ব্যাকআপ নিন</button>
+      <label class="btn ghost file-btn" for="importFile" data-k="import">⬆ রিস্টোর করুন</label>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn ghost" id="shareBtn" data-k="share">🔗 অ্যাপ শেয়ার করুন</button>
+    </div>
+    <div class="danger-zone">
+      <div class="setting-label" data-k="danger">বিপদজনক এলাকা</div>
+      <div class="btn-row">
+        <button type="button" class="btn danger" id="resetTrackerBtn" data-k="resetTracker">নামাজের হিসাব মুছুন</button>
+        <button type="button" class="btn danger" id="resetAllBtn" data-k="resetAll">সব সেটিংস রিসেট</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ৬) সম্পর্কে -->
+  <section class="glass-card set-card fade-in about" aria-labelledby="secAboutT">
+    <div class="card-header"><div class="card-title" id="secAboutT">ℹ️ <span data-k="secAbout">অ্যাপ সম্পর্কে</span></div></div>
+    <div class="trow"><span data-k="appName">অ্যাপ</span><b>দ্বীন টাইম · Islamic Nur</b></div>
+    <div class="trow"><span data-k="version">সংস্করণ</span><b>1.0</b></div>
+    <div class="trow"><span data-k="dataSrc">সময়ের উৎস</span><b>Aladhan API</b></div>
+  </section>
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
+<script src="js/setting.js"></script>
+<script src="js/nav.js"></script>
+<script>
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+    </html>
