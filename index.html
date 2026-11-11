@@ -10,11 +10,11 @@
 <link rel="manifest" href="manifest.json">
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <noscript><style>.fade-in{animation:none}</style></noscript>
 </head>
-<body data-page="home" data-tp-title="pageTitleHome">
+<body data-page="home">
 
 <!-- AI অরোরা ব্যাকগ্রাউন্ড -->
 <div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
@@ -27,14 +27,14 @@
 
   <div class="header-card fade-in">
     <div class="header-top">
-      <div class="prayer-state-chip" id="prayerStateChip"><div class="state-dot"></div><span id="prayerStateTxt" data-tp="waiting">অপেক্ষা</span></div>
-      <div class="greg-date-header" id="gregDateText" data-tp="loading">লোড হচ্ছে...</div>
+      <div class="prayer-state-chip" id="prayerStateChip"><div class="state-dot"></div><span id="prayerStateTxt">অপেক্ষা</span></div>
+      <div class="greg-date-header" id="gregDateText">লোড হচ্ছে...</div>
     </div>
     <div class="header-main">
       <div>
         <div class="prayer-name-bn" id="activePrayerName">ফজর</div>
-        <div class="prayer-time-big"><span data-tp="start">শুরু:</span> <b id="currentPrayerStartTime">--:--</b></div>
-        <div class="prayer-time-big"><span data-tp="end">শেষ:</span> <b id="currentPrayerEndTime">--:--</b></div>
+        <div class="prayer-time-big">শুরু: <b id="currentPrayerStartTime">--:--</b></div>
+        <div class="prayer-time-big">শেষ: <b id="currentPrayerEndTime">--:--</b></div>
         <div class="city-line">📍 <span id="cityLabel">ঢাকা</span></div>
       </div>
       <div class="header-timer">
@@ -51,7 +51,7 @@
   <div class="ai-card fade-in" id="aiCard">
     <div class="ai-head">
       <span class="ai-orb"></span>
-      <div><div class="ai-title" id="aiTitle" data-tp="aiTitle">দ্বীন স্মার্ট সহায়ক</div><div class="ai-sub" id="aiSub" data-tp="aiSub">আপনার আজকের ইবাদতের লাইভ ইনসাইট</div></div>
+      <div><div class="ai-title" id="aiTitle">দ্বীন স্মার্ট সহায়ক</div><div class="ai-sub" id="aiSub">আপনার আজকের ইবাদতের লাইভ ইনসাইট</div></div>
       <span class="ai-live">LIVE</span>
     </div>
     <div class="ai-list" id="aiInsights"></div>
@@ -59,7 +59,7 @@
 
   <!-- পরবর্তী নামাজ কখন শুরু হবে -->
   <div class="next-bar fade-in" id="nextBar">
-    <div class="nb-row"><div class="nb-left-grp"><div class="nb-icon"><img id="nbIcon" src="image/fozor.png" alt=""></div><div><div class="nb-lbl" id="nbLabel" data-tp="nextStarts">পরবর্তী নামাজ শুরু</div><div class="nb-name" id="nbName">--</div></div></div>
+    <div class="nb-row"><div class="nb-left-grp"><div class="nb-icon"><img id="nbIcon" src="image/fozor.png" alt=""></div><div><div class="nb-lbl" id="nbLabel">পরবর্তী নামাজ শুরু</div><div class="nb-name" id="nbName">--</div></div></div>
       <div class="nb-right"><div class="nb-time" id="nbTime">--:--</div><div class="nb-left" id="nbLeft"></div></div></div>
     <div class="nb-track"><div class="nb-fill" id="nbFill"></div></div>
   </div>
@@ -75,7 +75,7 @@
     <a href="arabiseducation.html" class="action-item"><div class="icon-wrap" style="font-size:1.5rem">🔤</div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
     <a href="oju.html" class="action-item"><div class="icon-wrap"><img src="image/oju.png" alt=""></div><span class="action-label" data-i18n="wudu">অজু</span></a>
     <a href="masjid.html" class="action-item"><div class="icon-wrap"><img src="image/mosjid.png" alt=""></div><span class="action-label" data-i18n="masjid">মসজিদ</span></a>
-    <a href="setting.html" class="action-item" id="settingsAction"><div class="icon-wrap" style="font-size:1.5rem" aria-hidden="true">⚙️</div><span class="action-label" id="settingsLabel" data-tp="settings">সেটিংস</span></a>
+    <a href="setting.html" class="action-item" id="settingsAction"><div class="icon-wrap" style="font-size:1.5rem" aria-hidden="true">⚙️</div><span class="action-label" id="settingsLabel">সেটিংস</span></a>
   </div>
 
   <div class="glass-card fade-in">
@@ -108,8 +108,8 @@
   <div class="modal-sheet">
     <div class="sheet-handle"></div>
     <div class="record-header">
-      <div><div class="record-day-name" id="recordModalDayName">--</div><div class="record-done-count" id="recordModalCount">--</div></div>
-      <button class="sheet-close" id="recordCloseBtn" data-tp-aria="close" aria-label="বন্ধ করুন">✕</button>
+      <div><div class="record-day-name" id="recordModalDayName">--</div><div class="record-done-count" id="recordModalCount">০/৫ সম্পন্ন</div></div>
+      <button class="sheet-close" id="recordCloseBtn" aria-label="বন্ধ করুন">✕</button>
     </div>
     <div class="record-list" id="recordPrayerList"></div>
     <div class="legend">
@@ -122,7 +122,6 @@
 
 <script src="js/i18n.js"></script>
 <script src="js/i18n-extra.js"></script>
-<script src="js/lang-pack.js"></script>
 <script src="js/reminders.js"></script>
 <script src="js/main.js"></script>
 <script src="js/nav.js"></script>
