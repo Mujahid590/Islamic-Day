@@ -1,6 +1,6 @@
 // ========== INTERACTIVE GOOGLE MAPS & LIVE ROUTE SCRIPT (No API Key Required) ==========
 document.addEventListener('DOMContentLoaded', () => {
-  // ১. সেটিংসের থিম, রঙ ও ভাষা সিঙ্ক করা
+  // ১. সেটিংসের থিম, রঙ ও ভাষা সিঙ্ক করা (কিবলা ও অন্যান্য পেজের মতো)
   const savedTheme = localStorage.getItem('deen_theme') || 'system';
   const savedColor = localStorage.getItem('deen_color') || 'teal';
   
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const locateBtn = document.getElementById('locateMasjidBtn');
   const openGoogleMapsApp = document.getElementById('openGoogleMapsApp');
 
-  // ম্যাপ ও ডিরেকশন আপডেট করার ফাংশন
+  // ম্যাপ ও ডিরেকশন আপডেট করার ফাংশন (কোনো এপিআই কি ছাড়াই কাজ করবে)
   function updateInteractiveMap(lat, lng) {
     locStatusBadge.textContent = "সক্রিয়";
     locStatusBadge.style.color = "var(--done)";
@@ -28,8 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // এপিআই কি ছাড়াই গুগল ম্যাপের অফিশিয়াল ভিউ লোড করার নিরাপদ লিংক
     mapFrame.src = `https://maps.google.com/maps?q=mosque&sll=${lat},${lng}&sspn=0.05,0.05&t=m&z=16&output=embed`;
 
-    // ফুল স্ক্রিন বা অ্যাপে ওপেন করার লিংক
-    openGoogleMapsApp.href = `https://www.google.com/maps/search/mosque/@${lat},${lng},16z`;
+    // ফুল স্ক্রিন বা গুগল ম্যাপ অ্যাপে ওপেন করার লিংক
+    if (openGoogleMapsApp) {
+      openGoogleMapsApp.href = `https://www.google.com/maps/search/mosque/@${lat},${lng},16z`;
+    }
 
     // নিচে ডিরেকশন এবং রুট কার্ড জেনারেট করা
     masjidListContainer.innerHTML = `
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         () => {
           locStatusBadge.textContent = "ব্যর্থ";
-          updateInteractiveMap(23.7312, 90.4146); // ডিফল্ট ঢাকা
+          updateInteractiveMap(23.7312, 90.4146); // লোকেশন না পেলে ডিফল্ট ঢাকা
           masjidListContainer.innerHTML = `<div class="info-message">⚠️ জিপিএস অনুমতি পাওয়া যায়নি। ঢাকার ডিফল্ট এলাকার ম্যাপ দেখানো হচ্ছে।</div>`;
         },
         { enableHighAccuracy: true }
@@ -75,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  locateBtn.addEventListener('click', getLiveLocation);
+  if (locateBtn) {
+    locateBtn.addEventListener('click', getLiveLocation);
+  }
   getLiveLocation();
 });
