@@ -26,31 +26,36 @@
     </a>
     <div>
       <div class="page-title">নিকটস্থ মসজিদ</div>
-      <div class="muted">আপনার আশপাশের মসজিদ খুঁজুন</div>
+      <div class="muted">লাইভ ম্যাপে আশপাশের মসজিদ খুঁজুন</div>
     </div>
   </div>
 
-  <!-- লোকেশন কন্ট্রোল কার্ড -->
-  <section class="glass-card fade-in">
-    <div class="card-header">
-      <div class="card-title">📍 জিপিএস লোকেশন</div>
+  <!-- গুগল ম্যাপ কার্ড (ঠিক যেমনটি আপনি ছবিতে চেয়েছেন) -->
+  <section class="glass-card fade-in" style="padding: 10px;">
+    <div class="card-header" style="padding: 6px 10px; margin-bottom: 8px;">
+      <div class="card-title">🗺 লাইভ জিপিএস ম্যাপ</div>
       <div class="card-badge" id="locStatusBadge">অফলাইন</div>
     </div>
-    <button class="btn" id="locateMasjidBtn" style="width:100%;">আমার অবস্থান অনুযায়ী খুঁজুন</button>
+    
+    <!-- গুগল ম্যাপ ফ্রেম যেখানে ব্যবহারকারীর লোকেশন ও আশপাশের সব মসজিদ পিন দেখাবে -->
+    <div class="map-wrapper" style="position:relative; width:100%; height:380px; border-radius:var(--r-md); overflow:hidden; border:1px solid var(--border);">
+      <iframe id="mapFrame" width="100%" height="100%" style="border:0;" loading="lazy" allowfullscreen src=""></iframe>
+    </div>
+
+    <div style="margin-top: 10px; display: flex; gap: 8px;">
+      <button class="btn" id="locateMasjidBtn" style="flex:1;">📡 আমার লোকেশন রিফ্রেশ</button>
+      <a id="fullMapBtn" href="#" target="_blank" class="btn ghost" style="flex:1; text-align:center;">🗺 বড় ম্যাপে খুলুন</a>
+    </div>
   </section>
 
-  <!-- লোডিং স্পিনার -->
-  <div class="loading-spinner glass-card fade-in" id="loadingSpinner" style="display: none;">
-    <div class="spinner"></div>
-    <span style="font-size: 0.85rem; color: var(--text2);">মসজিদ খুঁজে বের করা হচ্ছে...</span>
-  </div>
-
-  <!-- মসজিদ তালিকা কার্ড -->
+  <!-- মসজিদের তালিকা ও ডিরেকশন গাইড -->
   <section class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">🕌 মসজিদের তালিকা</div></div>
+    <div class="card-header">
+      <div class="card-title">🕌 নির্বাচিত এলাকার মসজিদসমূহ</div>
+    </div>
     <div class="masjid-list" id="masjidList">
       <div class="info-message">
-        নিকটস্থ মসজিদ দেখতে ওপরের বাটনে ক্লিক করুন।
+        আপনার জিপিএস লোকেশন চালু করলে দেশের বা বিদেশের যেকোনো প্রান্তে আপনার আশপাশের ছোট-বড় সব মসজিদ ম্যাপে পিন আকারে দেখাবে।
       </div>
     </div>
   </section>
@@ -59,7 +64,7 @@
   <section class="glass-card fade-in">
     <div class="card-header"><div class="card-title">📖 মসজিদের ফজিলত</div></div>
     <div class="set-note" style="margin-top:0; color:var(--text); line-height:1.6;">
-      রাসূলুল্লাহ (সা.) বলেছেন: "যে ব্যক্তি সকাল-সন্ধ্যা মসজিদে যায়, আল্লাহ তার জন্য জান্নাতে একটি করে ঘর তৈরি করেন।" (সহীহ বুখারী ও মুসলিম)
+      রাসূলুল্লাহ (সা.) বলেছেন: "যে ব্যক্তি সকাল-সন্ধ্যা মসজিদে যায়, আল্লাহ তার জন্য জান্নাতে একটি করে ঘর তৈরি করেন।"[cite: 7] (সহীহ বুখারী ও মুসলিম)
     </div>
   </section>
 
