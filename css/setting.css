@@ -9,10 +9,6 @@ body.dark .back-btn{background:rgba(30,45,60,.82);border-color:rgba(255,255,255,
 html[dir=rtl] .back-btn{transform:none}
 html[dir=rtl] .back-btn:active{transform:scale(.92)}
 html[dir=rtl] .back-btn svg{transform:scaleX(-1)}
-body:not(.dark) .back-btn{color:var(--text);background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 14px rgba(0,0,0,.08)}
-.back-btn svg{display:block}
-html[dir=rtl] .back-btn svg{transform:scaleX(-1)}
-.back-btn:hover{border-color:var(--accent)}
 .set-card .card-header{margin-bottom:10px}
 .set-group{margin-top:14px}.set-group:first-of-type{margin-top:4px}
 .set-card .setting-label{display:block;margin-bottom:8px;overflow-wrap:anywhere}
@@ -101,3 +97,6 @@ body.dark[data-color] .theme-row{background:rgba(var(--tint),.1);border-color:rg
 body.dark[data-color] .lang-menu .lang-opt.active{background:rgba(var(--tint),.18)}
 body.dark .theme-row .theme-opt.active{color:#04201c}
 body.dark[data-color] .btn:not(.ghost):not(.danger){color:#04201c}
+
+/* নিরাপত্তা: ফেড-ইন অ্যানিমেশন কোনো কারণে না চললেও কার্ডগুলো যেন সবসময় দেখা যায় */
+.page-head.fade-in,.set-card.fade-in{animation:none;opacity:1;transform:none}
