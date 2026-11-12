@@ -71,3 +71,6 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .sx-toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);max-width:calc(100% - 32px);padding:11px 18px;border-radius:999px;background:var(--text);color:var(--bg,#fff);font-size:.85rem;font-weight:600;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .sx-toast.show{opacity:1;transform:translate(-50%,0)}
 @media (max-width:360px){.btn-row .btn{flex-basis:100%}.lang-menu{grid-template-columns:1fr}}
+
+/* যোগাযোগ নোট */
+.contact-note{background:var(--accent-l);border-radius:var(--r-md);padding:12px 14px;font-size:.82rem;line-height:1.75;color:var(--text);margin-top:14px}
