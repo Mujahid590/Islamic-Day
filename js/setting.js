@@ -123,12 +123,13 @@
     buildMailLinks();
   }
 
-  function chooseLang(id) {
+  function chooseLang(id, silent) {
     var L = LANG_LIST.filter(function (x) { return x.id === id; })[0] || LANG_LIST[0];
     lang = L.id;
     /* অ্যাপের আসল ভাষা-ফাংশন (i18n.js) — এতে সব পেজে ভাষা বদলে যায় */
     var used = false;
-    try { if (typeof setLang === 'function') { setLang(lang); used = true; } } catch (e) {}
+    if (!silent) { try { if (typeof setLang === 'function') { setLang(lang); used = true; } } catch (e) { console.warn('setLang failed', e); } }
+    if (silent) used = true;
     if (!used) store(KEYS.lang, lang);
     doc.lang = lang;
     doc.dir = L.dir;
@@ -251,12 +252,13 @@
     $('copyEmailBtn').addEventListener('click', function () { copyText(EMAIL, t('copied')); });
   }
 
+  function safe(fn) { try { fn(); } catch (err) { console.error('settings:', err); } }
   function init() {
-    var verEl = $('appVer'); if (verEl) verEl.textContent = VERSION;
-    bind();
-    applyTheme(); applyColor();
-    chooseLang(lang);
-    renderTheme(); renderColor();
+    safe(function () { var v = $('appVer'); if (v) v.textContent = VERSION; });
+    safe(bind);
+    safe(applyTheme); safe(applyColor);
+    safe(function () { chooseLang(lang, true); });
+    safe(renderTheme); safe(renderColor);
   }
 
   init();
