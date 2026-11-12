@@ -1,8 +1,18 @@
 /* ===== সেটিংস পেজ — style.css এর ভ্যারিয়েবল/কার্ড ব্যবহার করে; শুধু অতিরিক্ত স্টাইল ===== */
-.page-head{margin-bottom:2px}
-.back-btn{display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);font-size:1.2rem;flex-shrink:0}
-html[dir=rtl] .back-btn{transform:scaleX(-1)}
+.page-head{margin-bottom:2px;display:flex;align-items:center;gap:12px}
+/* ব্যাক বাটন: গোল, পাতলা বর্ডার, মোটা গোলাকার শেভরন */
+.back-btn{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:46px;height:46px;border-radius:50%;padding:0;text-decoration:none;color:var(--text);
+background:rgba(255,255,255,.7);border:2px solid rgba(22,48,58,.12);box-shadow:0 4px 14px rgba(0,0,0,.08);transition:transform .15s,background .2s;-webkit-tap-highlight-color:transparent}
+.back-btn svg{display:block;transition:transform .2s}
 .back-btn:active{transform:scale(.92)}
+body.dark .back-btn{background:rgba(30,45,60,.82);border-color:rgba(255,255,255,.14);color:#f1f7f8;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+html[dir=rtl] .back-btn{transform:none}
+html[dir=rtl] .back-btn:active{transform:scale(.92)}
+html[dir=rtl] .back-btn svg{transform:scaleX(-1)}
+body:not(.dark) .back-btn{color:var(--text);background:rgba(255,255,255,.9);border-color:rgba(0,0,0,.08);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.back-btn svg{display:block}
+html[dir=rtl] .back-btn svg{transform:scaleX(-1)}
+.back-btn:hover{border-color:var(--accent)}
 .set-card .card-header{margin-bottom:10px}
 .set-group{margin-top:14px}.set-group:first-of-type{margin-top:4px}
 .set-card .setting-label{display:block;margin-bottom:8px;overflow-wrap:anywhere}
@@ -74,3 +84,20 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 
 /* যোগাযোগ নোট */
 .contact-note{background:var(--accent-l);border-radius:var(--r-md);padding:12px 14px;font-size:.82rem;line-height:1.75;color:var(--text);margin-top:14px}
+
+/* ===== ডার্ক মোডে রঙ: প্রতিটি রঙের জন্য আলাদা অ্যাকসেন্ট, ব্যাকগ্রাউন্ড, অরব ও কার্ড-গ্লো ===== */
+body.dark[data-color=teal]  {--accent:#2dd4bf;--accent-l:rgba(45,212,191,.18); --bg1:#0b2a2c;--bg2:#0f1c24;--bg3:#12262a;--tint:45,212,191}
+body.dark[data-color=green] {--accent:#4ade80;--accent-l:rgba(74,222,128,.18); --bg1:#0e2f1c;--bg2:#0f1f19;--bg3:#1b2a14;--tint:74,222,128}
+body.dark[data-color=blue]  {--accent:#38bdf8;--accent-l:rgba(56,189,248,.18); --bg1:#0b2740;--bg2:#0e1a2a;--bg3:#1a1c38;--tint:56,189,248}
+body.dark[data-color=peach] {--accent:#fb923c;--accent-l:rgba(251,146,60,.18); --bg1:#33200f;--bg2:#1f1a1a;--bg3:#34211c;--tint:251,146,60}
+body.dark[data-color] .ai-bg{background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%)}
+body.dark[data-color] .ai-bg .o1{background:radial-gradient(circle,rgba(var(--tint),.5),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .ai-bg .o2{background:radial-gradient(circle,rgba(var(--tint),.32),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .ai-bg .o3{background:radial-gradient(circle,rgba(var(--tint),.26),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .set-card{border-color:rgba(var(--tint),.3);box-shadow:0 10px 32px rgba(0,0,0,.45),0 0 0 1px rgba(var(--tint),.08),inset 0 1px 0 rgba(var(--tint),.15)}
+body.dark[data-color] .set-card .card-title{color:var(--text)}
+body.dark[data-color] .contact-note{background:rgba(var(--tint),.12)}
+body.dark[data-color] .theme-row{background:rgba(var(--tint),.1);border-color:rgba(var(--tint),.25)}
+body.dark[data-color] .lang-menu .lang-opt.active{background:rgba(var(--tint),.18)}
+body.dark .theme-row .theme-opt.active{color:#04201c}
+body.dark[data-color] .btn:not(.ghost):not(.danger){color:#04201c}
