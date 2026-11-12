@@ -6,8 +6,8 @@
 
   var EMAIL = 'mujahid590.bd@gmail.com';
   var VERSION = '1.0';
-  /* অ্যাপের বাকি পেজ যে কী ব্যবহার করে (theme = deen_theme নিশ্চিত); lang/color এর সম্ভাব্য নামগুলোতে একসাথে সেভ হয় */
-  var KEYS = { lang: ['deen_lang', 'lang', 'language'], theme: ['deen_theme', 'theme'], color: ['deen_color', 'deen_accent', 'accent'] };
+  /* অ্যাপের বাকি পেজের সঙ্গে একই কী (main.js: deen_theme, deen_color); ভাষা i18n.js এর setLang() দিয়ে সেভ হয় */
+  var KEYS = { lang: ['deen_lang', 'lang'], theme: 'deen_theme', color: 'deen_color' };
 
   var COLORS = {
     teal:  { c: '#0d9488', n: { bn: 'টিল', en: 'Teal', ar: 'تركوازي', ur: 'ٹیل', hi: 'टील' } },
@@ -16,7 +16,7 @@
     peach: { c: '#ea580c', n: { bn: 'পিচ', en: 'Peach', ar: 'خوخي', ur: 'آڑو', hi: 'पीच' } }
   };
 
-  var LANGS = [
+  var FALLBACK_LANGS = [
     { id: 'bn', flag: '🇧🇩', name: 'বাংলা', dir: 'ltr' },
     { id: 'en', flag: '🇬🇧', name: 'English', dir: 'ltr' },
     { id: 'ar', flag: '🇸🇦', name: 'العربية', dir: 'rtl' },
@@ -24,47 +24,58 @@
     { id: 'hi', flag: '🇮🇳', name: 'हिन्दी', dir: 'ltr' }
   ];
 
+  /* অ্যাপের আসল ভাষা তালিকা (i18n.js) থাকলে সেটাই ব্যবহার হবে */
+  var LANG_LIST = FALLBACK_LANGS;
+  try {
+    if (typeof LANGS !== 'undefined' && LANGS && Object.keys(LANGS).length) {
+      LANG_LIST = Object.keys(LANGS).map(function (k) {
+        var g = LANGS[k] || {};
+        return { id: k, flag: g.flag || '🌐', name: g.name || k, dir: (k === 'ar' || k === 'ur' || g.dir === 'rtl') ? 'rtl' : 'ltr' };
+      });
+    }
+  } catch (e) {}
+
   var T = {
     bn: { title: 'সেটিংস', subtitle: 'অ্যাপ আপনার মতো সাজিয়ে নিন', back: 'ফিরে যান', secLook: 'চেহারা ও ভাষা', lang: 'ভাষা', theme: 'থিম', themeDark: '🌙 ডার্ক', themeLight: '☀️ লাইট', themeSystem: '📱 সিস্টেম', color: 'অ্যাকসেন্ট রঙ',
       secData: 'ডেটা ও ব্যাকআপ', export: '⬇ ব্যাকআপ নিন', import: '⬆ রিস্টোর করুন', share: '🔗 অ্যাপ শেয়ার করুন', danger: 'বিপদজনক এলাকা', resetTracker: 'নামাজের হিসাব মুছুন', resetAll: 'সব সেটিংস রিসেট',
       secContact: 'যোগাযোগ', email: 'ইমেইল', copy: 'কপি', phone: 'মোবাইল', phoneSoon: 'শীঘ্রই যুক্ত হবে', sendMail: '✉️ ইমেইল পাঠান', report: '🐞 সমস্যা/পরামর্শ জানান',
-      contactNote: 'সমস্যা জানালে অ্যাপের সংস্করণ ও ডিভাইসের তথ্য ইমেইলে আপনা-আপনি যুক্ত হবে, যাতে দ্রুত সমাধান করা যায়।',
+      contactNote: 'এই অ্যাপে কোনো ত্রুটি বা সমস্যা দেখা গেলে, কিংবা আপনার কোনো পরামর্শ থাকলে নির্দ্বিধায় ইমেইলের মাধ্যমে জানান। আপনার একটি বার্তাই অ্যাপটিকে আরও সুন্দর ও নির্ভুল করে তুলতে সাহায্য করবে। 🤍',
       secAbout: 'অ্যাপ সম্পর্কে', appName: 'অ্যাপ', version: 'সংস্করণ', dataSrc: 'সময়ের উৎস',
       items: 'টি তথ্য', copied: 'ইমেইল কপি হয়েছে', copyFail: 'কপি করা যায়নি', exported: 'ব্যাকআপ ফাইল তৈরি হয়েছে', imported: 'রিস্টোর সফল হয়েছে', importFail: 'ফাইলটি সঠিক নয়', shared: 'লিংক কপি হয়েছে',
       confTracker: 'নামাজের সব হিসাব মুছে যাবে। নিশ্চিত?', confAll: 'সব সেটিংস ও ডেটা মুছে রিসেট হবে। নিশ্চিত?', done: 'সম্পন্ন হয়েছে', shareText: 'দ্বীন টাইম — নামাজের সময়, কুরআন ও আরও অনেক কিছু',
-      mailSubject: 'দ্বীন টাইম — যোগাযোগ', repSubject: 'দ্বীন টাইম — সমস্যা/পরামর্শ', repBody: 'আসসালামু আলাইকুম,\n\n(এখানে আপনার সমস্যা/পরামর্শ লিখুন)\n\n--- অ্যাপের তথ্য ---' },
+      mailSubject: 'দ্বীন টাইম — যোগাযোগ', repSubject: 'দ্বীন টাইম — সমস্যা/পরামর্শ', repBody: 'আসসালামু আলাইকুম,\n\n(এখানে আপনার সমস্যা বা পরামর্শ লিখুন)\n' },
     en: { title: 'Settings', subtitle: 'Make the app your own', back: 'Go back', secLook: 'Appearance & Language', lang: 'Language', theme: 'Theme', themeDark: '🌙 Dark', themeLight: '☀️ Light', themeSystem: '📱 System', color: 'Accent color',
       secData: 'Data & Backup', export: '⬇ Back up', import: '⬆ Restore', share: '🔗 Share app', danger: 'Danger zone', resetTracker: 'Clear prayer tracker', resetAll: 'Reset all settings',
       secContact: 'Contact', email: 'Email', copy: 'Copy', phone: 'Mobile', phoneSoon: 'Coming soon', sendMail: '✉️ Send email', report: '🐞 Report issue / feedback',
-      contactNote: 'When you report an issue, the app version and device info are added to the email automatically so it can be fixed faster.',
+      contactNote: 'If you notice any bug or problem in this app, or have a suggestion, please feel free to tell us by email. A single message from you helps make the app better and more accurate. 🤍',
       secAbout: 'About', appName: 'App', version: 'Version', dataSrc: 'Time source',
       items: ' items', copied: 'Email copied', copyFail: 'Could not copy', exported: 'Backup file created', imported: 'Restore successful', importFail: 'Invalid file', shared: 'Link copied',
       confTracker: 'All prayer tracker data will be deleted. Sure?', confAll: 'All settings and data will be erased. Sure?', done: 'Done', shareText: 'Deen Time — prayer times, Quran and more',
-      mailSubject: 'Deen Time — Contact', repSubject: 'Deen Time — Issue / Feedback', repBody: 'Assalamu alaikum,\n\n(Write your issue / feedback here)\n\n--- App info ---' },
+      mailSubject: 'Deen Time — Contact', repSubject: 'Deen Time — Issue / Feedback', repBody: 'Assalamu alaikum,\n\n(Write your issue or suggestion here)\n' },
     ar: { title: 'الإعدادات', subtitle: 'خصّص التطبيق على ذوقك', back: 'رجوع', secLook: 'المظهر واللغة', lang: 'اللغة', theme: 'السمة', themeDark: '🌙 داكن', themeLight: '☀️ فاتح', themeSystem: '📱 النظام', color: 'لون التمييز',
       secData: 'البيانات والنسخ الاحتياطي', export: '⬇ نسخ احتياطي', import: '⬆ استعادة', share: '🔗 مشاركة التطبيق', danger: 'منطقة الخطر', resetTracker: 'مسح سجل الصلاة', resetAll: 'إعادة ضبط الإعدادات',
       secContact: 'التواصل', email: 'البريد الإلكتروني', copy: 'نسخ', phone: 'الجوال', phoneSoon: 'سيُضاف قريباً', sendMail: '✉️ إرسال بريد', report: '🐞 إبلاغ عن مشكلة / اقتراح',
-      contactNote: 'عند الإبلاغ عن مشكلة تُضاف نسخة التطبيق ومعلومات الجهاز تلقائياً إلى البريد لتسريع الحل.',
+      contactNote: 'إذا لاحظت أي خلل أو مشكلة في هذا التطبيق، أو كان لديك اقتراح، فلا تتردد في إبلاغنا عبر البريد الإلكتروني. رسالة واحدة منك تساعدنا على جعل التطبيق أجمل وأدق. 🤍',
       secAbout: 'حول التطبيق', appName: 'التطبيق', version: 'الإصدار', dataSrc: 'مصدر الأوقات',
       items: ' عنصر', copied: 'تم نسخ البريد', copyFail: 'تعذّر النسخ', exported: 'تم إنشاء النسخة الاحتياطية', imported: 'تمت الاستعادة بنجاح', importFail: 'ملف غير صالح', shared: 'تم نسخ الرابط',
       confTracker: 'سيتم حذف كل سجل الصلاة. هل أنت متأكد؟', confAll: 'سيتم مسح كل الإعدادات والبيانات. هل أنت متأكد؟', done: 'تم', shareText: 'دين تايم — أوقات الصلاة والقرآن والمزيد',
-      mailSubject: 'دين تايم — تواصل', repSubject: 'دين تايم — مشكلة / اقتراح', repBody: 'السلام عليكم،\n\n(اكتب مشكلتك / اقتراحك هنا)\n\n--- معلومات التطبيق ---' },
+      mailSubject: 'دين تايم — تواصل', repSubject: 'دين تايم — مشكلة / اقتراح', repBody: 'السلام عليكم،\n\n(اكتب مشكلتك أو اقتراحك هنا)\n' },
     ur: { title: 'سیٹنگز', subtitle: 'ایپ کو اپنی پسند کے مطابق بنائیں', back: 'واپس', secLook: 'ظاہری شکل اور زبان', lang: 'زبان', theme: 'تھیم', themeDark: '🌙 ڈارک', themeLight: '☀️ لائٹ', themeSystem: '📱 سسٹم', color: 'نمایاں رنگ',
       secData: 'ڈیٹا اور بیک اپ', export: '⬇ بیک اپ لیں', import: '⬆ بحال کریں', share: '🔗 ایپ شیئر کریں', danger: 'خطرناک حصہ', resetTracker: 'نماز کا ریکارڈ مٹائیں', resetAll: 'تمام سیٹنگز ری سیٹ',
       secContact: 'رابطہ', email: 'ای میل', copy: 'کاپی', phone: 'موبائل', phoneSoon: 'جلد شامل ہوگا', sendMail: '✉️ ای میل بھیجیں', report: '🐞 مسئلہ / مشورہ بھیجیں',
-      contactNote: 'مسئلہ بتانے پر ایپ کا ورژن اور ڈیوائس کی معلومات خود بخود ای میل میں شامل ہو جائیں گی تاکہ جلد حل ہو سکے۔',
+      contactNote: 'اگر آپ کو اس ایپ میں کوئی خرابی یا مسئلہ نظر آئے، یا کوئی مشورہ ہو، تو بلا جھجھک ای میل کے ذریعے ہمیں بتائیں۔ آپ کا ایک پیغام ایپ کو مزید بہتر اور درست بنانے میں مدد دیتا ہے۔ 🤍',
       secAbout: 'ایپ کے بارے میں', appName: 'ایپ', version: 'ورژن', dataSrc: 'اوقات کا ماخذ',
       items: ' آئٹمز', copied: 'ای میل کاپی ہو گئی', copyFail: 'کاپی نہیں ہو سکی', exported: 'بیک اپ فائل بن گئی', imported: 'بحالی کامیاب', importFail: 'فائل درست نہیں', shared: 'لنک کاپی ہو گیا',
       confTracker: 'نماز کا تمام ریکارڈ مٹ جائے گا۔ کیا آپ کو یقین ہے؟', confAll: 'تمام سیٹنگز اور ڈیٹا مٹ جائے گا۔ کیا آپ کو یقین ہے؟', done: 'ہو گیا', shareText: 'دین ٹائم — نماز کے اوقات، قرآن اور بہت کچھ',
-      mailSubject: 'دین ٹائم — رابطہ', repSubject: 'دین ٹائم — مسئلہ / مشورہ', repBody: 'السلام علیکم،\n\n(یہاں اپنا مسئلہ / مشورہ لکھیں)\n\n--- ایپ کی معلومات ---' },
+      mailSubject: 'دین ٹائم — رابطہ', repSubject: 'دین ٹائم — مسئلہ / مشورہ', repBody: 'السلام علیکم،\n\n(یہاں اپنا مسئلہ یا مشورہ لکھیں)\n' },
     hi: { title: 'सेटिंग्स', subtitle: 'ऐप को अपने अनुसार सजाएँ', back: 'वापस', secLook: 'रूप और भाषा', lang: 'भाषा', theme: 'थीम', themeDark: '🌙 डार्क', themeLight: '☀️ लाइट', themeSystem: '📱 सिस्टम', color: 'एक्सेंट रंग',
       secData: 'डेटा और बैकअप', export: '⬇ बैकअप लें', import: '⬆ रीस्टोर करें', share: '🔗 ऐप शेयर करें', danger: 'खतरनाक क्षेत्र', resetTracker: 'नमाज़ का रिकॉर्ड मिटाएँ', resetAll: 'सभी सेटिंग्स रीसेट',
       secContact: 'संपर्क', email: 'ईमेल', copy: 'कॉपी', phone: 'मोबाइल', phoneSoon: 'जल्द जोड़ा जाएगा', sendMail: '✉️ ईमेल भेजें', report: '🐞 समस्या / सुझाव भेजें',
-      contactNote: 'समस्या बताने पर ऐप का संस्करण और डिवाइस की जानकारी ईमेल में अपने-आप जुड़ जाएगी ताकि जल्दी समाधान हो सके।',
+      contactNote: 'इस ऐप में कोई खामी या समस्या दिखे, या आपका कोई सुझाव हो, तो बेझिझक ईमेल के ज़रिए हमें बताएँ। आपका एक संदेश ऐप को और बेहतर व सटीक बनाने में मदद करता है। 🤍',
       secAbout: 'ऐप के बारे में', appName: 'ऐप', version: 'संस्करण', dataSrc: 'समय का स्रोत',
       items: ' आइटम', copied: 'ईमेल कॉपी हो गया', copyFail: 'कॉपी नहीं हो सका', exported: 'बैकअप फ़ाइल बन गई', imported: 'रीस्टोर सफल', importFail: 'फ़ाइल सही नहीं है', shared: 'लिंक कॉपी हो गया',
       confTracker: 'नमाज़ का सारा रिकॉर्ड मिट जाएगा। क्या आप निश्चित हैं?', confAll: 'सभी सेटिंग्स और डेटा मिट जाएगा। क्या आप निश्चित हैं?', done: 'हो गया', shareText: 'दीन टाइम — नमाज़ के समय, क़ुरआन और बहुत कुछ',
-      mailSubject: 'दीन टाइम — संपर्क', repSubject: 'दीन टाइम — समस्या / सुझाव', repBody: 'अस्सलामु अलैकुम,\n\n(यहाँ अपनी समस्या / सुझाव लिखें)\n\n--- ऐप की जानकारी ---' }
+      mailSubject: 'दीन टाइम — संपर्क', repSubject: 'दीन टाइम — समस्या / सुझाव', repBody: 'अस्सलामु अलैकुम,\n\n(यहाँ अपनी समस्या या सुझाव लिखें)\n' }
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -79,13 +90,15 @@
     return null;
   }
 
-  var lang = store(KEYS.lang) || 'bn';
-  if (!T[lang]) lang = 'bn';
+  var lang = 'bn';
+  try { if (typeof LANG !== 'undefined' && LANG) lang = LANG; else lang = store(KEYS.lang) || 'bn'; } catch (e) { lang = store(KEYS.lang) || 'bn'; }
+  if (!LANG_LIST.some(function (x) { return x.id === lang; })) lang = LANG_LIST[0].id;
   var theme = store(KEYS.theme) || 'dark';
   var color = store(KEYS.color) || 'teal';
   if (!COLORS[color]) color = 'teal';
 
-  function t(k) { return (T[lang] && T[lang][k]) || T.bn[k] || ''; }
+  function dict() { return T[lang] || T.en; }
+  function t(k) { return dict()[k] || T.en[k] || ''; }
 
   /* ---------- টোস্ট ---------- */
   var toastEl, toastTimer;
@@ -99,7 +112,7 @@
 
   /* ---------- ভাষা ---------- */
   function applyLangText() {
-    var d = T[lang];
+    var d = dict();
     document.querySelectorAll('[data-k]').forEach(function (el) {
       var v = d[el.getAttribute('data-k')];
       if (v !== undefined) el.textContent = v;
@@ -110,26 +123,30 @@
     buildMailLinks();
   }
 
-  function setLang(id) {
-    var L = LANGS.filter(function (x) { return x.id === id; })[0] || LANGS[0];
+  function chooseLang(id) {
+    var L = LANG_LIST.filter(function (x) { return x.id === id; })[0] || LANG_LIST[0];
     lang = L.id;
-    store(KEYS.lang, lang);
+    /* অ্যাপের আসল ভাষা-ফাংশন (i18n.js) — এতে সব পেজে ভাষা বদলে যায় */
+    var used = false;
+    try { if (typeof setLang === 'function') { setLang(lang); used = true; } } catch (e) {}
+    if (!used) store(KEYS.lang, lang);
     doc.lang = lang;
     doc.dir = L.dir;
     document.body.classList.toggle('rtl', L.dir === 'rtl');
     renderLang();
     applyLangText();
+    renderTheme();
     try { window.dispatchEvent(new CustomEvent('langchange', { detail: { lang: lang } })); } catch (e) {}
   }
 
   function renderLang() {
     var box = $('langGrid');
-    var cur = LANGS.filter(function (x) { return x.id === lang; })[0];
+    var cur = LANG_LIST.filter(function (x) { return x.id === lang; })[0];
     var open = box.classList.contains('open');
     var h = '<button type="button" class="lang-current" id="langBtn" aria-haspopup="listbox" aria-expanded="' + open + '">' +
       '<span class="flag">' + cur.flag + '</span><span class="lang-name">' + cur.name + '</span><span class="chev" aria-hidden="true">▾</span></button>' +
       '<div class="lang-menu" id="langMenu" role="listbox"' + (open ? '' : ' hidden') + '>';
-    LANGS.forEach(function (L) {
+    LANG_LIST.forEach(function (L) {
       h += '<button type="button" class="lang-opt' + (L.id === lang ? ' active' : '') + '" role="option" aria-selected="' + (L.id === lang) + '" data-l="' + L.id + '">' +
         '<span class="flag">' + L.flag + '</span><span class="lang-name">' + L.name + '</span><span class="tick" aria-hidden="true">✓</span></button>';
     });
@@ -151,8 +168,7 @@
     document.body.classList.toggle('dark', dark);
     document.body.classList.toggle('light', !dark);
     doc.setAttribute('data-theme', dark ? 'dark' : 'light');
-    var m = document.querySelector('meta[name=theme-color]');
-    if (m) m.setAttribute('content', dark ? '#0b1a20' : COLORS[color].c);
+    updateMeta();
   }
   function renderTheme() {
     var row = $('themeRow'), idx = 0;
@@ -170,17 +186,16 @@
   if (mq) { var onMq = function () { if (theme === 'system') applyTheme(); }; mq.addEventListener ? mq.addEventListener('change', onMq) : mq.addListener(onMq); }
 
   /* ---------- রঙ ---------- */
-  function hexToRgba(hex, a) {
-    var n = parseInt(hex.slice(1), 16);
-    return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
-  }
   function applyColor() {
-    var c = COLORS[color].c;
-    doc.setAttribute('data-accent', color);
-    doc.style.setProperty('--accent', c);
-    doc.style.setProperty('--accent-l', hexToRgba(c, 0.14));
+    /* style.css এর body[data-color=...] ও body.dark[data-color=...] নিয়ম ব্যবহার করে — লাইট ও ডার্ক দুই মোডেই সঠিক রঙ আসে */
+    document.body.dataset.color = color;
+    doc.style.removeProperty('--accent');
+    doc.style.removeProperty('--accent-l');
+    updateMeta();
+  }
+  function updateMeta() {
     var m = document.querySelector('meta[name=theme-color]');
-    if (m && !document.body.classList.contains('dark')) m.setAttribute('content', c);
+    if (m) m.setAttribute('content', document.body.classList.contains('dark') ? '#0b2428' : COLORS[color].c);
   }
   function updateColorName() { var e = $('colorName'); if (e) e.textContent = '· ' + COLORS[color].n[lang]; }
   function renderColor() {
@@ -216,8 +231,7 @@
   }
   function buildMailLinks() {
     $('mailBtn').href = mailto(t('mailSubject'));
-    var info = '\n' + t('version') + ': ' + VERSION + '\n' + t('lang') + ': ' + lang + '\n' + (navigator.userAgent || '') + '\n' + screen.width + 'x' + screen.height;
-    $('reportBtn').href = mailto(t('repSubject'), t('repBody') + info);
+    $('reportBtn').href = mailto(t('repSubject'), t('repBody'));
     $('emailLink').href = 'mailto:' + EMAIL;
   }
 
@@ -225,7 +239,7 @@
   function bind() {
     $('langGrid').addEventListener('click', function (e) {
       var opt = e.target.closest('.lang-opt');
-      if (opt) { $('langGrid').classList.remove('open'); setLang(opt.getAttribute('data-l')); return; }
+      if (opt) { $('langGrid').classList.remove('open'); chooseLang(opt.getAttribute('data-l')); return; }
       if (e.target.closest('#langBtn')) toggleLangMenu();
     });
     document.addEventListener('click', function (e) { if (!e.target.closest('#langGrid')) { var m = $('langMenu'); if (m && !m.hidden) toggleLangMenu(false); } });
@@ -241,10 +255,10 @@
     var verEl = $('appVer'); if (verEl) verEl.textContent = VERSION;
     bind();
     applyTheme(); applyColor();
-    setLang(lang);
+    chooseLang(lang);
     renderTheme(); renderColor();
   }
 
   init();
-  window.addEventListener('load', function () { setLang(lang); renderTheme(); });
+  window.addEventListener('load', function () { applyLangText(); renderTheme(); });
 })();
