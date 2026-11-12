@@ -43,7 +43,7 @@
       secAbout: 'অ্যাপ সম্পর্কে', appName: 'অ্যাপ', version: 'সংস্করণ', dataSrc: 'সময়ের উৎস',
       items: 'টি তথ্য', copied: 'ইমেইল কপি হয়েছে', copyFail: 'কপি করা যায়নি', exported: 'ব্যাকআপ ফাইল তৈরি হয়েছে', imported: 'রিস্টোর সফল হয়েছে', importFail: 'ফাইলটি সঠিক নয়', shared: 'লিংক কপি হয়েছে',
       confTracker: 'নামাজের সব হিসাব মুছে যাবে। নিশ্চিত?', confAll: 'সব সেটিংস ও ডেটা মুছে রিসেট হবে। নিশ্চিত?', done: 'সম্পন্ন হয়েছে', shareText: 'দ্বীন টাইম — নামাজের সময়, কুরআন ও আরও অনেক কিছু',
-      mailSubject: 'দ্বীন টাইম — যোগাযোগ', repSubject: 'দ্বীন টাইম — সমস্যা/পরামর্শ', repBody: 'আসসালামু আলাইকুম,\n\n(এখানে আপনার সমস্যা বা পরামর্শ লিখুন)\n' },
+      mailSubject: 'দ্বীন টাইম — যোগাযোগ', repSubject: 'ইসলামিক নূর অ্যাপ্লিকেশন — সমস্যা সমাধানের আবেদন', repBody: 'জনাব,\n\nআসসালামু আলাইকুম।\n\n"ইসলামিক নূর (দ্বীন টাইম)" অ্যাপ্লিকেশনটি ব্যবহারের সময় আমি নিচের সমস্যাটির সম্মুখীন হয়েছি:\n\nসমস্যার বিবরণ:\n(এখানে আপনার সমস্যাটি বিস্তারিত লিখুন)\n\nবিষয়টি অনুগ্রহ করে দ্রুত দেখে সমাধানের ব্যবস্থা গ্রহণ করলে কৃতজ্ঞ থাকব।\n\nজাযাকাল্লাহু খাইরান।\n\nবিনীত,\nআবেদনকারীর নাম: (এখানে আপনার নাম লিখুন)\n' },
     en: { title: 'Settings', subtitle: 'Make the app your own', back: 'Go back', secLook: 'Appearance & Language', lang: 'Language', theme: 'Theme', themeDark: '🌙 Dark', themeLight: '☀️ Light', themeSystem: '📱 System', color: 'Accent color',
       secData: 'Data & Backup', export: '⬇ Back up', import: '⬆ Restore', share: '🔗 Share app', danger: 'Danger zone', resetTracker: 'Clear prayer tracker', resetAll: 'Reset all settings',
       secContact: 'Contact', email: 'Email', copy: 'Copy', phone: 'Mobile', phoneSoon: 'Coming soon', sendMail: '✉️ Send email', report: '🐞 Report issue / feedback',
@@ -51,7 +51,7 @@
       secAbout: 'About', appName: 'App', version: 'Version', dataSrc: 'Time source',
       items: ' items', copied: 'Email copied', copyFail: 'Could not copy', exported: 'Backup file created', imported: 'Restore successful', importFail: 'Invalid file', shared: 'Link copied',
       confTracker: 'All prayer tracker data will be deleted. Sure?', confAll: 'All settings and data will be erased. Sure?', done: 'Done', shareText: 'Deen Time — prayer times, Quran and more',
-      mailSubject: 'Deen Time — Contact', repSubject: 'Deen Time — Issue / Feedback', repBody: 'Assalamu alaikum,\n\n(Write your issue or suggestion here)\n' },
+      mailSubject: 'Deen Time — Contact', repSubject: 'Islamic Nur App — Request for Issue Resolution', repBody: 'Dear Sir/Madam,\n\nAssalamu alaikum.\n\nWhile using the "Islamic Nur (Deen Time)" application, I have encountered the following issue:\n\nIssue description:\n(Please describe your issue in detail here)\n\nI kindly request you to look into this matter and resolve it at your earliest convenience.\n\nJazakAllahu khairan.\n\nSincerely,\nApplicant\'s name: (Write your name here)\n' },
     ar: { title: 'الإعدادات', subtitle: 'خصّص التطبيق على ذوقك', back: 'رجوع', secLook: 'المظهر واللغة', lang: 'اللغة', theme: 'السمة', themeDark: '🌙 داكن', themeLight: '☀️ فاتح', themeSystem: '📱 النظام', color: 'لون التمييز',
       secData: 'البيانات والنسخ الاحتياطي', export: '⬇ نسخ احتياطي', import: '⬆ استعادة', share: '🔗 مشاركة التطبيق', danger: 'منطقة الخطر', resetTracker: 'مسح سجل الصلاة', resetAll: 'إعادة ضبط الإعدادات',
       secContact: 'التواصل', email: 'البريد الإلكتروني', copy: 'نسخ', phone: 'الجوال', phoneSoon: 'سيُضاف قريباً', sendMail: '✉️ إرسال بريد', report: '🐞 إبلاغ عن مشكلة / اقتراح',
@@ -59,7 +59,7 @@
       secAbout: 'حول التطبيق', appName: 'التطبيق', version: 'الإصدار', dataSrc: 'مصدر الأوقات',
       items: ' عنصر', copied: 'تم نسخ البريد', copyFail: 'تعذّر النسخ', exported: 'تم إنشاء النسخة الاحتياطية', imported: 'تمت الاستعادة بنجاح', importFail: 'ملف غير صالح', shared: 'تم نسخ الرابط',
       confTracker: 'سيتم حذف كل سجل الصلاة. هل أنت متأكد؟', confAll: 'سيتم مسح كل الإعدادات والبيانات. هل أنت متأكد؟', done: 'تم', shareText: 'دين تايم — أوقات الصلاة والقرآن والمزيد',
-      mailSubject: 'دين تايم — تواصل', repSubject: 'دين تايم — مشكلة / اقتراح', repBody: 'السلام عليكم،\n\n(اكتب مشكلتك أو اقتراحك هنا)\n' },
+      mailSubject: 'دين تايم — تواصل', repSubject: 'تطبيق نور الإسلامي — طلب معالجة مشكلة', repBody: 'السادة المحترمون،\n\nالسلام عليكم ورحمة الله وبركاته.\n\nأثناء استخدام تطبيق "نور الإسلامي (دين تايم)" واجهتني المشكلة التالية:\n\nوصف المشكلة:\n(يرجى كتابة مشكلتك هنا بالتفصيل)\n\nأرجو التكرم بالنظر في الأمر ومعالجته في أقرب وقت ممكن.\n\nجزاكم الله خيراً.\n\nمقدّم الطلب،\nالاسم: (اكتب اسمك هنا)\n' },
     ur: { title: 'سیٹنگز', subtitle: 'ایپ کو اپنی پسند کے مطابق بنائیں', back: 'واپس', secLook: 'ظاہری شکل اور زبان', lang: 'زبان', theme: 'تھیم', themeDark: '🌙 ڈارک', themeLight: '☀️ لائٹ', themeSystem: '📱 سسٹم', color: 'نمایاں رنگ',
       secData: 'ڈیٹا اور بیک اپ', export: '⬇ بیک اپ لیں', import: '⬆ بحال کریں', share: '🔗 ایپ شیئر کریں', danger: 'خطرناک حصہ', resetTracker: 'نماز کا ریکارڈ مٹائیں', resetAll: 'تمام سیٹنگز ری سیٹ',
       secContact: 'رابطہ', email: 'ای میل', copy: 'کاپی', phone: 'موبائل', phoneSoon: 'جلد شامل ہوگا', sendMail: '✉️ ای میل بھیجیں', report: '🐞 مسئلہ / مشورہ بھیجیں',
@@ -67,7 +67,7 @@
       secAbout: 'ایپ کے بارے میں', appName: 'ایپ', version: 'ورژن', dataSrc: 'اوقات کا ماخذ',
       items: ' آئٹمز', copied: 'ای میل کاپی ہو گئی', copyFail: 'کاپی نہیں ہو سکی', exported: 'بیک اپ فائل بن گئی', imported: 'بحالی کامیاب', importFail: 'فائل درست نہیں', shared: 'لنک کاپی ہو گیا',
       confTracker: 'نماز کا تمام ریکارڈ مٹ جائے گا۔ کیا آپ کو یقین ہے؟', confAll: 'تمام سیٹنگز اور ڈیٹا مٹ جائے گا۔ کیا آپ کو یقین ہے؟', done: 'ہو گیا', shareText: 'دین ٹائم — نماز کے اوقات، قرآن اور بہت کچھ',
-      mailSubject: 'دین ٹائم — رابطہ', repSubject: 'دین ٹائم — مسئلہ / مشورہ', repBody: 'السلام علیکم،\n\n(یہاں اپنا مسئلہ یا مشورہ لکھیں)\n' },
+      mailSubject: 'دین ٹائم — رابطہ', repSubject: 'اسلامک نور ایپ — مسئلے کے حل کی درخواست', repBody: 'محترم جناب،\n\nالسلام علیکم ورحمۃ اللہ وبرکاتہ۔\n\n"اسلامک نور (دین ٹائم)" ایپ کے استعمال کے دوران مجھے درج ذیل مسئلہ پیش آیا ہے:\n\nمسئلے کی تفصیل:\n(براہِ کرم اپنا مسئلہ یہاں تفصیل سے لکھیں)\n\nگزارش ہے کہ اس معاملے کو دیکھ کر جلد از جلد حل فرما دیں۔\n\nجزاکم اللہ خیراً۔\n\nدرخواست گزار،\nنام: (یہاں اپنا نام لکھیں)\n' },
     hi: { title: 'सेटिंग्स', subtitle: 'ऐप को अपने अनुसार सजाएँ', back: 'वापस', secLook: 'रूप और भाषा', lang: 'भाषा', theme: 'थीम', themeDark: '🌙 डार्क', themeLight: '☀️ लाइट', themeSystem: '📱 सिस्टम', color: 'एक्सेंट रंग',
       secData: 'डेटा और बैकअप', export: '⬇ बैकअप लें', import: '⬆ रीस्टोर करें', share: '🔗 ऐप शेयर करें', danger: 'खतरनाक क्षेत्र', resetTracker: 'नमाज़ का रिकॉर्ड मिटाएँ', resetAll: 'सभी सेटिंग्स रीसेट',
       secContact: 'संपर्क', email: 'ईमेल', copy: 'कॉपी', phone: 'मोबाइल', phoneSoon: 'जल्द जोड़ा जाएगा', sendMail: '✉️ ईमेल भेजें', report: '🐞 समस्या / सुझाव भेजें',
@@ -75,7 +75,7 @@
       secAbout: 'ऐप के बारे में', appName: 'ऐप', version: 'संस्करण', dataSrc: 'समय का स्रोत',
       items: ' आइटम', copied: 'ईमेल कॉपी हो गया', copyFail: 'कॉपी नहीं हो सका', exported: 'बैकअप फ़ाइल बन गई', imported: 'रीस्टोर सफल', importFail: 'फ़ाइल सही नहीं है', shared: 'लिंक कॉपी हो गया',
       confTracker: 'नमाज़ का सारा रिकॉर्ड मिट जाएगा। क्या आप निश्चित हैं?', confAll: 'सभी सेटिंग्स और डेटा मिट जाएगा। क्या आप निश्चित हैं?', done: 'हो गया', shareText: 'दीन टाइम — नमाज़ के समय, क़ुरआन और बहुत कुछ',
-      mailSubject: 'दीन टाइम — संपर्क', repSubject: 'दीन टाइम — समस्या / सुझाव', repBody: 'अस्सलामु अलैकुम,\n\n(यहाँ अपनी समस्या या सुझाव लिखें)\n' }
+      mailSubject: 'दीन टाइम — संपर्क', repSubject: 'इस्लामिक नूर ऐप — समस्या समाधान हेतु आवेदन', repBody: 'आदरणीय महोदय/महोदया,\n\nअस्सलामु अलैकुम।\n\n"इस्लामिक नूर (दीन टाइम)" ऐप के उपयोग के दौरान मुझे निम्नलिखित समस्या का सामना करना पड़ा है:\n\nसमस्या का विवरण:\n(कृपया अपनी समस्या यहाँ विस्तार से लिखें)\n\nआपसे विनम्र अनुरोध है कि इस विषय को देखकर शीघ्र समाधान करें।\n\nजज़ाकल्लाहु ख़ैरन।\n\nआवेदक,\nनाम: (यहाँ अपना नाम लिखें)\n' }
   };
 
   var $ = function (id) { return document.getElementById(id); };
