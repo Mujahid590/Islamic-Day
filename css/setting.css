@@ -1,203 +1,102 @@
-/* =====================================================================
-   সেটিংস পেজ — 3D ক্লে (Claymorphism) স্টাইল
-   ব্যবহার: setting.html এ setting.css এর ঠিক পরে এই ফাইলটি লিংক করুন।
-   অ্যাকসেন্ট রঙ (teal/green/blue/peach) ও লাইট/ডার্ক — দুটোর সাথেই মেলে।
-   ===================================================================== */
+/* ===== সেটিংস পেজ — style.css এর ভ্যারিয়েবল/কার্ড ব্যবহার করে; শুধু অতিরিক্ত স্টাইল ===== */
+.page-head{margin-bottom:2px;display:flex;align-items:center;gap:12px}
+/* ব্যাক বাটন: গোল, পাতলা বর্ডার, মোটা গোলাকার শেভরন */
+.back-btn{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:46px;height:46px;border-radius:50%;padding:0;text-decoration:none;color:var(--text);
+background:rgba(255,255,255,.7);border:2px solid rgba(22,48,58,.12);box-shadow:0 4px 14px rgba(0,0,0,.08);transition:transform .15s,background .2s;-webkit-tap-highlight-color:transparent}
+.back-btn svg{display:block;transition:transform .2s}
+.back-btn:active{transform:scale(.92)}
+body.dark .back-btn{background:rgba(30,45,60,.82);border-color:rgba(255,255,255,.14);color:#f1f7f8;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+html[dir=rtl] .back-btn{transform:none}
+html[dir=rtl] .back-btn:active{transform:scale(.92)}
+html[dir=rtl] .back-btn svg{transform:scaleX(-1)}
+.set-card .card-header{margin-bottom:10px}
+.set-group{margin-top:14px}.set-group:first-of-type{margin-top:4px}
+.set-card .setting-label{display:block;margin-bottom:8px;overflow-wrap:anywhere}
+.set-note{font-size:.76rem;line-height:1.6;color:var(--text2);margin-top:10px;overflow-wrap:anywhere}
+.set-card .card-badge{max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ---------- রঙের ভ্যারিয়েবল (প্রতিটি কার্ডের আলাদা প্যাস্টেল) ---------- */
-body[data-page=settings] .set-card{
-  --cb:color-mix(in srgb,var(--accent) 14%,#fff);              /* কার্ডের ব্যাকগ্রাউন্ড */
-  --cs:color-mix(in srgb,var(--accent) 42%,transparent);       /* কার্ডের ছায়ার রঙ */
-}
-body[data-page=settings] .set-card:nth-of-type(2){--cb:#ffece6;--cs:rgba(240,130,90,.42)}
-body[data-page=settings] .set-card:nth-of-type(3){--cb:#e7f2ff;--cs:rgba(70,140,230,.42)}
+/* বাটন/টেক্সট যেন বক্সের বাইরে না যায় */
+.btn{overflow-wrap:anywhere;line-height:1.35}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn-row .btn{flex:1 1 140px;text-align:center}
+.btn:disabled{opacity:.5;pointer-events:none}
+.file-btn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.btn.danger{background:var(--missed-bg);color:var(--missed);border:1px solid rgba(239,68,68,.35)}
+body.dark .btn.danger{background:rgba(239,68,68,.15)}
+.danger-zone{margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)}
+.danger-zone .setting-label{color:var(--missed)}
+.btn:focus-visible,.theme-opt:focus-visible,.lang-opt:focus-visible,.dot:focus-visible,.back-btn:focus-visible,.lang-current:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-body.dark[data-page=settings] .set-card{
-  --cb:color-mix(in srgb,var(--accent) 16%,#1b2836);
-  --cs:color-mix(in srgb,var(--accent) 38%,transparent);
-}
-body.dark[data-page=settings] .set-card:nth-of-type(2){--cb:#2e2328;--cs:rgba(251,146,60,.30)}
-body.dark[data-page=settings] .set-card:nth-of-type(3){--cb:#1d2a40;--cs:rgba(56,189,248,.30)}
+/* ===== ভাষা: এক বাটনে (পতাকা + নাম), চাপলে তালিকা খোলে ===== */
+.lang-pick{position:relative}
+.lang-pick .lang-current{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:var(--r-md);font-weight:700;font-family:inherit;font-size:.95rem;cursor:pointer;transition:var(--t)}
+.lang-pick .lang-current .flag{font-size:1.5rem;line-height:1}
+.lang-pick .lang-current .lang-name{flex:1;text-align:start;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lang-pick .lang-current .chev{color:var(--text2);transition:transform .25s}
+.lang-pick.open .lang-current{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-l)}
+.lang-pick.open .lang-current .chev{transform:rotate(180deg)}
+.lang-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;animation:menuIn .22s ease}
+.lang-menu[hidden]{display:none}
+@keyframes menuIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.lang-menu .lang-opt{display:flex;align-items:center;gap:8px;justify-content:flex-start;padding:10px 12px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:var(--r-md);font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;min-width:0;transition:var(--t)}
+.lang-menu .lang-opt .flag{font-size:1.25rem;line-height:1}
+.lang-menu .lang-opt .lang-name{flex:1;text-align:start;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lang-menu .lang-opt .tick{color:var(--accent);font-weight:800;opacity:0}
+.lang-menu .lang-opt.active{border-color:var(--accent);background:var(--accent-l)}
+.lang-menu .lang-opt.active .tick{opacity:1}
+.lang-menu .lang-opt:active{transform:scale(.97)}
 
-/* ---------- পেজ হেডার ---------- */
-body[data-page=settings] .page-head .page-title{font-weight:800;letter-spacing:-.2px}
+/* ===== থিম: স্লাইডিং সেগমেন্ট ===== */
+.theme-row{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:4px;border-radius:var(--r-md);background:var(--accent-l);border:1px solid var(--border);isolation:isolate}
+.theme-row .theme-opt{position:relative;z-index:1;background:transparent;border:0;color:var(--text2);font-family:inherit;font-size:.82rem;font-weight:700;padding:10px 4px;border-radius:calc(var(--r-md) - 4px);cursor:pointer;transition:color .25s;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.theme-row .theme-opt.active{color:#fff}
+.theme-row .slider{position:absolute;z-index:0;top:4px;bottom:4px;inset-inline-start:4px;width:calc((100% - 8px)/3);border-radius:calc(var(--r-md) - 4px);background:var(--accent);box-shadow:0 4px 12px rgba(0,0,0,.18);transition:transform .3s cubic-bezier(.4,.8,.3,1)}
 
-/* ব্যাক বাটন: ফোলা 3D গোল বাটন */
-body[data-page=settings] .back-btn{
-  border:0;
-  background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--accent) 16%,#fff) 100%);
-  box-shadow:
-    0 5px 0 color-mix(in srgb,var(--accent) 30%,#c9c9d6),
-    0 12px 18px -6px color-mix(in srgb,var(--accent) 45%,transparent),
-    inset 0 2px 0 rgba(255,255,255,.95);
-}
-body[data-page=settings] .back-btn:active{
-  transform:translateY(4px);
-  box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 30%,#c9c9d6),0 3px 6px rgba(0,0,0,.12),inset 0 2px 0 rgba(255,255,255,.95);
-}
-body.dark[data-page=settings] .back-btn{
-  background:linear-gradient(180deg,#34465a 0%,#26364a 100%);
-  box-shadow:0 5px 0 #121c28,0 12px 18px -6px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.18);
-}
-body.dark[data-page=settings] .back-btn:active{box-shadow:0 1px 0 #121c28,0 3px 6px rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.18)}
+/* ===== রঙ ডট ===== */
+.dots{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.color-name{font-weight:600;color:var(--text2);font-size:.78rem}
+.dot{position:relative;width:38px;height:38px;border-radius:50%;padding:0;border:3px solid transparent;background:var(--accent);cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.dot[data-c=teal]{background:#0d9488}.dot[data-c=green]{background:#16a34a}.dot[data-c=blue]{background:#0284c7}.dot[data-c=peach]{background:#ea580c}
+.dot.active{border-color:var(--text);transform:scale(1.12);box-shadow:0 4px 14px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.5)}
+.dot.active::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;font-weight:800}
 
-/* ---------- কার্ড: ফোলা, নরম, ভেতরে হাইলাইট ---------- */
-body[data-page=settings] .set-card{
-  position:relative;
-  border:0;
-  border-radius:30px;
-  padding:20px 16px 18px;
-  background:linear-gradient(155deg,#fff 0%,var(--cb) 62%);
-  -webkit-backdrop-filter:none;backdrop-filter:none;
-  box-shadow:
-    0 22px 34px -14px var(--cs),
-    0 6px 14px rgba(40,40,80,.06),
-    inset 0 3px 0 rgba(255,255,255,.98),
-    inset 0 -10px 18px color-mix(in srgb,var(--cs) 55%,transparent);
-}
-body.dark[data-color][data-page=settings] .set-card{
-  border:0;
-  background:linear-gradient(155deg,color-mix(in srgb,var(--cb) 70%,#fff) 0%,var(--cb) 55%);
-  box-shadow:
-    0 22px 34px -12px rgba(0,0,0,.65),
-    0 0 26px -8px var(--cs),
-    inset 0 2px 0 rgba(255,255,255,.14),
-    inset 0 -10px 18px rgba(0,0,0,.28);
-}
-body[data-page=settings] .set-card .card-title{font-weight:800;font-size:1.02rem}
-body.dark[data-color][data-page=settings] .set-card .card-title{color:var(--text)}
+/* ===== স্ট্যাটাস, যোগাযোগ, সম্পর্কে ===== */
+.about .trow b{font-size:.85rem;text-align:end}
+.contact-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border)}
+.contact-row:last-of-type{border-bottom:none}
+.contact-ic{width:42px;height:42px;border-radius:14px;background:var(--accent-l);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.contact-body{flex:1;min-width:0}
+.contact-lbl{font-size:.72rem;color:var(--text2)}
+.contact-val{display:block;font-size:clamp(.68rem,3.2vw,.88rem);font-weight:700;color:var(--text);overflow-wrap:anywhere;word-break:normal;-webkit-user-select:text;user-select:text;text-decoration:none;font-family:'Poppins','Noto Sans Bengali',sans-serif;direction:ltr;text-align:start}
+a.contact-val{color:var(--accent)}
+.contact-val.soon{font-family:inherit;font-weight:600;color:var(--text2);font-size:.85rem;direction:inherit}
+.contact-row.disabled{opacity:.75}
+.contact-copy{padding:8px 14px;font-size:.8rem;flex-shrink:0}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 
-/* ---------- বাটন: মোটা 3D পিল, চাপলে বসে যায় ---------- */
-body[data-page=settings] .btn-row{gap:16px 10px;margin-bottom:6px}
-body[data-page=settings] .btn:not(.ghost):not(.danger){
-  border:0;border-radius:20px;font-weight:800;color:#fff;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 72%,#fff) 0%,var(--accent) 100%);
-  box-shadow:
-    0 6px 0 color-mix(in srgb,var(--accent) 60%,#000),
-    0 16px 20px -8px color-mix(in srgb,var(--accent) 60%,transparent),
-    inset 0 2px 0 rgba(255,255,255,.55);
-  transition:transform .12s ease,box-shadow .12s ease;
-}
-body[data-page=settings] .btn:not(.ghost):not(.danger):active{
-  transform:translateY(5px);
-  box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 60%,#000),0 4px 8px -4px color-mix(in srgb,var(--accent) 60%,transparent),inset 0 2px 0 rgba(255,255,255,.45);
-}
-body[data-page=settings] .btn.ghost{
-  border:0;border-radius:20px;font-weight:800;
-  color:color-mix(in srgb,var(--accent) 80%,#000);
-  background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--accent) 10%,#fff) 100%);
-  box-shadow:
-    0 6px 0 color-mix(in srgb,var(--accent) 24%,#cfd2dc),
-    0 14px 18px -8px color-mix(in srgb,var(--accent) 38%,transparent),
-    inset 0 2px 0 rgba(255,255,255,.95);
-  transition:transform .12s ease,box-shadow .12s ease;
-}
-body[data-page=settings] .btn.ghost:active{
-  transform:translateY(5px);
-  box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 24%,#cfd2dc),0 3px 6px rgba(0,0,0,.1),inset 0 2px 0 rgba(255,255,255,.95);
-}
-body.dark[data-page=settings] .btn.ghost{
-  color:var(--accent);
-  background:linear-gradient(180deg,#34465a 0%,#26364a 100%);
-  box-shadow:0 6px 0 #121c28,0 14px 18px -8px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.16);
-}
-body.dark[data-page=settings] .btn.ghost:active{box-shadow:0 1px 0 #121c28,0 3px 6px rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.16)}
-/* কপি বাটন ছোট, তাই ছায়া একটু পাতলা */
-body[data-page=settings] .contact-copy{border-radius:16px;box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 24%,#cfd2dc),inset 0 2px 0 rgba(255,255,255,.95)}
-body.dark[data-page=settings] .contact-copy{box-shadow:0 4px 0 #121c28,inset 0 2px 0 rgba(255,255,255,.16)}
+/* টোস্ট */
+.sx-toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);max-width:calc(100% - 32px);padding:11px 18px;border-radius:999px;background:var(--text);color:var(--bg,#fff);font-size:.85rem;font-weight:600;text-align:center;opacity:0;pointer-events:none;transition:.28s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.sx-toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:360px){.btn-row .btn{flex-basis:100%}.lang-menu{grid-template-columns:1fr}}
 
-/* ---------- ভাষা বাটন ও তালিকা ---------- */
-body[data-page=settings] .lang-pick .lang-current,
-body[data-page=settings] .lang-menu .lang-opt{
-  border:0;border-radius:20px;
-  background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--accent) 9%,#fff) 100%);
-  box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 22%,#d3d6df),0 12px 16px -8px color-mix(in srgb,var(--accent) 35%,transparent),inset 0 2px 0 rgba(255,255,255,.95);
-}
-body[data-page=settings] .lang-pick.open .lang-current{box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 45%,#c8cad6),0 0 0 3px var(--accent-l),inset 0 2px 0 rgba(255,255,255,.95)}
-body[data-page=settings] .lang-menu{gap:12px 10px;margin-top:14px;padding-bottom:5px}
-body[data-page=settings] .lang-menu .lang-opt.active{
-  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 24%,#fff) 0%,color-mix(in srgb,var(--accent) 14%,#fff) 100%);
-  box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 50%,#c8cad6),inset 0 2px 0 rgba(255,255,255,.9);
-}
-body[data-page=settings] .lang-menu .lang-opt:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 22%,#d3d6df),inset 0 2px 0 rgba(255,255,255,.95)}
-body.dark[data-page=settings] .lang-pick .lang-current,
-body.dark[data-page=settings] .lang-menu .lang-opt{
-  background:linear-gradient(180deg,#34465a 0%,#26364a 100%);
-  box-shadow:0 5px 0 #121c28,0 12px 16px -8px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.16);
-}
-body.dark[data-color][data-page=settings] .lang-menu .lang-opt.active{
-  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 34%,#26364a) 0%,color-mix(in srgb,var(--accent) 20%,#1f2e40) 100%);
-  box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 45%,#0b141d),inset 0 2px 0 rgba(255,255,255,.2);
-}
+/* যোগাযোগ নোট */
+.contact-note{background:var(--accent-l);border-radius:var(--r-md);padding:12px 14px;font-size:.82rem;line-height:1.75;color:var(--text);margin-top:14px}
 
-/* ---------- থিম সেগমেন্ট: ভেতরে বসানো খাঁজ + ভাসমান স্লাইডার ---------- */
-body[data-page=settings] .theme-row{
-  padding:5px;border:0;border-radius:22px;
-  background:color-mix(in srgb,var(--accent) 16%,#f4f4fb);
-  box-shadow:inset 0 5px 10px rgba(30,30,70,.14),inset 0 -2px 0 rgba(255,255,255,.9);
-}
-body[data-page=settings] .theme-row .slider{
-  top:5px;bottom:5px;inset-inline-start:5px;width:calc((100% - 10px)/3);border-radius:17px;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 72%,#fff) 0%,var(--accent) 100%);
-  box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 60%,#000),0 8px 14px -4px color-mix(in srgb,var(--accent) 55%,transparent),inset 0 2px 0 rgba(255,255,255,.55);
-}
-body[data-page=settings] .theme-row .theme-opt{font-weight:800}
-body.dark[data-color][data-page=settings] .theme-row{
-  background:rgba(0,0,0,.28);border:0;
-  box-shadow:inset 0 5px 10px rgba(0,0,0,.5),inset 0 -1px 0 rgba(255,255,255,.08);
-}
+/* ===== ডার্ক মোডে রঙ: প্রতিটি রঙের জন্য আলাদা অ্যাকসেন্ট, ব্যাকগ্রাউন্ড, অরব ও কার্ড-গ্লো ===== */
+body.dark[data-color=teal]  {--accent:#2dd4bf;--accent-l:rgba(45,212,191,.18); --bg1:#0b2a2c;--bg2:#0f1c24;--bg3:#12262a;--tint:45,212,191}
+body.dark[data-color=green] {--accent:#4ade80;--accent-l:rgba(74,222,128,.18); --bg1:#0e2f1c;--bg2:#0f1f19;--bg3:#1b2a14;--tint:74,222,128}
+body.dark[data-color=blue]  {--accent:#38bdf8;--accent-l:rgba(56,189,248,.18); --bg1:#0b2740;--bg2:#0e1a2a;--bg3:#1a1c38;--tint:56,189,248}
+body.dark[data-color=peach] {--accent:#fb923c;--accent-l:rgba(251,146,60,.18); --bg1:#33200f;--bg2:#1f1a1a;--bg3:#34211c;--tint:251,146,60}
+body.dark[data-color] .ai-bg{background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%)}
+body.dark[data-color] .ai-bg .o1{background:radial-gradient(circle,rgba(var(--tint),.5),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .ai-bg .o2{background:radial-gradient(circle,rgba(var(--tint),.32),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .ai-bg .o3{background:radial-gradient(circle,rgba(var(--tint),.26),rgba(var(--tint),0) 68%)}
+body.dark[data-color] .set-card{border-color:rgba(var(--tint),.3);box-shadow:0 10px 32px rgba(0,0,0,.45),0 0 0 1px rgba(var(--tint),.08),inset 0 1px 0 rgba(var(--tint),.15)}
+body.dark[data-color] .set-card .card-title{color:var(--text)}
+body.dark[data-color] .contact-note{background:rgba(var(--tint),.12)}
+body.dark[data-color] .theme-row{background:rgba(var(--tint),.1);border-color:rgba(var(--tint),.25)}
+body.dark[data-color] .lang-menu .lang-opt.active{background:rgba(var(--tint),.18)}
+body.dark .theme-row .theme-opt.active{color:#04201c}
+body.dark[data-color] .btn:not(.ghost):not(.danger){color:#04201c}
 
-/* ---------- রঙের ডট: চকচকে গোলক ---------- */
-body[data-page=settings] .dots{gap:16px}
-body[data-page=settings] .dot{
-  width:42px;height:42px;border:0;
-  background-image:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85) 0%,rgba(255,255,255,0) 46%);
-  box-shadow:0 6px 10px -2px rgba(0,0,0,.28),inset 0 -5px 8px rgba(0,0,0,.22),inset 0 3px 4px rgba(255,255,255,.55);
-}
-body[data-page=settings] .dot.active{
-  transform:translateY(-3px) scale(1.12);
-  box-shadow:0 0 0 4px #fff,0 0 0 7px var(--accent),0 12px 16px -4px rgba(0,0,0,.35),inset 0 -5px 8px rgba(0,0,0,.22),inset 0 3px 4px rgba(255,255,255,.55);
-}
-body.dark[data-page=settings] .dot.active{box-shadow:0 0 0 4px #1b2836,0 0 0 7px var(--accent),0 12px 16px -4px rgba(0,0,0,.6),inset 0 -5px 8px rgba(0,0,0,.22),inset 0 3px 4px rgba(255,255,255,.55)}
-
-/* ---------- যোগাযোগ: ফোলা আইকন টাইল ---------- */
-body[data-page=settings] .contact-ic{
-  width:48px;height:48px;border-radius:17px;font-size:1.3rem;
-  background:linear-gradient(145deg,#fff 0%,color-mix(in srgb,var(--accent) 22%,#fff) 100%);
-  box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 28%,#d3d6df),0 10px 14px -6px color-mix(in srgb,var(--accent) 40%,transparent),inset 0 2px 0 rgba(255,255,255,.95);
-}
-body[data-page=settings] .contact-row:nth-of-type(2) .contact-ic{background:linear-gradient(145deg,#fff 0%,#ffd9cc 100%);box-shadow:0 5px 0 #efc2b2,0 10px 14px -6px rgba(240,130,90,.45),inset 0 2px 0 rgba(255,255,255,.95)}
-body.dark[data-page=settings] .contact-ic{
-  background:linear-gradient(145deg,#3a4d62 0%,#2a3b50 100%);
-  box-shadow:0 5px 0 #121c28,0 10px 14px -6px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.16);
-}
-body[data-page=settings] .contact-row{padding:12px 0;border-bottom-color:color-mix(in srgb,var(--accent) 22%,transparent)}
-
-/* নোট বক্স: ভেতরে বসা নরম বক্স */
-body[data-page=settings] .contact-note{
-  border-radius:22px;padding:14px 16px;
-  background:rgba(255,255,255,.65);
-  box-shadow:inset 0 4px 10px rgba(30,30,70,.09),inset 0 -2px 0 rgba(255,255,255,.9);
-}
-body.dark[data-color][data-page=settings] .contact-note{background:rgba(0,0,0,.25);box-shadow:inset 0 4px 10px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.07)}
-
-/* ---------- অ্যাপ সম্পর্কে: প্রতিটি সারি এক-একটি নরম পিল ---------- */
-body[data-page=settings] .about .trow{
-  border:0;border-radius:18px;padding:12px 16px;margin-top:10px;
-  background:rgba(255,255,255,.7);
-  box-shadow:0 4px 0 color-mix(in srgb,var(--cs) 55%,#d7dbe6),inset 0 2px 0 rgba(255,255,255,.95);
-}
-body.dark[data-page=settings] .about .trow{background:rgba(255,255,255,.07);box-shadow:0 4px 0 rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.1)}
-
-/* ---------- টোস্ট ---------- */
-body[data-page=settings] .sx-toast{border-radius:22px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 14px 24px rgba(0,0,0,.25)}
-
-/* ---------- ছোট স্ক্রিন ও অ্যানিমেশন কমানো ---------- */
-@media (max-width:360px){body[data-page=settings] .set-card{border-radius:26px;padding:18px 12px 16px}}
-@media (prefers-reduced-motion:reduce){body[data-page=settings] *{transition:none!important}}
-
-/* কালার-মিক্স সাপোর্ট না থাকা পুরোনো ব্রাউজারের জন্য সাধারণ ফলব্যাক */
-@supports not (color:color-mix(in srgb,red 10%,white)){
-  body[data-page=settings] .set-card{background:linear-gradient(155deg,#fff 0%,#f1f6f6 62%)}
-  body.dark[data-color][data-page=settings] .set-card{background:#1b2836}
-}
+/* নিরাপত্তা: ফেড-ইন অ্যানিমেশন কোনো কারণে না চললেও কার্ডগুলো যেন সবসময় দেখা যায় */
+.page-head.fade-in,.set-card.fade-in{animation:none;opacity:1;transform:none}
