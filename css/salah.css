@@ -25,26 +25,13 @@ body.dark .pp-bar{background:rgba(255,255,255,.1)}
 .pp-bar .d{background:var(--done)}.pp-bar .m{background:var(--missed)}.pp-bar .p{background:var(--pending)}
 .legend{margin-top:6px}
 
-/* ৩০ দিনের গ্রিড */
-.cal30{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.cal-cell{border:1.5px solid transparent;border-radius:12px;padding:6px 0;background:var(--bg-solid);color:var(--text);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;transition:var(--t)}
-.cal-cell b{font-size:.86rem;font-weight:700;line-height:1.2}
-.cal-cell small{font-size:.6rem;opacity:.8;font-family:'Poppins','Noto Sans Bengali',sans-serif}
-.cal-cell.part{background:rgba(245,158,11,.22)}
-.cal-cell.full{background:var(--done);color:#fff}
-.cal-cell.miss{box-shadow:inset 0 -3px 0 var(--missed)}
-.cal-cell.now{border-color:var(--accent)}
-.cal-cell.sel{outline:2px solid var(--text);outline-offset:1px}
-.cal-cell.pre{opacity:.4}
-.cal-cell:active{transform:scale(.94)}
-
 /* অ্যালার্ট কার্ড */
 .al-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px}
 .al-head .card-title{min-width:0;overflow-wrap:anywhere}
 .al-desc{font-size:.78rem;line-height:1.6;color:var(--text2);margin-bottom:10px}
 .switch{width:50px;height:30px;border-radius:20px;border:none;background:rgba(0,0,0,.2);position:relative;cursor:pointer;transition:var(--t);flex-shrink:0;padding:0}
 .switch::after{content:'';position:absolute;top:3px;inset-inline-start:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:var(--t);box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.switch[aria-checked=true]{background:var(--done)}
+.switch[aria-checked=true]{background:var(--accent)}
 .switch[aria-checked=true]::after{inset-inline-start:23px}
 .al-list{display:flex;flex-direction:column}
 .al-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:inherit;text-align:start;cursor:pointer}
@@ -66,13 +53,13 @@ body.dark .pp-bar{background:rgba(255,255,255,.1)}
 .al-chip{display:inline-block;max-width:100%;background:var(--accent-l);color:var(--text);padding:12px 14px;border-radius:14px;font-weight:700;font-size:.95rem;line-height:1.5;overflow-wrap:anywhere}
 .al-hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
 .al-ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2);margin:8px 0 12px;font-family:'Poppins','Noto Sans Bengali',sans-serif}
-.al-range{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:10px;outline:none;background:linear-gradient(to right,var(--done) var(--p,0%),#b2ebf2 var(--p,0%))}
-html[dir=rtl] .al-range{background:linear-gradient(to left,var(--done) var(--p,0%),#b2ebf2 var(--p,0%))}
-body.dark .al-range{background:linear-gradient(to right,var(--done) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
+.al-range{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:10px;outline:none;background:linear-gradient(to right,var(--accent) var(--p,0%),var(--accent-l) var(--p,0%))}
+html[dir=rtl] .al-range{background:linear-gradient(to left,var(--accent) var(--p,0%),var(--accent-l) var(--p,0%))}
+body.dark .al-range{background:linear-gradient(to right,var(--accent) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
 body.dark[dir] .al-range{}
-html[dir=rtl] body.dark .al-range{background:linear-gradient(to left,var(--done) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
-.al-range::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:38px;border-radius:4px;background:var(--done);border:2px solid var(--bg-solid);box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
-.al-range::-moz-range-thumb{width:8px;height:38px;border-radius:4px;background:var(--done);border:2px solid var(--bg-solid);cursor:pointer}
+html[dir=rtl] body.dark .al-range{background:linear-gradient(to left,var(--accent) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
+.al-range::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:38px;border-radius:4px;background:var(--accent);border:2px solid var(--bg-solid);box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
+.al-range::-moz-range-thumb{width:8px;height:38px;border-radius:4px;background:var(--accent);border:2px solid var(--bg-solid);cursor:pointer}
 .al-step{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0 8px}
 .al-step .btn{width:46px;height:42px;padding:0;font-size:1.3rem;line-height:1}
 .al-val{min-width:110px;text-align:center;font-weight:800;font-size:1.05rem}
@@ -95,3 +82,62 @@ body.dark .btn.danger-t{background:rgba(239,68,68,.15)}
 #trkList .p-name{text-align:center;line-height:1.25;overflow-wrap:anywhere}
 .prayer-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
 .cal30+.hint{margin-top:10px}
+
+/* ===== হিরো কার্ড: style.css এর .header-card (সেটিংসের রঙে বদলায়) ===== */
+#hero .prayer-name-bn{font-family:'Poppins','Noto Sans Bengali',sans-serif}
+#hero .prayer-time-big{overflow-wrap:anywhere}
+
+/* ===== ৪টি অবস্থা: আদায় হয়নি / আদায় (একা) / জামাতে আদায় / কাযা ===== */
+#trkList .p-circle{position:relative}
+.p-circle.jamaat{background:var(--done-bg);border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,.28),0 0 14px rgba(16,185,129,.45)}
+.p-circle.jamaat::after{content:'👥';position:absolute;bottom:-5px;inset-inline-end:-5px;width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.66rem;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.legend-dot.jamaat{background:#047857}
+.st-legend{flex-wrap:wrap;gap:6px 14px;margin-top:12px}
+.pp-bar .j{background:#047857}
+.pp-nums{white-space:normal;text-align:end}
+.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.st-opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:var(--r-md);border:2px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;cursor:pointer;min-width:0;transition:var(--t)}
+.st-opt .st-ic{font-size:1.5rem;font-weight:800;line-height:1}
+.st-opt .st-tx{font-size:.85rem;font-weight:700;text-align:center;overflow-wrap:anywhere;line-height:1.35}
+.st-opt:active{transform:scale(.96)}
+.st-opt.st-completed .st-ic,.st-opt.st-jamaat .st-ic{color:var(--done)}
+.st-opt.st-missed .st-ic{color:var(--missed)}
+.st-opt.st-pending .st-ic{color:var(--pending)}
+.st-opt.on{border-color:var(--accent);background:var(--accent-l)}
+.st-opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ===== মাসিক ক্যালেন্ডার (ইসলামিক ধাঁচ: শনি–শুক্র, শুক্রবার লাল) ===== */
+.cal-nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cal-month{font-weight:800;font-size:1.02rem;text-align:center;flex:1;min-width:0;overflow-wrap:anywhere}
+.cal-nav{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:1.6rem;line-height:1;font-family:'Poppins',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 3px;flex-shrink:0;transition:var(--t)}
+.cal-nav:active{transform:scale(.9)}
+.cal-nav:disabled{opacity:.3;pointer-events:none}
+html[dir=rtl] .cal-nav{transform:scaleX(-1)}
+html[dir=rtl] .cal-nav:active{transform:scaleX(-1) scale(.9)}
+.cal-head,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-head{margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.cal-head div{text-align:center;font-size:.68rem;font-weight:700;color:var(--text2);overflow-wrap:anywhere;line-height:1.3;padding:2px 0}
+.cal-head .fri{color:var(--missed)}
+.cal-cell{border:1.5px solid transparent;border-radius:12px;padding:6px 0 5px;background:var(--bg-solid);color:var(--text);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;transition:var(--t)}
+.cal-cell b{font-size:.92rem;font-weight:700;line-height:1.2}
+.cal-cell.fri b{color:var(--missed)}
+.cal-cell .dots{display:flex;gap:2px;height:5px}
+.cal-cell .dots i{width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,.15)}
+body.dark .cal-cell .dots i{background:rgba(255,255,255,.2)}
+.cal-cell .dots i.completed{background:var(--done)}
+.cal-cell .dots i.jamaat{background:#047857}
+.cal-cell .dots i.missed{background:var(--missed)}
+.cal-cell.full{background:var(--done-bg)}
+body.dark .cal-cell.full{background:rgba(16,185,129,.2)}
+.cal-cell.now{border-color:var(--accent);background:var(--accent-l)}
+.cal-cell.sel{outline:2px solid var(--accent);outline-offset:1px}
+.cal-cell.pre{opacity:.5}
+.cal-cell.fut{opacity:.3;pointer-events:none}
+.cal-cell:active{transform:scale(.94)}
+.cal-cell:focus-visible,.cal-nav:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cal-grid+.hint{margin-top:12px}
+
+/* ===== আভা: পেজের ব্যাকগ্রাউন্ডের আভা সেটিংসের রঙ ধরে ===== */
+.ai-bg .o1{background:radial-gradient(circle,color-mix(in srgb,var(--accent) 45%,transparent),transparent 68%)}
+.ai-bg .o2{background:radial-gradient(circle,color-mix(in srgb,var(--accent) 28%,transparent),transparent 68%)}
+@media (max-width:360px){.cal-cell b{font-size:.84rem}.cal-cell .dots i{width:4px;height:4px}}
