@@ -16,6 +16,12 @@ const clean=s=>(s||'').split(' ')[0]; // "05:00 (+06)" -> "05:00"
 function mins(s){const m=clean(s).match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0}
 function fmt(s){const t=mins(s),h=Math.floor(t/60),m=t%60;return `${bn(h%12||12)}:${bn(pad(m))} ${h>=12?L().pm:L().am}`}
 
+// ===== শুক্রবার = জুমা, ভাষা অনুযায়ী নাম/সময় =====
+const isFri=d=>(d||new Date()).getDay()===5;
+function pdisp(n,d){return(n==='যোহর'&&isFri(d))?t('jumuah'):pnOf(n)}
+function pimg(i,d){return(i===1&&isFri(d))?'image/jumuah.svg':prayerImages[i]}
+function dur(m){return t('durHM',{h:bn(Math.floor(m/60)),m:bn(m%60)})}
+
 // ===== TOAST =====
 function showToast(msg){let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t)}
 t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
@@ -40,7 +46,7 @@ async function loadTimes(){
     const pre=co?`pt_${co.lat.toFixed(2)}_${co.lon.toFixed(2)}`:'pt_'+city+'_';
     const last=Object.keys(localStorage).filter(k=>k.startsWith(pre)).sort().pop();
     try{times=last?JSON.parse(localStorage.getItem(last)):defaultTimes}catch(_){times=defaultTimes}
-    if(!last){showToast(LANG==='en'?'Could not load prayer times (check internet). Showing approximate times.':'নামাজের সময় লোড হয়নি (ইন্টারনেট চেক করুন)। আনুমানিক সময় দেখানো হচ্ছে।');
+    if(!last){showToast(t('ptFail'));
       if(!window._ptRetry){window._ptRetry=1;addEventListener('online',async()=>{await loadTimes();updateTimer();renderExtras()})}}
   }
 }
@@ -63,8 +69,8 @@ async function loadDates(){
 function loadData(){try{weeklyData=JSON.parse(localStorage.getItem('weeklyPrayerTracker'))||{}}catch(e){weeklyData={}}}
 function saveData(){localStorage.setItem('weeklyPrayerTracker',JSON.stringify(weeklyData))}
 function dayPrayers(k){if(!weeklyData[k]){weeklyData[k]={};prayerNames.forEach(p=>weeklyData[k][p]='pending');saveData()}return weeklyData[k]}
-function setStatus(k,p,s){dayPrayers(k)[p]=s;saveData();renderAll();if(recordKey===k)renderRecord(k);
-  showToast(t(s==='completed'?'toastDone':s==='missed'?'toastMissed':'toastPending',{p:pnOf(p)}))}
+function setStatus(k,p,s){dayPrayers(k)[p]=s;saveData();renderAll();renderInsight();if(recordKey===k)renderRecord(k);
+  showToast(t(s==='completed'?'toastDone':s==='missed'?'toastMissed':'toastPending',{p:pdisp(p,new Date(k+'T00:00:00'))}))}
 function weekDates(){const n=new Date(),s=new Date(n.getFullYear(),n.getMonth(),n.getDate()-n.getDay());
   return Array.from({length:7},(_,i)=>new Date(s.getFullYear(),s.getMonth(),s.getDate()+i))}
 
@@ -83,10 +89,10 @@ function updateTimer(){
   $('timerCountdownText').textContent=num(`${pad(Math.floor(r/3600))}:${pad(Math.floor(r%3600/60))}:${pad(r%60)}`);
   const frac=p.active?Math.min(1,Math.max(0,(now-p.s)/(p.e-p.s))):0,C=2*Math.PI*48;
   const c=$('timerProgressCircle');c.style.strokeDasharray=C.toFixed(2);c.style.strokeDashoffset=(C*(1-frac)).toFixed(2);
-  $('activePrayerName').textContent=pnOf(p.n);
+  $('activePrayerName').textContent=pdisp(p.n,new Date(p.s));
   $('currentPrayerStartTime').textContent=fmt(times[p.n].start);$('currentPrayerEndTime').textContent=fmt(times[p.n].end);
   $('prayerStateChip').className='prayer-state-chip '+(p.active?'active':'waiting');
-  $('prayerStateTxt').textContent=p.active?t('inTime'):t('next',{p:pnOf(p.n)});
+  $('prayerStateTxt').textContent=p.active?t('inTime'):t('next',{p:pdisp(p.n,new Date(p.s))});
   $('timerSublabel').textContent=p.active?t('endsIn'):t('startsIn');
   document.querySelectorAll('.pchip').forEach(c=>c.classList.toggle('now',c.dataset.n===p.n));
 }
@@ -95,7 +101,7 @@ function updateTimer(){
 function renderToday(){
   const k=todayKey(),pr=dayPrayers(k);let done=0;
   $('prayersRowContainer').innerHTML=prayerNames.map((p,i)=>{const s=pr[p]||'pending';if(s==='completed')done++;
-    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(pnOf(p))}"><div class="p-circle ${s}"><img src="${prayerImages[i]}" alt=""></div><div class="p-name">${pnOf(p)}</div><div class="p-count">${s==='completed'?'✓':s==='missed'?'✗':'○'}</div></div>`}).join('');
+    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(pdisp(p))}"><div class="p-circle ${s}"><img src="${pimg(i)}" alt=""></div><div class="p-name">${pdisp(p)}</div><div class="p-count">${s==='completed'?'✓':s==='missed'?'✗':'○'}</div></div>`}).join('');
   document.querySelectorAll('.prayer-item').forEach(el=>{el.onkeydown=kbd(()=>el.click());el.onclick=()=>{
     const p=prayerNames[el.dataset.i],cur=dayPrayers(k)[p];
     setStatus(k,p,cur==='pending'?'completed':cur==='completed'?'missed':'pending')}});
@@ -132,7 +138,7 @@ function renderRecord(k){
   $('recordModalDayName').textContent=`${dn[d.getDay()]}, ${bn(d.getDate())} ${mn[d.getMonth()]}`;
   $('recordModalCount').textContent=t('doneOf',{x:`${bn(Object.values(pr).filter(s=>s==='completed').length)}/${bn(5)}`});
   $('recordPrayerList').innerHTML=prayerNames.map((p,i)=>{const s=pr[p]||'pending';
-    return `<div class="record-row"><div class="record-row-left"><img src="${prayerImages[i]}" alt=""><span class="record-row-name">${pnOf(p)}</span></div><div class="rec-btns">
+    return `<div class="record-row"><div class="record-row-left"><img src="${pimg(i,d)}" alt=""><span class="record-row-name">${pdisp(p,d)}</span></div><div class="rec-btns">
     <button class="rec-btn ${s==='completed'?'done-active':''}" data-p="${p}" data-v="completed">✓ ${t('done')}</button>
     <button class="rec-btn ${s==='missed'?'missed-active':''}" data-p="${p}" data-v="missed">✗ ${t('qaza')}</button>
     <button class="rec-btn ${s==='pending'?'pending-active':''}" data-p="${p}" data-v="pending">○ ${t('pending')}</button></div></div>`}).join('');
@@ -156,7 +162,7 @@ function fillLangs(){
   $('langGrid').innerHTML=Object.keys(LANGS).map(k=>`<button class="lang-opt ${k===LANG?'active':''}" data-l="${k}"><span class="flag">${LANGS[k].flag}</span>${LANGS[k].name}</button>`).join('');
   document.querySelectorAll('.lang-opt').forEach(b=>b.onclick=()=>changeLang(b.dataset.l));
 }
-function setSettingsLabel(){const e=$('settingsLabel');if(e)e.textContent=LANG==='en'?'Settings':'সেটিংস'}
+function setSettingsLabel(){const e=$('settingsLabel');if(e)e.textContent=t('settings')}
 function changeLang(c){
   setLang(c);setSettingsLabel();fillLangs();fillCities();renderDates();renderAll();updateTimer();renderExtras();loadDaily();
   if(recordKey)renderRecord(recordKey);
@@ -177,14 +183,14 @@ function renderExtras(){
 function renderPrayerBar(){
   if(!$('prayerBar'))return;
   const cur=currentSlot();
-  $('prayerBar').innerHTML=prayerNames.map((n,i)=>`<div class="pchip ${cur.n===n?'now':''}" data-n="${n}"><img src="${prayerImages[i]}" alt=""><div class="pn">${pnOf(n)}</div><div class="pt">${fmt(times[n].start)}</div></div>`).join('');
+  $('prayerBar').innerHTML=prayerNames.map((n,i)=>`<div class="pchip ${cur.n===n?'now':''}" data-n="${n}"><img src="${pimg(i)}" alt=""><div class="pn">${pdisp(n)}</div><div class="pt">${fmt(times[n].start)}</div></div>`).join('');
 }
 // ===== আজকের আয়াত ও হাদিস =====
 async function cached(k,fn){const c=localStorage.getItem(k);if(c)return JSON.parse(c);const v=await fn();localStorage.setItem(k,JSON.stringify(v));return v}
 async function loadDaily(){
   const day=Math.floor(Date.now()/864e5);
   Object.keys(localStorage).filter(k=>/^(ayah|hadith)_/.test(k)&&!k.includes('_'+day+'_')).forEach(k=>localStorage.removeItem(k));
-  try{const ed=({bn:'bn.bengali',en:'en.sahih',ur:'ur.jalandhry',ar:'ar.muyassar'}[LANG]||'en.sahih'),n=(day*7)%6236+1;
+  try{const ed=({bn:'bn.bengali',en:'en.sahih',ur:'ur.jalandhry',ar:'ar.muyassar',hi:'hi.hindi'}[LANG]||'en.sahih'),n=(day*7)%6236+1;
     const d=await cached(`ayah_${day}_${ed}`,async()=>(await(await fetch(`https://api.alquran.cloud/v1/ayah/${n}/editions/quran-uthmani,${ed}`)).json()).data.map(x=>({t:x.text,s:x.surah.englishName,n:x.numberInSurah})));
     $('dailyAyah').innerHTML=`<div class="ar-text">${esc(d[0].t)}</div><div class="tr-text" ${L().dir==='rtl'?'dir=rtl':''}>${esc(d[1].t)}</div><div class="src">${esc(d[0].s)} · ${bn(d[0].n)}</div>`}catch(e){}
   try{const ed=({bn:'ben-bukhari',ar:'ara-bukhari',ur:'urd-bukhari',en:'eng-bukhari'}[LANG]||'eng-bukhari'),n=(day*13)%7000+1;
@@ -195,46 +201,36 @@ async function loadDaily(){
 // ===== পরবর্তী নামাজ কখন শুরু (বার) =====
 function renderNextBar(){
   const box=$('nextBar');if(!box)return;
-  const en=LANG==='en',now=Date.now();
+  const now=Date.now();
   let idx=prayerNames.findIndex(n=>atMs(times[n].start,0)>now),off=0;
   if(idx<0){idx=0;off=1}
-  const n=prayerNames[idx],st=atMs(times[n].start,off);
+  const n=prayerNames[idx],st=atMs(times[n].start,off),sd=new Date(st);
   const pst=atMs(times[prayerNames[(idx+4)%5]].start,idx===0?(off?0:-1):0);
   const left=Math.max(0,Math.round((st-now)/60000));
-  $('nbLabel').textContent=en?'Next prayer starts':'পরবর্তী নামাজ শুরু';
-  $('nbName').textContent=pnOf(n);
-  if($('nbIcon'))$('nbIcon').src=prayerImages[idx];
+  $('nbLabel').textContent=t('nextStart');
+  $('nbName').textContent=pdisp(n,sd);
+  if($('nbIcon'))$('nbIcon').src=pimg(idx,sd);
   $('nbTime').textContent=fmt(times[n].start);
-  $('nbLeft').textContent=`${bn(Math.floor(left/60))}${en?'h ':' ঘণ্টা '}${bn(left%60)}${en?'m':' মিনিট'} ${en?'left':'বাকি'}`;
+  $('nbLeft').textContent=`${dur(left)} ${t('left')}`;
   $('nbFill').style.width=Math.max(0,Math.min(100,(now-pst)/(st-pst)*100))+'%';
 }
 function renderInsight(){try{renderNextBar()}catch(e){console.warn('nextbar',e)}try{renderInsightInner()}catch(e){console.warn('insight',e)}}
 function renderInsightInner(){
   const box=$('aiInsights');if(!box)return;
-  const en=LANG==='en',now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey());
+  const now=Date.now(),cur=currentSlot(),pr=dayPrayers(todayKey()),cn=pdisp(cur.n,new Date(cur.s));
   const ttl=$('aiTitle'),sub=$('aiSub');
-  if(ttl)ttl.textContent=en?'Deen Smart Assistant':'দ্বীন স্মার্ট সহায়ক';
-  if(sub)sub.textContent=en?'Live insights for your day':'আপনার আজকের ইবাদতের লাইভ ইনসাইট';
-  const left=Math.max(0,Math.round(((cur.active?cur.e:cur.s)-now)/60000));
-  const dur=`${bn(Math.floor(left/60))}${en?'h ':' ঘণ্টা '}${bn(left%60)}${en?'m':' মিনিট'}`;
+  if(ttl)ttl.textContent=t('aiTitle');
+  if(sub)sub.textContent=t('aiSub');
+  const left=Math.max(0,Math.round(((cur.active?cur.e:cur.s)-now)/60000)),d=dur(left);
   const rows=[];
-  rows.push(['⏳',cur.active
-    ?(en?`${pnOf(cur.n)} time is running — ${dur} left`:`${pnOf(cur.n)} এর ওয়াক্ত চলছে — ${dur} বাকি`)
-    :(en?`Next prayer ${pnOf(cur.n)} in ${dur}`:`পরবর্তী ওয়াক্ত ${pnOf(cur.n)} — ${dur} পরে`)]);
+  rows.push(['⏳',cur.active?t('aiRun',{p:cn,d}):t('aiNext',{p:cn,d})]);
   const done=prayerNames.filter(n=>pr[n]==='completed').length;
   const past=prayerNames.filter(n=>pr[n]==='pending'&&atMs(times[n].start,0)<=now&&!(cur.active&&cur.n===n));
-  if(past.length){
-    const names=past.map(pnOf).join(en?', ':'، ');
-    rows.push(['📝',en?`Not marked yet: ${names}. Tap below to update your tracker.`:`এখনও চিহ্নিত করা হয়নি: ${names}। নিচের ট্র্যাকারে আপডেট করুন।`]);
-  }else if(done===5){
-    rows.push(['🎉',en?'All five prayers done today. Alhamdulillah!':'আলহামদুলিল্লাহ! আজকের পাঁচ ওয়াক্তই আদায় হয়েছে।']);
-  }else{
-    rows.push(['✅',en?`${bn(done)} of ${bn(5)} prayers done today`:`আজ ${bn(done)}/${bn(5)} ওয়াক্ত আদায় হয়েছে`]);
-  }
+  if(past.length)rows.push(['📝',t('aiPend',{n:past.map(n=>pdisp(n)).join(t('sep'))})]);
+  else if(done===5)rows.push(['🎉',t('aiAll')]);
+  else rows.push(['✅',t('aiDone',{x:`${bn(done)}/${bn(5)}`})]);
   const st=window.curStreak||0;
-  rows.push([st>0?'🔥':'🌱',st>0
-    ?(en?`${bn(st)}-day streak — keep it going!`:`টানা ${bn(st)} দিনের ধারাবাহিকতা — চালিয়ে যান!`)
-    :(en?'Complete all five today to start a streak':'আজ পাঁচ ওয়াক্ত পূর্ণ করলেই ধারাবাহিকতা শুরু হবে')]);
+  rows.push([st>0?'🔥':'🌱',st>0?t('aiStreak',{n:bn(st)}):t('aiNoStreak')]);
   box.innerHTML=rows.map(r=>`<div class="ai-row"><span class="ai-ic">${r[0]}</span><span class="ai-tx">${r[1]}</span></div>`).join('');
 }
 // ===== অর্জন =====
@@ -257,7 +253,7 @@ function notifyTick(){
   if(mode==='off'&&!rem&&!aft)return;const now=Math.floor(Date.now()/60000);
   prayerNames.forEach(n=>{const s=Math.floor(atMs(times[n].start,0)/60000);
     [[s,0],[s-rem,1],[s+aft,2]].forEach(([m,pre])=>{const k=n+m+pre;if((pre===1&&!rem)||(pre===2&&!aft)||now<m||now-m>2||fired[k])return;fired[k]=1;
-      const body=pre===1?t('remindMsg',{p:pnOf(n),m:bn(rem)}):pre===2?(LANG==='en'?`${pnOf(n)} started ${bn(aft)} min ago — have you prayed?`:`${pnOf(n)} শুরু হয়েছে ${bn(aft)} মিনিট হলো — নামাজ পড়েছেন তো?`):t('prayerNow',{p:pnOf(n)});if(pre===0)sound();
+      const body=pre===1?t('remindMsg',{p:pdisp(n),m:bn(rem)}):pre===2?t('afterMsg',{p:pdisp(n),m:bn(aft)}):t('prayerNow',{p:pdisp(n)});if(pre===0)sound();
       if('Notification' in window&&Notification.permission==='granted'){
         swNotify(body).catch(()=>{try{new Notification('দ্বীন টাইম',{body})}catch(e){}})}
       else showToast(body)})})
@@ -313,6 +309,8 @@ function dayRollover(){
 }
 async function initDeen(){
   loadData();
+  addEventListener('pageshow',e=>{if(e.persisted){loadData();renderAll();renderInsight()}});
+  addEventListener('storage',e=>{if(e.key==='weeklyPrayerTracker'){loadData();renderAll();renderInsight()}});
   setSettingsLabel();
   try{if(typeof setLang==='function')setLang(LANG)}catch(e){}
   setTheme(localStorage.getItem('deen_theme')||'dark');
@@ -329,6 +327,6 @@ async function initDeen(){
   setInterval(()=>{updateTimer();dayRollover()},1000);
   setInterval(()=>{renderNextBar();renderInsight()},30000);
   setInterval(notifyTick,20000);notifyTick();
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden){dayRollover();updateTimer();renderExtras()}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){loadData();renderAll();dayRollover();updateTimer();renderExtras()}});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initDeen);else initDeen();
