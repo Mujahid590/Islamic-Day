@@ -4,110 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d9488">
-<title>নামাজের হিসাব - দ্বীন টাইম</title>
+<title>নামাজের হিসাব ও অ্যালার্ট - দ্বীন টাইম</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/salah.css?v=2">
+<link rel="stylesheet" href="css/salah.css">
 </head>
 <body data-page="salah">
 
+<!-- AI অরোরা ব্যাকগ্রাউন্ড -->
 <div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
 
 <div class="app-container">
 
+  <!-- পেজ হেডার -->
   <div class="page-head fade-in">
-    <a href="index.html" class="back-btn round-btn" data-i18n-aria="back" aria-label="ফিরে যান">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    <a href="index.html" class="back-btn round-btn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
     </a>
     <div>
-      <div class="page-title" data-i18n="sTitle">নামাজের হিসাব</div>
-      <div class="muted" data-i18n="sSub">প্রতি ওয়াক্তের হিসাব ও অ্যালার্ট</div>
+      <div class="page-title">নামাজ ও আযান অ্যালার্ট</div>
+      <div class="muted">মনমতো সময় ও সাউন্ড রিমাইন্ডার সেটআপ</div>
     </div>
   </div>
 
-  <!-- ১) নির্বাচিত দিনের হিসাব (হোমের সাথে সিঙ্ক) -->
-  <section class="glass-card fade-in" id="trkCard">
-    <div class="card-header"><div class="card-title" id="trkTitle">🕌</div><div class="card-badge" id="trkBadge">০/৫</div></div>
-    <div class="progress-track"><div class="progress-bar" id="trkBar"></div></div>
-    <div class="prayers-row" id="trkList"></div>
-    <div class="legend"><span class="legend-item"><span class="legend-dot done"></span> <span data-i18n="done">আদায়</span></span><span class="legend-item"><span class="legend-dot missed"></span> <span data-i18n="qaza">কাযা</span></span><span class="legend-item"><span class="legend-dot pending"></span> <span data-i18n="pending">বাকি</span></span></div>
-    <div class="muted hint" data-i18n="pickDay">নিচের ক্যালেন্ডারে যেকোনো দিনে চাপ দিয়ে সেই দিনের হিসাব ঠিক করুন</div>
-  </section>
-
-  <!-- ২) মোট ও প্রতি ওয়াক্তের হিসাব -->
+  <!-- ১) আযান ও ওয়াক্ত অ্যালার্ট সেটিংস কার্ড -->
   <section class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">📊 <span data-i18n="statsT">মোট হিসাব</span></div><div class="card-badge" id="sinceBadge">...</div></div>
-    <div class="stats-grid" id="statGrid"></div>
-    <div class="sub-title" data-i18n="perT">প্রতি ওয়াক্তের হিসাব</div>
-    <div id="perList"></div>
-    <div class="legend"><span class="legend-item"><span class="legend-dot done"></span> <span data-i18n="done">আদায়</span></span><span class="legend-item"><span class="legend-dot missed"></span> <span data-i18n="qaza">কাযা</span></span><span class="legend-item"><span class="legend-dot pending"></span> <span data-i18n="pending">বাকি</span></span></div>
+    <div class="card-header">
+      <div class="card-title">🔔 আযান ও সাউন্ড অ্যালার্ট</div>
+      <div class="card-badge" id="alertStatusBadge">সক্রিয়</div>
+    </div>
+    
+    <div class="set-group" style="margin-bottom: 14px;">
+      <label class="setting-label" for="prayerSoundSelect">আযানের বা রিমাইন্ডারের শব্দ</label>
+      <select class="city-select" id="prayerSoundSelect">
+        <option value="adhan">মদিনার মিষ্টি আযান</option>
+        <option value="beep">সাধারণ বিপ সাউন্ড</option>
+        <option value="soft">নরম রিমাইন্ডার বেল</option>
+      </select>
+    </div>
+
+    <div class="btn-row" style="display: flex; gap: 8px;">
+      <button type="button" class="btn" id="testSoundBtn" style="flex:1;">▶ সাউন্ড টেস্ট করুন</button>
+      <button type="button" class="btn ghost" id="toggleAlertsBtn" style="flex:1;">সতর্কবার্তা অন/অফ</button>
+    </div>
   </section>
 
-  <!-- ৩) গত ৩০ দিন -->
+  <!-- ২) মনমতো কাস্টম সময় দিয়ে অ্যালার্ট সেটআপ অপশন -->
   <section class="glass-card fade-in">
-    <div class="card-header"><div class="card-title">🗓️ <span data-i18n="calT">গত ৩০ দিন</span></div><div class="card-badge" id="calRange">...</div></div>
-    <div class="cal30" id="cal30"></div>
+    <div class="card-header">
+      <div class="card-title">⏰ মনমতো সময় দিয়ে অ্যালার্ট সেটআপ</div>
+    </div>
+
+    <div class="set-group" style="margin-bottom: 12px;">
+      <label class="setting-label" for="customPrayerSelect">নামাজের ওয়াক্ত নির্বাচন</label>
+      <select class="city-select" id="customPrayerSelect">
+        <option value="fajr">ফজর</option>
+        <option value="dhuhr">যোহর</option>
+        <option value="asr">আসর</option>
+        <option value="maghrib">মাগরিব</option>
+        <option value="isha">ইশা</option>
+      </select>
+    </div>
+
+    <div class="set-group" style="margin-bottom: 14px;">
+      <label class="setting-label" for="customTimeInput">ওয়াক্তের কত মিনিট আগে বা পরে অ্যালার্ট চান?</label>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="number" id="customTimeInput" class="input" value="10" min="0" max="60" style="flex:1;">
+        <span style="font-size: 0.85rem; color: var(--text2); font-weight: 600;">মিনিট আগে</span>
+      </div>
+    </div>
+
+    <button type="button" class="btn" id="saveCustomAlertBtn" style="width:100%;">💾 কাস্টম অ্যালার্ট সেভ করুন</button>
   </section>
 
-  <!-- ৪) আযান অ্যালার্ট -->
-  <section class="glass-card fade-in" id="alAdhan"></section>
-
-  <!-- ৫) নামাজ আদায়ের অ্যালার্ট -->
-  <section class="glass-card fade-in" id="alNamaz"></section>
-  <p class="muted al-note" data-i18n="alNote">অ্যালার্ট বাজার সময় অ্যাপটি খোলা থাকতে হবে।</p>
-
-  <!-- ৬) রিসেট -->
-  <section class="glass-card fade-in danger-card">
-    <div class="card-header"><div class="card-title">♻️ <span data-i18n="resetT">হিসাব রিসেট</span></div></div>
-    <div class="muted" data-i18n="resetD">মাস বা বছর শেষে নতুন করে শুরু করতে চাইলে সব হিসাব মুছে ফেলুন।</div>
-    <button type="button" class="btn danger" id="resetBtn" data-i18n="resetBtn">🔄 সব হিসাব রিসেট করুন</button>
+  <!-- ৩) আজকের নামাজের ট্র্যাকার লিস্ট -->
+  <section class="glass-card fade-in">
+    <div class="card-header">
+      <div class="card-title">🕌 আজকের সালাহ ট্র্যাকার</div>
+      <div class="card-badge" id="salahCountBadge">০/৫</div>
+    </div>
+    <div class="record-list" id="salahTrackerList">
+      <!-- জাভাস্ক্রিপ্ট দিয়ে ওয়াক্তগুলো লোড হবে -->
+    </div>
   </section>
-</div>
 
-<!-- অ্যালার্ট সেট করার শিট -->
-<div class="modal-overlay" id="alSheet" role="dialog" aria-modal="true">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" id="shTitle"></div>
-    <div class="al-chip" id="shChip"></div>
-    <hr class="al-hr">
-    <div class="setting-label" id="shLabel"></div>
-    <div class="al-ends"><span id="shMin"></span><span id="shMax"></span></div>
-    <input type="range" id="shRange" class="al-range" step="1">
-    <div class="al-step">
-      <button type="button" class="btn ghost" id="shMinus" aria-label="-1">−</button>
-      <div class="al-val" id="shVal"></div>
-      <button type="button" class="btn ghost" id="shPlus" aria-label="+1">+</button>
-    </div>
-    <div class="al-actions">
-      <button type="button" class="btn ghost danger-t" id="shRemove"></button>
-      <span class="grow"></span>
-      <button type="button" class="btn ghost" id="shCancel"></button>
-      <button type="button" class="btn" id="shSave"></button>
-    </div>
-  </div>
 </div>
-
-<!-- রিসেট নিশ্চিতকরণ -->
-<div class="modal-overlay" id="cfSheet" role="dialog" aria-modal="true">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" id="cfTitle"></div>
-    <div class="muted cf-msg" id="cfMsg"></div>
-    <div class="al-actions">
-      <span class="grow"></span>
-      <button type="button" class="btn ghost" id="cfCancel"></button>
-      <button type="button" class="btn danger" id="cfOk"></button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script src="js/i18n.js"></script>
 <script src="js/i18n-extra.js"></script>
-<script src="js/alarms.js"></script>
 <script src="js/salah.js"></script>
 </body>
 </html>
