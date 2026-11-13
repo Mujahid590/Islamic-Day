@@ -10,9 +10,20 @@
 <link rel="manifest" href="manifest.json">
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <noscript><style>.fade-in{animation:none}</style></noscript>
+<style>
+html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
+/* দ্রুত অ্যাকশন: ১০টি আইটেম = ৫ কলাম × ২ সারি */
+.actions-grid{grid-template-columns:repeat(5,1fr);gap:8px}
+.action-item{padding:12px 2px;gap:6px;min-width:0}
+.action-label{font-size:.68rem;line-height:1.3;overflow-wrap:anywhere;padding:0 2px}
+.icon-wrap{width:42px;height:42px;border-radius:14px}
+.icon-wrap img{width:24px;height:24px}
+.p-name,.pchip .pn{text-align:center;line-height:1.25;overflow-wrap:anywhere}
+@media (max-width:360px){.icon-wrap{width:38px;height:38px}.action-label{font-size:.62rem}}
+</style>
 </head>
 <body data-page="home">
 
@@ -71,26 +82,29 @@
   <div class="actions-grid fade-in">
     <a href="salah.html" class="action-item"><div class="icon-wrap"><img src="image/salah.png" alt=""></div><span class="action-label" data-i18n="salah">নামাজ</span></a>
     <a href="qibla.html" class="action-item"><div class="icon-wrap"><img src="image/compass.png" alt=""></div><span class="action-label" data-i18n="qibla">কিবলা</span></a>
+    <a href="quran.html" class="action-item"><div class="icon-wrap" style="font-size:1.35rem" aria-hidden="true">📖</div><span class="action-label" data-i18n="quran">কুরআন</span></a>
+    <a href="tasbih.html" class="action-item"><div class="icon-wrap" style="font-size:1.35rem" aria-hidden="true">📿</div><span class="action-label" data-i18n="tasbih">তাসবিহ</span></a>
+    <a href="hadith.html" class="action-item"><div class="icon-wrap" style="font-size:1.35rem" aria-hidden="true">📜</div><span class="action-label" data-i18n="hadith">হাদিস</span></a>
     <a href="asmaul-husna.html" class="action-item"><div class="icon-wrap"><img src="image/asmaul_husna.png" alt=""></div><span class="action-label" data-i18n="asma">আসমাউল হুসনা</span></a>
-    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap" style="font-size:1.5rem">🔤</div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
+    <a href="arabiseducation.html" class="action-item"><div class="icon-wrap" style="font-size:1.35rem" aria-hidden="true">🔤</div><span class="action-label" data-i18n="arabic">আরবি শিক্ষা</span></a>
     <a href="oju.html" class="action-item"><div class="icon-wrap"><img src="image/oju.png" alt=""></div><span class="action-label" data-i18n="wudu">অজু</span></a>
     <a href="masjid.html" class="action-item"><div class="icon-wrap"><img src="image/mosjid.png" alt=""></div><span class="action-label" data-i18n="masjid">মসজিদ</span></a>
-    <a href="setting.html" class="action-item" id="settingsAction"><div class="icon-wrap" style="font-size:1.5rem" aria-hidden="true">⚙️</div><span class="action-label" id="settingsLabel">সেটিংস</span></a>
+    <a href="setting.html" class="action-item" id="settingsAction"><div class="icon-wrap" style="font-size:1.35rem" aria-hidden="true">⚙️</div><span class="action-label" id="settingsLabel" data-i18n="settings">সেটিংস</span></a>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title" data-i18n="today">🕌 আজকের নামাজ</div><div class="card-badge" id="trackerTotalCount">০/৫</div></div>
+    <div class="card-header"><div class="card-title">🕌 <span data-i18n="today">আজকের নামাজ</span></div><div class="card-badge" id="trackerTotalCount">০/৫</div></div>
     <div class="progress-track"><div class="progress-bar" id="progressFillBar"></div></div>
     <div class="prayers-row" id="prayersRowContainer"></div>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title" data-i18n="weekly">📅 সাপ্তাহিক নামাজ</div><div class="card-badge" id="weekCalRange">...</div></div>
+    <div class="card-header"><div class="card-title">📅 <span data-i18n="weekly">সাপ্তাহিক নামাজ</span></div><div class="card-badge" id="weekCalRange">...</div></div>
     <div class="week-strip" id="weekDaysStrip"></div>
   </div>
 
   <div class="glass-card fade-in">
-    <div class="card-header"><div class="card-title" data-i18n="stats">📊 সাপ্তাহিক পরিসংখ্যান</div><div class="card-badge" id="statsRange">...</div></div>
+    <div class="card-header"><div class="card-title">📊 <span data-i18n="stats">সাপ্তাহিক পরিসংখ্যান</span></div><div class="card-badge" id="statsRange">...</div></div>
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-icon-wrap">🔥</div><div><div class="stat-value" id="streakCount">০</div><div class="stat-label" data-i18n="streak">ধারাবাহিকতা (দিন)</div></div></div>
       <div class="stat-box"><div class="stat-icon-wrap">📈</div><div><div class="stat-value" id="weeklyProgress">০%</div><div class="stat-label" data-i18n="progress">সপ্তাহের অগ্রগতি</div></div></div>
@@ -109,7 +123,7 @@
     <div class="sheet-handle"></div>
     <div class="record-header">
       <div><div class="record-day-name" id="recordModalDayName">--</div><div class="record-done-count" id="recordModalCount">০/৫ সম্পন্ন</div></div>
-      <button class="sheet-close" id="recordCloseBtn" aria-label="বন্ধ করুন">✕</button>
+      <button class="sheet-close" id="recordCloseBtn" data-i18n-aria="close" aria-label="বন্ধ করুন">✕</button>
     </div>
     <div class="record-list" id="recordPrayerList"></div>
     <div class="legend">
@@ -124,9 +138,10 @@
 <script src="js/i18n-extra.js"></script>
 <script src="js/reminders.js"></script>
 <script src="js/main.js"></script>
+<script src="js/alarms.js"></script>
 <script src="js/nav.js"></script>
 <script>
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
-</html>
+  </html>
