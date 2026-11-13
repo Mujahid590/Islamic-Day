@@ -90,3 +90,10 @@ body.dark .btn.danger-t{background:rgba(239,68,68,.15)}
 .cf-msg{line-height:1.8;font-size:.9rem}
 .btn:focus-visible,.al-row:focus-visible,.cal-cell:focus-visible,.switch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:360px){.cal30{grid-template-columns:repeat(5,1fr)}.rec-btn{padding:6px 6px}}
+
+/* নামাজের হিসাব বার — হোমের "আজকের নামাজ" এর মতো */
+#trkList.prayers-row{gap:4px;margin-bottom:4px}
+#trkList .prayer-item{flex:1;min-width:0}
+#trkList .p-name{text-align:center;line-height:1.25;overflow-wrap:anywhere}
+.prayer-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
+#trkCard .legend{margin-top:12px}
