@@ -47,12 +47,14 @@ function renderTracker(){
   const d=dateOf(selKey),rec=dayRec(selKey),isToday=selKey===keyOf(new Date());let done=0;
   $('trkTitle').textContent='🕌 '+(isToday?t('recToday'):dLabel(d));
   $('trkList').innerHTML=PN.map((p,i)=>{const s=rec[p]||'pending';if(s==='completed')done++;
-    return `<div class="record-row"><div class="record-row-left"><img src="${A.pimg(i,d)}" alt=""><span class="record-row-name">${esc(A.pname(i,d))}</span></div><div class="rec-btns">`+
-    `<button type="button" class="rec-btn ${s==='completed'?'done-active':''}" data-i="${i}" data-v="completed">✓ ${esc(t('done'))}</button>`+
-    `<button type="button" class="rec-btn ${s==='missed'?'missed-active':''}" data-i="${i}" data-v="missed">✗ ${esc(t('qaza'))}</button>`+
-    `<button type="button" class="rec-btn ${s==='pending'?'pending-active':''}" data-i="${i}" data-v="pending">○ ${esc(t('pending'))}</button></div></div>`}).join('');
+    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(A.pname(i,d))}"><div class="p-circle ${s}"><img src="${A.pimg(i,d)}" alt=""></div><div class="p-name">${esc(A.pname(i,d))}</div><div class="p-count">${s==='completed'?'✓':s==='missed'?'✗':'○'}</div></div>`}).join('');
   $('trkBadge').textContent=`${num(done)}/${num(5)}`;
-  $('trkList').querySelectorAll('.rec-btn').forEach(b=>b.onclick=()=>setStatus(selKey,+b.dataset.i,b.dataset.v));
+  $('trkBar').style.width=`${done*20}%`;
+  // হোমের মতো: চাপলে বাকি → আদায় → কাযা → বাকি
+  $('trkList').querySelectorAll('.prayer-item').forEach(el=>{
+    const go=()=>{const i=+el.dataset.i,cur=dayRec(selKey)[PN[i]]||'pending';setStatus(selKey,i,cur==='pending'?'completed':cur==='completed'?'missed':'pending')};
+    el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};
+  });
 }
 
 /* ---------- ২) মোট ও প্রতি ওয়াক্তের হিসাব ---------- */
