@@ -1,106 +1,92 @@
-/* ===== SALAH PAGE STYLES (Style.css এর ভ্যারিয়েবল ও গ্লাস ডিজাইন সমর্থিত) ===== */
+/* ===== নামাজের হিসাব পেজ — style.css এর ভ্যারিয়েবল ব্যবহার করে ===== */
+html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
+.back-btn.round-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text);box-shadow:var(--shadow);transition:var(--t);text-decoration:none;flex-shrink:0;padding:0}
+.back-btn.round-btn svg{width:22px;height:22px}
+.back-btn.round-btn:active{transform:scale(.92);background:var(--accent-l)}
+html[dir=rtl] .back-btn.round-btn:active{transform:scaleX(-1) scale(.92)}
+.page-head>div{min-width:0}
+.hint{margin-top:2px;font-size:.76rem;line-height:1.6}
+.sub-title{font-weight:700;font-size:.92rem;margin:16px 0 8px}
+.record-row-name{overflow-wrap:anywhere}
+.record-row{gap:8px}.record-row-left{min-width:0}.rec-btns{flex-shrink:0}
+.record-row-left img{width:26px;height:26px;object-fit:contain;flex-shrink:0}
+.record-list{margin-bottom:10px}
+.stat-box{min-width:0}.stat-label{overflow-wrap:anywhere}
 
-.back-btn.round-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  box-shadow: var(--shadow);
-  transition: var(--t);
-  text-decoration: none;
-  flex-shrink: 0;
-}
+/* প্রতি ওয়াক্ত */
+.pp-row{margin-bottom:12px}
+.pp-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;font-size:.84rem}
+.pp-name{display:flex;align-items:center;gap:8px;font-weight:700;min-width:0}
+.pp-name img{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.pp-nums{font-size:.74rem;color:var(--text2);white-space:nowrap;font-family:'Poppins','Noto Sans Bengali',sans-serif}
+.pp-bar{display:flex;height:9px;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.08)}
+body.dark .pp-bar{background:rgba(255,255,255,.1)}
+.pp-bar i{display:block;height:100%}
+.pp-bar .d{background:var(--done)}.pp-bar .m{background:var(--missed)}.pp-bar .p{background:var(--pending)}
+.legend{margin-top:6px}
 
-.back-btn.round-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--text);
-}
+/* ৩০ দিনের গ্রিড */
+.cal30{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.cal-cell{border:1.5px solid transparent;border-radius:12px;padding:6px 0;background:var(--bg-solid);color:var(--text);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;transition:var(--t)}
+.cal-cell b{font-size:.86rem;font-weight:700;line-height:1.2}
+.cal-cell small{font-size:.6rem;opacity:.8;font-family:'Poppins','Noto Sans Bengali',sans-serif}
+.cal-cell.part{background:rgba(245,158,11,.22)}
+.cal-cell.full{background:var(--done);color:#fff}
+.cal-cell.miss{box-shadow:inset 0 -3px 0 var(--missed)}
+.cal-cell.now{border-color:var(--accent)}
+.cal-cell.sel{outline:2px solid var(--text);outline-offset:1px}
+.cal-cell.pre{opacity:.4}
+.cal-cell:active{transform:scale(.94)}
 
-.back-btn.round-btn:active {
-  transform: scale(0.92);
-  background: var(--accent-l);
-}
+/* অ্যালার্ট কার্ড */
+.al-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px}
+.al-head .card-title{min-width:0;overflow-wrap:anywhere}
+.al-desc{font-size:.78rem;line-height:1.6;color:var(--text2);margin-bottom:10px}
+.switch{width:50px;height:30px;border-radius:20px;border:none;background:rgba(0,0,0,.2);position:relative;cursor:pointer;transition:var(--t);flex-shrink:0;padding:0}
+.switch::after{content:'';position:absolute;top:3px;inset-inline-start:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:var(--t);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.switch[aria-checked=true]{background:var(--done)}
+.switch[aria-checked=true]::after{inset-inline-start:23px}
+.al-list{display:flex;flex-direction:column}
+.al-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:inherit;text-align:start;cursor:pointer}
+.al-row:last-child{border-bottom:none}
+.al-row img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+.al-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.al-info b{font-size:.95rem}
+.al-info small{font-size:.76rem;color:var(--text2);overflow-wrap:anywhere}
+.al-info small.on{color:var(--accent);font-weight:600}
+.al-plus{font-size:1.5rem;color:var(--accent);line-height:1;flex-shrink:0;width:28px;text-align:center}
+.al-card.off .al-list{opacity:.5}
+.al-sound{display:flex;gap:8px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.al-sound label{font-size:.8rem;font-weight:600;flex-shrink:0}
+.al-sound select{flex:1;min-width:0;padding:9px 10px;font-size:.85rem}
+.al-sound .btn{padding:9px 12px;font-size:.8rem;flex-shrink:0}
+.al-note{font-size:.76rem;line-height:1.7;padding:0 6px}
 
-.set-group {
-  margin-top: 12px;
-}
+/* শিট */
+.al-chip{display:inline-block;max-width:100%;background:var(--accent-l);color:var(--text);padding:12px 14px;border-radius:14px;font-weight:700;font-size:.95rem;line-height:1.5;overflow-wrap:anywhere}
+.al-hr{border:none;border-top:1px solid var(--border);margin:16px 0 14px}
+.al-ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2);margin:8px 0 12px;font-family:'Poppins','Noto Sans Bengali',sans-serif}
+.al-range{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:10px;outline:none;background:linear-gradient(to right,var(--done) var(--p,0%),#b2ebf2 var(--p,0%))}
+html[dir=rtl] .al-range{background:linear-gradient(to left,var(--done) var(--p,0%),#b2ebf2 var(--p,0%))}
+body.dark .al-range{background:linear-gradient(to right,var(--done) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
+body.dark[dir] .al-range{}
+html[dir=rtl] body.dark .al-range{background:linear-gradient(to left,var(--done) var(--p,0%),rgba(255,255,255,.18) var(--p,0%))}
+.al-range::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:38px;border-radius:4px;background:var(--done);border:2px solid var(--bg-solid);box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
+.al-range::-moz-range-thumb{width:8px;height:38px;border-radius:4px;background:var(--done);border:2px solid var(--bg-solid);cursor:pointer}
+.al-step{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0 8px}
+.al-step .btn{width:46px;height:42px;padding:0;font-size:1.3rem;line-height:1}
+.al-val{min-width:110px;text-align:center;font-weight:800;font-size:1.05rem}
+.al-actions{display:flex;align-items:center;gap:8px;margin-top:18px;flex-wrap:wrap}
+.al-actions .grow{flex:1}
+.al-actions .btn{padding:10px 14px;font-size:.88rem}
+.al-actions [hidden]{display:none}
 
-.setting-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-select.city-select, .input {
-  width: 100%;
-  padding: 11px 14px;
-  font-size: 0.92rem;
-  background-color: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: var(--r-md);
-  font-family: inherit;
-}
-
-select.city-select option {
-  background: var(--card);
-  color: var(--text);
-}
-
-.record-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.record-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  background: var(--bg-solid);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-}
-
-.record-row-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.record-row-name {
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--text);
-}
-
-.rec-btns {
-  display: flex;
-  gap: 6px;
-}
-
-.rec-btn {
-  border: none;
-  padding: 6px 10px;
-  border-radius: var(--r-sm);
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--card);
-  color: var(--text2);
-  border: 1px solid var(--border);
-  transition: var(--t);
-}
-
-.rec-btn.done-active { background: var(--done); color: #fff; border-color: var(--done); }
-.rec-btn.missed-active { background: var(--missed); color: #fff; border-color: var(--missed); }
-.rec-btn.pending-active { background: var(--pending); color: #fff; border-color: var(--pending); }
+/* রিসেট */
+.btn.danger{background:var(--missed-bg);color:var(--missed);border:1px solid rgba(239,68,68,.35)}
+body.dark .btn.danger{background:rgba(239,68,68,.15)}
+.btn.danger-t{color:var(--missed);background:var(--missed-bg)}
+body.dark .btn.danger-t{background:rgba(239,68,68,.15)}
+.danger-card .btn{width:100%;margin-top:14px;overflow-wrap:anywhere}
+.cf-msg{line-height:1.8;font-size:.9rem}
+.btn:focus-visible,.al-row:focus-visible,.cal-cell:focus-visible,.switch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:360px){.cal30{grid-template-columns:repeat(5,1fr)}.rec-btn{padding:6px 6px}}
