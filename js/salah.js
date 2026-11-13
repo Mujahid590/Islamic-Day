@@ -2,7 +2,18 @@
 // ডেটা হোম পেজের সাথে একই জায়গায় থাকে: localStorage 'weeklyPrayerTracker' ({তারিখ:{ফজর:'completed'|'missed'|'pending',...}})
 (function(){
 'use strict';
-const A=window.DeenAlarms;
+const HAS_AL=!!window.DeenAlarms;
+const A=window.DeenAlarms||(function(){ // alarms.js লোড না হলেও হিসাবের অংশ যেন চলে
+  const PN=['ফজর','যোহর','আসর','মাগরিব','ইশা'],IMG=['image/fozor.png','image/zohor.png','image/asor.png','image/magrib.png','image/isa.png'];
+  const DEF={ফজর:{start:'05:00',end:'06:20'},যোহর:{start:'12:00',end:'15:20'},আসর:{start:'15:20',end:'17:25'},মাগরিব:{start:'17:25',end:'18:45'},ইশা:{start:'18:45',end:'05:00'}};
+  const cfg={adhan:{on:false,sound:'beep',items:{}},namaz:{on:false,sound:'bell',items:{}}};
+  const pad=n=>String(n).padStart(2,'0');
+  return{PN,IMG,cfg:()=>cfg,save(){},ask(){},playSound(){},timesSync:()=>DEF,getTimes:()=>Promise.resolve(DEF),
+    mins:s=>{const m=String(s||'').match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0},
+    pname:(i,d)=>(i===1&&(d||new Date()).getDay()===5)?t('jumuah'):L().prayers[i],
+    pimg:(i,d)=>(i===1&&(d||new Date()).getDay()===5)?'image/jumuah.svg':IMG[i],
+    fmtMin:m=>{m=((Math.round(m)%1440)+1440)%1440;const h=Math.floor(m/60);return `${num(h%12||12)}:${num(pad(m%60))} ${h>=12?L().pm:L().am}`}};
+})();
 const $=id=>document.getElementById(id);
 const PN=A.PN;
 const TKEY='weeklyPrayerTracker',SINCE='deen_since_reset',DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
@@ -89,6 +100,7 @@ function offDesc(mode,off){
   return off<0?t('beforeA',{m:num(-off)}):off>0?t('afterA',{m:num(off)}):t('atA');
 }
 function renderAlarms(){
+  if(!HAS_AL)return;
   const cfg=A.cfg();
   Object.keys(MODES).forEach(mode=>{
     const M=MODES[mode],c=cfg[mode],today=new Date();
@@ -144,7 +156,12 @@ function doReset(){
 function renderAll(){renderTracker();renderStats();renderCal();renderAlarms()}
 function refresh(){applyI18n();loadData();renderAll()}
 function init(){
-  applyTheme();applyI18n();loadData();renderAll();
+  applyTheme();applyI18n();loadData();
+  if(!HAS_AL){console.warn('alarms.js লোড হয়নি — অ্যালার্ট অংশ লুকানো হলো');['alAdhan','alNamaz'].forEach(id=>{$(id).hidden=true});const n=document.querySelector('.al-note');if(n)n.hidden=true}
+  renderAll();
+  // রাত পেরোলে (নতুন দিন) আজকের তারিখে ফিরে আসুন
+  let curDay=keyOf(new Date());
+  setInterval(()=>{const k=keyOf(new Date());if(k!==curDay){if(selKey===curDay)selKey=k;curDay=k;times=A.timesSync();loadData();renderAll()}},30000);
   $('shRange').addEventListener('input',()=>{if(sh)updateSheet()});
   $('shMinus').onclick=()=>sh&&step(-1);$('shPlus').onclick=()=>sh&&step(1);
   $('shCancel').onclick=closeSheet;
