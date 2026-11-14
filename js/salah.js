@@ -1,5 +1,5 @@
 // ===== নামাজের হিসাব + আযান/নামাজ অ্যালার্ট =====
-// ডেটা হোম পেজের সাথে একই জায়গায় থাকে: localStorage 'weeklyPrayerTracker' ({তারিখ:{ফজর:'completed'|'missed'|'pending',...}})
+// ডেটা হোম পেজের সাথে একই জায়গায় থাকে: localStorage 'weeklyPrayerTracker' ({তারিখ:{ফজর:'completed'|'pending' (জামাত আলাদা: deen_jamaat),...}})
 (function(){
 'use strict';
 const HAS_AL=!!window.DeenAlarms;
@@ -30,8 +30,9 @@ function loadData(){
 }
 function saveData(){try{localStorage.setItem(TKEY,JSON.stringify(data));localStorage.setItem(JKEY,JSON.stringify(jam))}catch(e){}}
 function dayRec(k){if(!data[k]){data[k]={};PN.forEach(p=>data[k][p]='pending')}return data[k]}
-// ৪টি অবস্থা: pending (আদায় হয়নি) / completed (একা আদায়) / jamaat (জামাতে আদায়) / missed (কাযা)
-function stateOf(k,p){const s=(data[k]||{})[p]||'pending';return s==='completed'&&(jam[k]||{})[p]?'jamaat':s}
+// ৩টি অবস্থা: pending (আদায় হয়নি) → completed (আদায়, সবুজ) → jamaat (জামাতে আদায়, নীল)। পুরনো 'missed' (কাযা) এখন 'আদায় হয়নি' ধরা হয়
+function stateOf(k,p){const s=(data[k]||{})[p];return s==='completed'?((jam[k]||{})[p]?'jamaat':'completed'):'pending'}
+const NEXT={pending:'completed',completed:'jamaat',jamaat:'pending'};
 function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');clearTimeout(e._h);e._h=setTimeout(()=>e.classList.remove('show'),2000)}
 function dateOf(k){return new Date(k+'T00:00:00')}
 function dLabel(d){return `${L().days[d.getDay()]}, ${num(d.getDate())} ${L().months[d.getMonth()]}`}
@@ -46,53 +47,42 @@ function applyTheme(){
 }
 
 /* ---------- ১) নির্বাচিত দিনের হিসাব ---------- */
-const STATES=[['pending','○','notDone'],['completed','✓','aloneDone'],['jamaat','✓✓','jamaat'],['missed','✗','qaza']];
 function setStatus(k,i,st){
   const p=PN[i],rec=dayRec(k);
-  rec[p]=st==='jamaat'?'completed':st;
+  rec[p]=st==='pending'?'pending':'completed';
   if(st==='jamaat'){(jam[k]=jam[k]||{})[p]=true}
   else if(jam[k]){delete jam[k][p];if(!Object.keys(jam[k]).length)delete jam[k]}
   saveData();renderAll();
-  toast(t(st==='jamaat'?'toastJamaat':st==='completed'?'toastDone':st==='missed'?'toastMissed':'toastPending',{p:A.pname(i,dateOf(k))}));
+  toast(t(st==='jamaat'?'toastJamaat':st==='completed'?'toastDone':'toastPending',{p:A.pname(i,dateOf(k))}));
 }
 function renderTracker(){
   const d=dateOf(selKey),isToday=selKey===keyOf(new Date());let done=0;
   $('trkTitle').textContent='🕌 '+(isToday?t('recToday'):dLabel(d));
-  $('trkList').innerHTML=PN.map((p,i)=>{const s=stateOf(selKey,p);if(s==='completed'||s==='jamaat')done++;
+  $('trkList').innerHTML=PN.map((p,i)=>{const s=stateOf(selKey,p);if(s!=='pending')done++;
     const cls=s==='jamaat'?'completed jamaat':s;
-    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(A.pname(i,d))}"><div class="p-circle ${cls}"><img src="${A.pimg(i,d)}" alt=""></div><div class="p-name">${esc(A.pname(i,d))}</div><div class="p-count">${s==='jamaat'?'✓✓':s==='completed'?'✓':s==='missed'?'✗':'○'}</div></div>`}).join('');
+    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(A.pname(i,d))}"><div class="p-circle ${cls}"><img src="${A.pimg(i,d)}" alt=""></div><div class="p-name">${esc(A.pname(i,d))}</div><div class="p-count">${s==='jamaat'?'✓✓':s==='completed'?'✓':'○'}</div></div>`}).join('');
   $('trkBadge').textContent=`${num(done)}/${num(5)}`;
   $('trkBar').style.width=`${done*20}%`;
   $('trkList').querySelectorAll('.prayer-item').forEach(el=>{
-    const go=()=>openStatus(+el.dataset.i);
+    const go=()=>{const i=+el.dataset.i;setStatus(selKey,i,NEXT[stateOf(selKey,PN[i])])};
     el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};
   });
   $('stLegend').innerHTML=legendHtml();
 }
 function legendHtml(){
-  return [['jamaat','jamaat'],['done','aloneDone'],['missed','qaza'],['pending','notDone']]
+  return [['jamaat','jamaat'],['done','aloneDone'],['pending','notDone']]
     .map(r=>`<span class="legend-item"><span class="legend-dot ${r[0]}"></span> ${esc(t(r[1]))}</span>`).join('');
 }
-/* অবস্থা বাছাইয়ের শিট */
-function openStatus(i){
-  const d=dateOf(selKey),cur=stateOf(selKey,PN[i]);
-  $('stTitle').textContent=`${A.pname(i,d)} · ${dLabel(d)}`;
-  $('stGrid').innerHTML=STATES.map(o=>`<button type="button" class="st-opt st-${o[0]} ${cur===o[0]?'on':''}" data-v="${o[0]}"><span class="st-ic">${o[1]}</span><span class="st-tx">${esc(t(o[2]))}</span></button>`).join('');
-  $('stGrid').querySelectorAll('.st-opt').forEach(b=>b.onclick=()=>{closeStatus();setStatus(selKey,i,b.dataset.v)});
-  $('stSheet').classList.add('show');
-}
-function closeStatus(){$('stSheet').classList.remove('show')}
-
 /* ---------- হিরো কার্ড (রঙ সেটিংস অনুযায়ী) ---------- */
 function calcStreak(){
-  const full=k=>PN.every(p=>{const s=(data[k]||{})[p];return s==='completed'});
+  const full=k=>PN.every(p=>stateOf(k,p)!=='pending');
   let n=0;const x=new Date();if(!full(keyOf(x)))x.setDate(x.getDate()-1);
   while(full(keyOf(x))&&n<3700){n++;x.setDate(x.getDate()-1)}
   return n;
 }
 function renderHero(){
   const tk=keyOf(new Date()),today=new Date();
-  const done=PN.filter(p=>{const s=stateOf(tk,p);return s==='completed'||s==='jamaat'}).length,pct=done*20,C=2*Math.PI*48;
+  const done=PN.filter(p=>stateOf(tk,p)!=='pending').length,pct=done*20,C=2*Math.PI*48;
   $('heroChip').textContent=t('heroLbl');$('heroDate').textContent=dLabel(today);
   $('heroCount').textContent=`${num(done)}/${num(5)}`;
   $('heroSub').textContent=`🔥 ${num(calcStreak())} · ${t('streak')}`;
@@ -107,19 +97,19 @@ function sinceKey(){
   return s>tk?tk:s;
 }
 function renderStats(){
-  const tk=keyOf(new Date()),since=sinceKey(),per=PN.map(()=>({j:0,d:0,m:0,p:0}));
+  const tk=keyOf(new Date()),since=sinceKey(),per=PN.map(()=>({j:0,d:0,p:0}));
   const it=dateOf(since);let n=0;
   while(keyOf(it)<=tk&&n<3700){const k=keyOf(it);
-    PN.forEach((p,i)=>{const s=stateOf(k,p);if(s==='jamaat')per[i].j++;else if(s==='completed')per[i].d++;else if(s==='missed')per[i].m++;else if(k<tk)per[i].p++});
+    PN.forEach((p,i)=>{const s=stateOf(k,p);if(s==='jamaat')per[i].j++;else if(s==='completed')per[i].d++;else if(k<tk)per[i].p++});
     it.setDate(it.getDate()+1);n++}
-  const sum=f=>per.reduce((a,x)=>a+x[f],0),J=sum('j'),D=sum('d')+J,M=sum('m'),P=sum('p'),tot=D+M+P;
+  const sum=f=>per.reduce((a,x)=>a+x[f],0),J=sum('j'),A1=sum('d'),D=A1+J,P=sum('p'),tot=D+P;
   const pct=tot?Math.round(D/tot*100):0,sd=dateOf(since);
   $('sinceBadge').textContent=t('since',{d:`${num(sd.getDate())} ${L().months[sd.getMonth()]}`});
-  $('statGrid').innerHTML=[['✅',D,t('done')],['🕌',J,t('jamaat')],['❌',M,t('qaza')],['⭕',P,t('notDone')],['🔥',calcStreak(),t('streak')],['📈',num(pct)+'%',t('success')]]
+  $('statGrid').innerHTML=[['✅',D,t('done')],['🕌',J,t('jamaat')],['☑️',A1,t('aloneDone')],['⭕',P,t('notDone')],['🔥',calcStreak(),t('streak')],['📈',num(pct)+'%',t('success')]]
     .map(r=>`<div class="stat-box"><div class="stat-icon-wrap">${r[0]}</div><div><div class="stat-value">${typeof r[1]==='number'?num(r[1]):r[1]}</div><div class="stat-label">${esc(r[2])}</div></div></div>`).join('');
-  $('perList').innerHTML=PN.map((p,i)=>{const x=per[i],tt=x.j+x.d+x.m+x.p||1;
-    return `<div class="pp-row"><div class="pp-top"><span class="pp-name"><img src="${A.IMG[i]}" alt="">${esc(L().prayers[i])}</span><span class="pp-nums">🕌 ${num(x.j)} · ✓ ${num(x.d)} · ✗ ${num(x.m)} · ○ ${num(x.p)}</span></div>`+
-      `<div class="pp-bar"><i class="j" style="width:${x.j/tt*100}%"></i><i class="d" style="width:${x.d/tt*100}%"></i><i class="m" style="width:${x.m/tt*100}%"></i><i class="p" style="width:${x.p/tt*100}%"></i></div></div>`}).join('');
+  $('perList').innerHTML=PN.map((p,i)=>{const x=per[i],tt=x.j+x.d+x.p||1;
+    return `<div class="pp-row"><div class="pp-top"><span class="pp-name"><img src="${A.IMG[i]}" alt="">${esc(L().prayers[i])}</span><span class="pp-nums">🕌 ${num(x.j)} · ✓ ${num(x.d)} · ○ ${num(x.p)}</span></div>`+
+      `<div class="pp-bar"><i class="j" style="width:${x.j/tt*100}%"></i><i class="d" style="width:${x.d/tt*100}%"></i><i class="p" style="width:${x.p/tt*100}%"></i></div></div>`}).join('');
   $('stLegend2').innerHTML=legendHtml();
 }
 
@@ -134,7 +124,7 @@ function renderCal(){
   for(let n=1;n<=days;n++){
     const d=new Date(viewY,viewM,n),k=keyOf(d),fut=k>tk;
     const dots=PN.map(p=>`<i class="${fut?'':stateOf(k,p)}"></i>`).join('');
-    const full=!fut&&PN.every(p=>{const s=stateOf(k,p);return s==='completed'||s==='jamaat'});
+    const full=!fut&&PN.every(p=>stateOf(k,p)!=='pending');
     const cls=['cal-cell',d.getDay()===5?'fri':'',full?'full':'',k===tk?'now':'',k===selKey?'sel':'',fut?'fut':'',k<since?'pre':''].filter(Boolean).join(' ');
     cells.push(`<button type="button" class="${cls}" data-k="${k}" ${fut?'disabled':''} aria-label="${esc(dLabel(d))}"><b>${num(n)}</b><span class="dots">${dots}</span></button>`);
   }
@@ -225,10 +215,9 @@ function init(){
   $('shRemove').onclick=()=>{if(!sh)return;const cf=A.cfg();delete cf[sh.mode].items[sh.p];A.save();closeSheet();renderAlarms();toast(t('removed'))};
   $('alSheet').addEventListener('click',e=>{if(e.target===$('alSheet'))closeSheet()});
   $('calPrev').onclick=()=>shiftMonth(-1);$('calNext').onclick=()=>shiftMonth(1);
-  $('stSheet').addEventListener('click',e=>{if(e.target===$('stSheet'))closeStatus()});
   $('resetBtn').onclick=openConfirm;$('cfCancel').onclick=closeConfirm;$('cfOk').onclick=doReset;
   $('cfSheet').addEventListener('click',e=>{if(e.target===$('cfSheet'))closeConfirm()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeConfirm();closeStatus()}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeConfirm()}});
   A.getTimes().then(tm=>{times=tm;renderAlarms()});
   window.addEventListener('storage',e=>{if(e.key===TKEY||e.key===JKEY||e.key==='deen_lang'||e.key==='deen_color'||e.key==='deen_theme'||e.key===null)refresh()});
   window.addEventListener('deen-tracker',()=>{loadData();renderAll()});
