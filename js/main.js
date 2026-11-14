@@ -3,7 +3,8 @@ const prayerNames=["ফজর","যোহর","আসর","মাগরিব","
 const prayerImages=["image/fozor.png","image/zohor.png","image/asor.png","image/magrib.png","image/isa.png"];
 // 24-hour defaults (offline fallback)
 const defaultTimes={ফজর:{start:"05:00",end:"06:20"},যোহর:{start:"12:00",end:"15:20"},আসর:{start:"15:20",end:"17:25"},মাগরিব:{start:"17:25",end:"18:45"},ইশা:{start:"18:45",end:"05:00"}};
-let weeklyData={},recordKey=null,times=defaultTimes,city=localStorage.getItem('userCity')||'Dhaka';
+let jam={},weeklyData={},recordKey=null,times=defaultTimes,city=localStorage.getItem('userCity')||'Dhaka';
+const JKEY='deen_jamaat'; // জামাতে আদায়: {তারিখ:{ফজর:true}}
 const $=id=>document.getElementById(id);
 const bn=n=>num(n); // ভাষা অনুযায়ী অঙ্ক
 const pad=n=>String(n).padStart(2,'0');
@@ -66,11 +67,27 @@ async function loadDates(){
 }
 
 // ===== STORAGE =====
-function loadData(){try{weeklyData=JSON.parse(localStorage.getItem('weeklyPrayerTracker'))||{}}catch(e){weeklyData={}}}
-function saveData(){localStorage.setItem('weeklyPrayerTracker',JSON.stringify(weeklyData))}
+function loadData(){
+  try{const d=JSON.parse(localStorage.getItem('weeklyPrayerTracker'));weeklyData=(d&&typeof d==='object'&&!Array.isArray(d))?d:{}}catch(e){weeklyData={}}
+  try{const j=JSON.parse(localStorage.getItem(JKEY));jam=(j&&typeof j==='object'&&!Array.isArray(j))?j:{}}catch(e){jam={}}
+}
+function saveData(){try{localStorage.setItem('weeklyPrayerTracker',JSON.stringify(weeklyData));localStorage.setItem(JKEY,JSON.stringify(jam))}catch(e){}}
 function dayPrayers(k){if(!weeklyData[k]){weeklyData[k]={};prayerNames.forEach(p=>weeklyData[k][p]='pending');saveData()}return weeklyData[k]}
-function setStatus(k,p,s){dayPrayers(k)[p]=s;saveData();renderAll();renderInsight();if(recordKey===k)renderRecord(k);
-  showToast(t(s==='completed'?'toastDone':s==='missed'?'toastMissed':'toastPending',{p:pdisp(p,new Date(k+'T00:00:00'))}))}
+// ৩টি অবস্থা: pending (আদায় হয়নি) → completed (আদায়, সবুজ) → jamaat (জামাতে আদায়, নীল)। পুরনো 'missed' (কাযা) এখন 'আদায় হয়নি' ধরা হয়
+function stateOf(k,p){const s=(weeklyData[k]||{})[p];return s==='completed'?((jam[k]||{})[p]?'jamaat':'completed'):'pending'}
+const isDone=(k,p)=>stateOf(k,p)!=='pending';
+const doneCount=k=>prayerNames.filter(p=>isDone(k,p)).length;
+const NEXT={pending:'completed',completed:'jamaat',jamaat:'pending'};
+function setStatus(k,p,st){
+  dayPrayers(k)[p]=st==='pending'?'pending':'completed';
+  if(st==='jamaat'){(jam[k]=jam[k]||{})[p]=true}
+  else if(jam[k]){delete jam[k][p];if(!Object.keys(jam[k]).length)delete jam[k]}
+  saveData();renderAll();renderInsight();if(recordKey===k)renderRecord(k);
+  showToast(t(st==='jamaat'?'toastJamaat':st==='completed'?'toastDone':'toastPending',{p:pdisp(p,new Date(k+'T00:00:00'))}))}
+function legendHtml(){
+  return [['jamaat','jamaat'],['done','aloneDone'],['pending','notDone']]
+    .map(r=>`<span class="legend-item"><span class="legend-dot ${r[0]}"></span> ${esc(t(r[1]))}</span>`).join('');
+}
 function weekDates(){const n=new Date(),s=new Date(n.getFullYear(),n.getMonth(),n.getDate()-n.getDay());
   return Array.from({length:7},(_,i)=>new Date(s.getFullYear(),s.getMonth(),s.getDate()+i))}
 
@@ -99,19 +116,21 @@ function updateTimer(){
 
 // ===== RENDER =====
 function renderToday(){
-  const k=todayKey(),pr=dayPrayers(k);let done=0;
-  $('prayersRowContainer').innerHTML=prayerNames.map((p,i)=>{const s=pr[p]||'pending';if(s==='completed')done++;
-    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(pdisp(p))}"><div class="p-circle ${s}"><img src="${pimg(i)}" alt=""></div><div class="p-name">${pdisp(p)}</div><div class="p-count">${s==='completed'?'✓':s==='missed'?'✗':'○'}</div></div>`}).join('');
-  document.querySelectorAll('.prayer-item').forEach(el=>{el.onkeydown=kbd(()=>el.click());el.onclick=()=>{
-    const p=prayerNames[el.dataset.i],cur=dayPrayers(k)[p];
-    setStatus(k,p,cur==='pending'?'completed':cur==='completed'?'missed':'pending')}});
+  const k=todayKey();dayPrayers(k);let done=0;
+  $('prayersRowContainer').innerHTML=prayerNames.map((p,i)=>{const s=stateOf(k,p);if(s!=='pending')done++;
+    const cls=s==='jamaat'?'completed jamaat':s;
+    return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(pdisp(p))}"><div class="p-circle ${cls}"><img src="${pimg(i)}" alt=""></div><div class="p-name">${pdisp(p)}</div><div class="p-count">${s==='jamaat'?'✓✓':s==='completed'?'✓':'○'}</div></div>`}).join('');
+  document.querySelectorAll('#prayersRowContainer .prayer-item').forEach(el=>{el.onkeydown=kbd(()=>el.click());el.onclick=()=>{
+    const p=prayerNames[el.dataset.i];
+    setStatus(k,p,NEXT[stateOf(k,p)])}});
   $('trackerTotalCount').textContent=`${bn(done)}/${bn(5)}`;$('todayDone').textContent=`${bn(done)}/${bn(5)}`;
   $('progressFillBar').style.width=`${done*20}%`;
+  if($('homeLegend'))$('homeLegend').innerHTML=legendHtml();
 }
 function renderWeek(){
   const wd=weekDates(),tk=todayKey(),dn=L().daysShort,C=2*Math.PI*10;
   $('weekCalRange').textContent=`${bn(wd[0].getDate())}/${bn(wd[0].getMonth()+1)} – ${bn(wd[6].getDate())}/${bn(wd[6].getMonth()+1)}`;
-  $('weekDaysStrip').innerHTML=wd.map(d=>{const k=keyOf(d),n=Object.values(weeklyData[k]||{}).filter(s=>s==='completed').length,pct=n*20;
+  $('weekDaysStrip').innerHTML=wd.map(d=>{const k=keyOf(d),n=doneCount(k),pct=n*20;
     return `<div class="cal-day ${k===tk?'cal-today':''} ${k>tk?'cal-future':''}" data-date="${k}" role="button" tabindex="${k>tk?-1:0}"><div class="cal-day-name">${dn[d.getDay()]}</div><div class="cal-day-num">${bn(d.getDate())}</div>
     <div class="cal-ring"><svg viewBox="0 0 26 26"><circle class="cal-ring-bg" cx="13" cy="13" r="10" stroke-width="3"/><circle class="cal-ring-fill" cx="13" cy="13" r="10" stroke-width="3" style="stroke-dasharray:${C.toFixed(2)};stroke-dashoffset:${(C*(1-pct/100)).toFixed(2)};transform:rotate(-90deg);transform-origin:center"/></svg></div>
     <div class="cal-pct">${bn(pct)}%</div></div>`}).join('');
@@ -119,11 +138,11 @@ function renderWeek(){
 }
 function renderStats(){
   const wd=weekDates(),tk=todayKey();let total=0;
-  wd.forEach(d=>{const k=keyOf(d);if(k<=tk)total+=Object.values(weeklyData[k]||{}).filter(s=>s==='completed').length});
-  // streak: consecutive full days counting back from today (or yesterday if today not yet complete)
+  wd.forEach(d=>{const k=keyOf(d);if(k<=tk)total+=doneCount(k)});
+  // streak: আজ (বা আজ সম্পূর্ণ না হলে গতকাল) থেকে পেছনে টানা পূর্ণ দিন
   let streak=0;const d=new Date();
-  if(Object.values(weeklyData[keyOf(d)]||{}).filter(s=>s==='completed').length<5)d.setDate(d.getDate()-1);
-  while(Object.values(weeklyData[keyOf(d)]||{}).filter(s=>s==='completed').length===5){streak++;d.setDate(d.getDate()-1)}
+  if(doneCount(keyOf(d))<5)d.setDate(d.getDate()-1);
+  while(doneCount(keyOf(d))===5&&streak<3700){streak++;d.setDate(d.getDate()-1)}
   window.curStreak=streak;$('streakCount').textContent=bn(streak);$('weeklyProgress').textContent=`${bn(Math.round(total/35*100))}%`;$('totalCompleted').textContent=bn(total);
   $('statsRange').textContent=$('weekCalRange').textContent;renderBadges();renderInsight();
 }
@@ -133,16 +152,17 @@ function renderAll(){renderWeek();renderToday();renderStats()}
 function openRecord(k){recordKey=k;renderRecord(k);$('recordModal').classList.add('show')}
 function closeRecord(){$('recordModal').classList.remove('show');recordKey=null}
 function renderRecord(k){
-  const pr=dayPrayers(k),d=new Date(k+'T00:00:00');
+  dayPrayers(k);const d=new Date(k+'T00:00:00');
   const dn=L().days,mn=L().months;
   $('recordModalDayName').textContent=`${dn[d.getDay()]}, ${bn(d.getDate())} ${mn[d.getMonth()]}`;
-  $('recordModalCount').textContent=t('doneOf',{x:`${bn(Object.values(pr).filter(s=>s==='completed').length)}/${bn(5)}`});
-  $('recordPrayerList').innerHTML=prayerNames.map((p,i)=>{const s=pr[p]||'pending';
+  $('recordModalCount').textContent=t('doneOf',{x:`${bn(doneCount(k))}/${bn(5)}`});
+  $('recordPrayerList').innerHTML=prayerNames.map((p,i)=>{const s=stateOf(k,p);
     return `<div class="record-row"><div class="record-row-left"><img src="${pimg(i,d)}" alt=""><span class="record-row-name">${pdisp(p,d)}</span></div><div class="rec-btns">
-    <button class="rec-btn ${s==='completed'?'done-active':''}" data-p="${p}" data-v="completed">✓ ${t('done')}</button>
-    <button class="rec-btn ${s==='missed'?'missed-active':''}" data-p="${p}" data-v="missed">✗ ${t('qaza')}</button>
-    <button class="rec-btn ${s==='pending'?'pending-active':''}" data-p="${p}" data-v="pending">○ ${t('pending')}</button></div></div>`}).join('');
+    <button class="rec-btn ${s==='pending'?'pending-active':''}" data-p="${p}" data-v="pending">○ ${esc(t('notDone'))}</button>
+    <button class="rec-btn ${s==='completed'?'done-active':''}" data-p="${p}" data-v="completed">✓ ${esc(t('aloneDone'))}</button>
+    <button class="rec-btn ${s==='jamaat'?'jamaat-active':''}" data-p="${p}" data-v="jamaat">✓✓ ${esc(t('jamaat'))}</button></div></div>`}).join('');
   document.querySelectorAll('.rec-btn').forEach(b=>b.onclick=()=>setStatus(k,b.dataset.p,b.dataset.v));
+  if($('recordLegend'))$('recordLegend').innerHTML=legendHtml();
 }
 
 // ===== THEME & SETTINGS =====
@@ -224,8 +244,8 @@ function renderInsightInner(){
   const left=Math.max(0,Math.round(((cur.active?cur.e:cur.s)-now)/60000)),d=dur(left);
   const rows=[];
   rows.push(['⏳',cur.active?t('aiRun',{p:cn,d}):t('aiNext',{p:cn,d})]);
-  const done=prayerNames.filter(n=>pr[n]==='completed').length;
-  const past=prayerNames.filter(n=>pr[n]==='pending'&&atMs(times[n].start,0)<=now&&!(cur.active&&cur.n===n));
+  const tkey=todayKey(),done=doneCount(tkey);
+  const past=prayerNames.filter(n=>stateOf(tkey,n)==='pending'&&atMs(times[n].start,0)<=now&&!(cur.active&&cur.n===n));
   if(past.length)rows.push(['📝',t('aiPend',{n:past.map(n=>pdisp(n)).join(t('sep'))})]);
   else if(done===5)rows.push(['🎉',t('aiAll')]);
   else rows.push(['✅',t('aiDone',{x:`${bn(done)}/${bn(5)}`})]);
@@ -235,7 +255,7 @@ function renderInsightInner(){
 }
 // ===== অর্জন =====
 function renderBadges(){
-  const all=Object.values(weeklyData).reduce((a,d)=>a+Object.values(d).filter(s=>s==='completed').length,0),st=window.curStreak||0;
+  const all=Object.keys(weeklyData).reduce((a,k)=>a+doneCount(k),0),st=window.curStreak||0;
   $('badges').innerHTML=[['🌱',all>=1,'b1'],['🔥',st>=3,'b2'],['🏅',st>=7,'b3'],['👑',st>=30,'b4'],['🕌',all>=100,'b5']].map(b=>`<span class="badge ${b[1]?'':'locked'}">${b[0]} ${t(b[2])}</span>`).join('');
 }
 // ===== নোটিফিকেশন / আযান =====
@@ -282,14 +302,16 @@ function setupSettings(){
   const ex=$('exportBtn'),im=$('importFile'),sh=$('shareBtn');
   if(ex)ex.onclick=()=>{
     const a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([JSON.stringify(weeklyData)],{type:'application/json'}));
+    a.href=URL.createObjectURL(new Blob([JSON.stringify({v:2,tracker:weeklyData,jamaat:jam})],{type:'application/json'}));
     a.download=`deen-backup-${todayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
   };
   if(im)im.onchange=()=>{
     const f=im.files&&im.files[0];if(!f)return;const r=new FileReader();
     r.onload=()=>{try{const d=JSON.parse(r.result);
       if(!d||typeof d!=='object'||Array.isArray(d))throw 0;
-      weeklyData=d;saveData();renderAll();showToast(tx('ব্যাকআপ রিস্টোর হয়েছে ✓','Backup restored ✓'));
+      const isNew=d.tracker&&typeof d.tracker==='object'&&!Array.isArray(d.tracker);
+      weeklyData=isNew?d.tracker:d;jam=(isNew&&d.jamaat&&typeof d.jamaat==='object'&&!Array.isArray(d.jamaat))?d.jamaat:{};
+      saveData();renderAll();showToast(tx('ব্যাকআপ রিস্টোর হয়েছে ✓','Backup restored ✓'));
     }catch(e){showToast(tx('ফাইলটি সঠিক নয়','Invalid backup file'))}im.value=''};
     r.readAsText(f);
   };
@@ -310,7 +332,7 @@ function dayRollover(){
 async function initDeen(){
   loadData();
   addEventListener('pageshow',e=>{if(e.persisted){loadData();renderAll();renderInsight()}});
-  addEventListener('storage',e=>{if(e.key==='weeklyPrayerTracker'){loadData();renderAll();renderInsight()}});
+  addEventListener('storage',e=>{if(e.key==='weeklyPrayerTracker'||e.key===JKEY){loadData();renderAll();renderInsight()}});
   setSettingsLabel();
   try{if(typeof setLang==='function')setLang(LANG)}catch(e){}
   setTheme(localStorage.getItem('deen_theme')||'dark');
