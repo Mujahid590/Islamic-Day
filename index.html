@@ -11,7 +11,7 @@
 <title>দ্বীন টাইম - নামাজের সময়সূচি</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 <noscript><style>.fade-in{animation:none}</style></noscript>
 <style>
 html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
@@ -96,6 +96,7 @@ html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
     <div class="card-header"><div class="card-title">🕌 <span data-i18n="today">আজকের নামাজ</span></div><div class="card-badge" id="trackerTotalCount">০/৫</div></div>
     <div class="progress-track"><div class="progress-bar" id="progressFillBar"></div></div>
     <div class="prayers-row" id="prayersRowContainer"></div>
+    <div class="legend st-legend" id="homeLegend"></div>
   </div>
 
   <div class="glass-card fade-in">
@@ -126,11 +127,7 @@ html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
       <button class="sheet-close" id="recordCloseBtn" data-i18n-aria="close" aria-label="বন্ধ করুন">✕</button>
     </div>
     <div class="record-list" id="recordPrayerList"></div>
-    <div class="legend">
-      <span class="legend-item"><span class="legend-dot done"></span> <span data-i18n="done">আদায়</span></span>
-      <span class="legend-item"><span class="legend-dot missed"></span> <span data-i18n="qaza">কাযা</span></span>
-      <span class="legend-item"><span class="legend-dot pending"></span> <span data-i18n="pending">বাকি</span></span>
-    </div>
+    <div class="legend st-legend" id="recordLegend"></div>
   </div>
 </div>
 
@@ -144,4 +141,4 @@ html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
-  </html>
+</html>
