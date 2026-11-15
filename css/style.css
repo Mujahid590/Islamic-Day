@@ -315,3 +315,5 @@ body.dark{--jamaat:#60a5fa;--jamaat-bg:rgba(96,165,250,.2)}
 .st-legend{flex-wrap:wrap;gap:6px 14px;margin-top:12px}
 .rec-btns{flex-wrap:wrap;justify-content:flex-end}
 .rec-btn.jamaat-active{background:var(--jamaat);color:#fff}
+/* হোম পেজে জামাতের চক্রে মানুষের লোগো নেই (নামাজ পেজে থাকবে) */
+body[data-page="home"] .p-circle.jamaat::after{content:none;display:none}
