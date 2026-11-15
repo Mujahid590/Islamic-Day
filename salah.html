@@ -7,8 +7,8 @@
 <title>নামাজের হিসাব - দ্বীন টাইম</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/salah.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/salah.css?v=4">
 </head>
 <body data-page="salah">
 
@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <!-- ১) নির্বাচিত দিনের হিসাব (হোমের সাথে সিঙ্ক) -->
+  <!-- ১) নির্বাচিত দিনের হিসাব (হোমের সাথে সিঙ্ক) — চাপ দিলে সরাসরি অবস্থা বদলায়: আদায় হয়নি → আদায় → জামাতে আদায় -->
   <section class="glass-card fade-in" id="trkCard">
     <div class="card-header"><div class="card-title" id="trkTitle">🕌</div><div class="card-badge" id="trkBadge">০/৫</div></div>
     <div class="progress-track"><div class="progress-bar" id="trkBar"></div></div>
@@ -87,15 +87,6 @@
     <div class="muted" data-i18n="resetD">মাস বা বছর শেষে নতুন করে শুরু করতে চাইলে সব হিসাব মুছে ফেলুন।</div>
     <button type="button" class="btn danger" id="resetBtn" data-i18n="resetBtn">🔄 সব হিসাব রিসেট করুন</button>
   </section>
-</div>
-
-<!-- অবস্থা বাছাইয়ের শিট -->
-<div class="modal-overlay" id="stSheet" role="dialog" aria-modal="true">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" id="stTitle"></div>
-    <div class="st-grid" id="stGrid"></div>
-  </div>
 </div>
 
 <!-- অ্যালার্ট সেট করার শিট -->
