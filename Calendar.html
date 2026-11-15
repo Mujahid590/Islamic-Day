@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d9488">
+<title>ক্যালেন্ডার - দ্বীন টাইম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/calendar.css?v=1">
+</head>
+<body data-page="calendar">
+
+<div class="ai-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+
+<div class="app-container">
+
+  <div class="page-head fade-in">
+    <a href="index.html" class="back-btn round-btn" data-i18n-aria="back" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <div>
+      <div class="page-title" data-i18n="calM">ক্যালেন্ডার</div>
+      <div class="muted" data-i18n="pickDay">নিচের ক্যালেন্ডারে যেকোনো দিনে চাপ দিয়ে সেই দিনের হিসাব ঠিক করুন</div>
+    </div>
+  </div>
+
+  <!-- মাসিক ক্যালেন্ডার (শনি–শুক্র, শুক্রবার লাল) -->
+  <section class="glass-card fade-in">
+    <div class="cal-nav-row">
+      <button type="button" class="cal-nav" id="calPrev" data-i18n-aria="prevM" aria-label="আগের মাস">‹</button>
+      <div class="cal-month" id="calMonth">...</div>
+      <button type="button" class="cal-nav" id="calNext" data-i18n-aria="nextM" aria-label="পরের মাস">›</button>
+    </div>
+    <div class="cal-head" id="calHead"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="legend st-legend" id="calLegend"></div>
+  </section>
+
+  <!-- নির্বাচিত দিনের হিসাব: চাপ দিলেই অবস্থা বদলায় (হোম ও নামাজ পেজের সাথে সিঙ্ক) -->
+  <section class="glass-card fade-in" id="trkCard">
+    <div class="card-header"><div class="card-title" id="trkTitle">🕌</div><div class="card-badge" id="trkBadge">০/৫</div></div>
+    <div class="progress-track"><div class="progress-bar" id="trkBar"></div></div>
+    <div class="prayers-row" id="trkList"></div>
+    <div class="legend st-legend" id="stLegend"></div>
+  </section>
+
+  <!-- এই মাসের সারাংশ -->
+  <section class="glass-card fade-in">
+    <div class="card-header"><div class="card-title">📊 <span data-i18n="statsT">মোট হিসাব</span></div><div class="card-badge" id="monthBadge">...</div></div>
+    <div class="stats-grid" id="monthStats"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/i18n-extra.js"></script>
+<script src="js/calendar.js"></script>
+</body>
+</html>
