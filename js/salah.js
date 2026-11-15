@@ -1,5 +1,6 @@
-// ===== নামাজের হিসাব + আযান/নামাজ অ্যালার্ট =====
-// ডেটা হোম পেজের সাথে একই জায়গায় থাকে: localStorage 'weeklyPrayerTracker' ({তারিখ:{ফজর:'completed'|'pending' (জামাত আলাদা: deen_jamaat),...}})
+// ===== নামাজের হিসাব + আযান/নামাজ অ্যালার্টের তালিকা =====
+// হিসাবের ডেটা হোমের সাথে একই: localStorage 'weeklyPrayerTracker' ({তারিখ:{ফজর:'completed'|'pending'}}) + 'deen_jamaat' (জামাতে আদায়)
+// অ্যালার্ট সারিতে চাপ দিলে আগের মতো নিচ থেকে স্লাইডার শিট খোলে। (নামাজ পেজে ক্যালেন্ডার নেই — আলাদা calendar.html এ)
 (function(){
 'use strict';
 const HAS_AL=!!window.DeenAlarms;
@@ -16,12 +17,11 @@ const A=window.DeenAlarms||(function(){ // alarms.js লোড না হলে�
 })();
 const $=id=>document.getElementById(id);
 const PN=A.PN;
-const TKEY='weeklyPrayerTracker',SINCE='deen_since_reset',DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
+const TKEY='weeklyPrayerTracker',JKEY='deen_jamaat',SINCE='deen_since_reset',DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
 const pad=n=>String(n).padStart(2,'0');
 const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let data={},jam={},selKey=keyOf(new Date()),times=A.timesSync(),sh=null,viewY=new Date().getFullYear(),viewM=new Date().getMonth();
-const JKEY='deen_jamaat'; // জামাতে আদায়: {তারিখ:{ফজর:true}} — হোমের হিসাব (completed) অপরিবর্তিত থাকে
+let data={},jam={},times=A.timesSync();
 
 /* ---------- ডেটা ---------- */
 function loadData(){
@@ -46,7 +46,7 @@ function applyTheme(){
   const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?'#0b2428':'#0d9488';
 }
 
-/* ---------- ১) নির্বাচিত দিনের হিসাব ---------- */
+/* ---------- ১) আজকের হিসাব: চাপ দিলেই অবস্থা বদলায় ---------- */
 function setStatus(k,i,st){
   const p=PN[i],rec=dayRec(k);
   rec[p]=st==='pending'?'pending':'completed';
@@ -55,24 +55,25 @@ function setStatus(k,i,st){
   saveData();renderAll();
   toast(t(st==='jamaat'?'toastJamaat':st==='completed'?'toastDone':'toastPending',{p:A.pname(i,dateOf(k))}));
 }
+function legendHtml(){
+  return [['jamaat','jamaat'],['done','aloneDone'],['pending','notDone']]
+    .map(r=>`<span class="legend-item"><span class="legend-dot ${r[0]}"></span> ${esc(t(r[1]))}</span>`).join('');
+}
 function renderTracker(){
-  const d=dateOf(selKey),isToday=selKey===keyOf(new Date());let done=0;
-  $('trkTitle').textContent='🕌 '+(isToday?t('recToday'):dLabel(d));
-  $('trkList').innerHTML=PN.map((p,i)=>{const s=stateOf(selKey,p);if(s!=='pending')done++;
+  const d=new Date(),k=keyOf(d);let done=0;
+  $('trkTitle').textContent='🕌 '+t('recToday');
+  $('trkList').innerHTML=PN.map((p,i)=>{const s=stateOf(k,p);if(s!=='pending')done++;
     const cls=s==='jamaat'?'completed jamaat':s;
     return `<div class="prayer-item" data-i="${i}" role="button" tabindex="0" aria-label="${esc(A.pname(i,d))}"><div class="p-circle ${cls}"><img src="${A.pimg(i,d)}" alt=""></div><div class="p-name">${esc(A.pname(i,d))}</div><div class="p-count">${s==='jamaat'?'✓✓':s==='completed'?'✓':'○'}</div></div>`}).join('');
   $('trkBadge').textContent=`${num(done)}/${num(5)}`;
   $('trkBar').style.width=`${done*20}%`;
   $('trkList').querySelectorAll('.prayer-item').forEach(el=>{
-    const go=()=>{const i=+el.dataset.i;setStatus(selKey,i,NEXT[stateOf(selKey,PN[i])])};
+    const go=()=>{const i=+el.dataset.i,kk=keyOf(new Date());setStatus(kk,i,NEXT[stateOf(kk,PN[i])])};
     el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};
   });
   $('stLegend').innerHTML=legendHtml();
 }
-function legendHtml(){
-  return [['jamaat','jamaat'],['done','aloneDone'],['pending','notDone']]
-    .map(r=>`<span class="legend-item"><span class="legend-dot ${r[0]}"></span> ${esc(t(r[1]))}</span>`).join('');
-}
+
 /* ---------- হিরো কার্ড (রঙ সেটিংস অনুযায়ী) ---------- */
 function calcStreak(){
   const full=k=>PN.every(p=>stateOf(k,p)!=='pending');
@@ -113,33 +114,7 @@ function renderStats(){
   $('stLegend2').innerHTML=legendHtml();
 }
 
-/* ---------- ৩) মাসিক ক্যালেন্ডার: শনি → শুক্র, শুক্রবার লাল ---------- */
-const WEEK=[6,0,1,2,3,4,5]; // শনিবার থেকে শুরু, শুক্রবার সবশেষে
-function renderCal(){
-  const now=new Date(),tk=keyOf(now),since=sinceKey();
-  $('calMonth').textContent=`${L().months[viewM]} ${num(viewY)}`;
-  $('calHead').innerHTML=WEEK.map(w=>`<div class="${w===5?'fri':''}">${esc(L().daysShort[w])}</div>`).join('');
-  const first=new Date(viewY,viewM,1),lead=(first.getDay()+1)%7,days=new Date(viewY,viewM+1,0).getDate(),cells=[];
-  for(let j=0;j<lead;j++)cells.push('<div class="cal-blank"></div>');
-  for(let n=1;n<=days;n++){
-    const d=new Date(viewY,viewM,n),k=keyOf(d),fut=k>tk;
-    const dots=PN.map(p=>`<i class="${fut?'':stateOf(k,p)}"></i>`).join('');
-    const full=!fut&&PN.every(p=>stateOf(k,p)!=='pending');
-    const cls=['cal-cell',d.getDay()===5?'fri':'',full?'full':'',k===tk?'now':'',k===selKey?'sel':'',fut?'fut':'',k<since?'pre':''].filter(Boolean).join(' ');
-    cells.push(`<button type="button" class="${cls}" data-k="${k}" ${fut?'disabled':''} aria-label="${esc(dLabel(d))}"><b>${num(n)}</b><span class="dots">${dots}</span></button>`);
-  }
-  $('calGrid').innerHTML=cells.join('');
-  $('calNext').disabled=(viewY===now.getFullYear()&&viewM===now.getMonth());
-  $('calGrid').querySelectorAll('.cal-cell:not([disabled])').forEach(el=>el.onclick=()=>{selKey=el.dataset.k;renderTracker();renderHero();renderCal();$('trkCard').scrollIntoView({behavior:'smooth',block:'start'})});
-}
-function shiftMonth(d){
-  const now=new Date();let m=viewM+d,y=viewY;if(m<0){m=11;y--}if(m>11){m=0;y++}
-  if(y>now.getFullYear()||(y===now.getFullYear()&&m>now.getMonth()))return;
-  if(y<now.getFullYear()-5)return;
-  viewY=y;viewM=m;renderCal();
-}
-
-/* ---------- ৪/৫) অ্যালার্ট কার্ড ---------- */
+/* ---------- ৩/৪) অ্যালার্ট কার্ড ---------- */
 const MODES={adhan:{box:'alAdhan',icon:'📢',title:'alAdhanT',desc:'alAdhanD'},namaz:{box:'alNamaz',icon:'⏰',title:'alNamazT',desc:'alNamazD'}};
 function offDesc(mode,off){
   if(mode==='namaz')return t('afterS',{m:num(off)});
@@ -167,6 +142,7 @@ function renderAlarms(){
 }
 
 /* ---------- অ্যালার্ট শিট (স্লাইডার) ---------- */
+let sh=null;
 function openSheet(mode,i){
   const p=PN[i],st=A.mins(times[p].start),en=A.mins(times[p].end);let win=en-st;if(win<=0)win+=1440;
   const cur=A.cfg()[mode].items[p],set=typeof cur==='number';
@@ -195,33 +171,32 @@ function closeConfirm(){$('cfSheet').classList.remove('show')}
 function doReset(){
   try{localStorage.removeItem(TKEY);localStorage.removeItem(JKEY);Object.keys(localStorage).filter(k=>/^deen_tracker_\d{4}-/.test(k)).forEach(k=>localStorage.removeItem(k));
     localStorage.setItem(SINCE,keyOf(new Date()))}catch(e){}
-  data={};jam={};selKey=keyOf(new Date());closeConfirm();renderAll();toast(t('resetDone'));
+  data={};jam={};closeConfirm();renderAll();toast(t('resetDone'));
 }
 
 /* ---------- রেন্ডার ও ইভেন্ট ---------- */
-function renderAll(){renderHero();renderTracker();renderStats();renderCal();renderAlarms()}
-function refresh(){applyTheme();applyI18n();loadData();renderAll()}
+function renderAll(){renderHero();renderTracker();renderStats();renderAlarms()}
+function refresh(){applyTheme();applyI18n();loadData();times=A.timesSync();renderAll()}
 function init(){
   applyTheme();applyI18n();loadData();
   if(!HAS_AL){console.warn('alarms.js লোড হয়নি — অ্যালার্ট অংশ লুকানো হলো');['alAdhan','alNamaz'].forEach(id=>{$(id).hidden=true});const n=document.querySelector('.al-note');if(n)n.hidden=true}
   renderAll();
   // রাত পেরোলে (নতুন দিন) আজকের তারিখে ফিরে আসুন
   let curDay=keyOf(new Date());
-  setInterval(()=>{const k=keyOf(new Date());if(k!==curDay){if(selKey===curDay)selKey=k;curDay=k;viewY=new Date().getFullYear();viewM=new Date().getMonth();times=A.timesSync();loadData();renderAll()}},30000);
+  setInterval(()=>{const k=keyOf(new Date());if(k!==curDay){curDay=k;times=A.timesSync();loadData();renderAll()}},30000);
   $('shRange').addEventListener('input',()=>{if(sh)updateSheet()});
   $('shMinus').onclick=()=>sh&&step(-1);$('shPlus').onclick=()=>sh&&step(1);
   $('shCancel').onclick=closeSheet;
   $('shSave').onclick=()=>{if(!sh)return;const cf=A.cfg();cf[sh.mode].items[sh.p]=sh.val;A.save();A.ask();closeSheet();renderAlarms();toast(t('saved'))};
   $('shRemove').onclick=()=>{if(!sh)return;const cf=A.cfg();delete cf[sh.mode].items[sh.p];A.save();closeSheet();renderAlarms();toast(t('removed'))};
   $('alSheet').addEventListener('click',e=>{if(e.target===$('alSheet'))closeSheet()});
-  $('calPrev').onclick=()=>shiftMonth(-1);$('calNext').onclick=()=>shiftMonth(1);
   $('resetBtn').onclick=openConfirm;$('cfCancel').onclick=closeConfirm;$('cfOk').onclick=doReset;
   $('cfSheet').addEventListener('click',e=>{if(e.target===$('cfSheet'))closeConfirm()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeConfirm()}});
   A.getTimes().then(tm=>{times=tm;renderAlarms()});
   window.addEventListener('storage',e=>{if(e.key===TKEY||e.key===JKEY||e.key==='deen_lang'||e.key==='deen_color'||e.key==='deen_theme'||e.key===null)refresh()});
   window.addEventListener('deen-tracker',()=>{loadData();renderAll()});
-  window.addEventListener('pageshow',e=>{if(e.persisted)refresh()});
+  window.addEventListener('pageshow',e=>{if(e.persisted)refresh()}); // alarm-set.html থেকে ফিরলে নতুন সময় দেখাবে
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){times=A.timesSync();refresh()}});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
