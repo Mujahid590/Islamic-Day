@@ -310,10 +310,7 @@ html:has(body.dark){background:#101a24}
 body.dark{--jamaat:#60a5fa;--jamaat-bg:rgba(96,165,250,.2)}
 .p-circle{position:relative}
 .p-circle.jamaat{background:var(--jamaat-bg);border-color:var(--jamaat);box-shadow:0 0 0 3px rgba(37,99,235,.25),0 0 14px rgba(59,130,246,.5)}
-.p-circle.jamaat::after{content:'👥';position:absolute;bottom:-5px;inset-inline-end:-5px;width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.66rem;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .legend-dot.jamaat{background:var(--jamaat)}
 .st-legend{flex-wrap:wrap;gap:6px 14px;margin-top:12px}
 .rec-btns{flex-wrap:wrap;justify-content:flex-end}
 .rec-btn.jamaat-active{background:var(--jamaat);color:#fff}
-/* হোম পেজে জামাতের চক্রে মানুষের লোগো নেই (নামাজ পেজে থাকবে) */
-body[data-page="home"] .p-circle.jamaat::after{content:none;display:none}
