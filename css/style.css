@@ -8,6 +8,7 @@ body.dark{--bg1:#0b2428;--bg2:#101a24;--bg3:#2a1c24;--card:rgba(30,45,58,.65);--
 html{background:var(--bg2)}
 body{font-family:'Noto Sans Bengali','Poppins',sans-serif;color:var(--text);min-height:100vh;min-height:100dvh;
 background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%) fixed;overflow-x:hidden;-webkit-user-select:none;user-select:none}
+[hidden]{display:none!important}
 a{text-decoration:none;color:inherit}button{font-family:inherit}
 .app-container{max-width:480px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
 .fade-in{animation:fi .5s ease both}@keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -52,7 +53,7 @@ body.dark .progress-track{background:rgba(255,255,255,.1)}
 .prayer-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .p-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg-solid);border:2px solid transparent;transition:var(--t)}
 .p-circle img{width:24px;height:24px;object-fit:contain}
-.p-circle.completed{background:var(--done-bg);border-color:var(--done)}.p-circle.missed{background:var(--missed-bg);border-color:var(--missed)}
+.p-circle.completed{background:var(--done-bg);border-color:var(--done)}
 .p-name{font-size:.74rem;font-weight:600}.p-count{font-size:.8rem;font-weight:700;color:var(--text2)}
 .week-strip{display:flex;gap:6px}
 .cal-day{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px;border-radius:14px;background:rgba(255,255,255,.35);cursor:pointer;transition:var(--t)}
@@ -99,13 +100,14 @@ display:flex;align-items:center;padding:0 6px;box-shadow:0 10px 30px rgba(13,148
 .record-row-left{display:flex;align-items:center;gap:8px}.record-row-left img{width:24px;height:24px}.record-row-name{font-weight:600;font-size:.9rem}
 .rec-btns{display:flex;gap:4px}
 .rec-btn{border:none;padding:6px 8px;border-radius:8px;font-size:.72rem;font-weight:600;cursor:pointer;background:var(--bg-solid);color:var(--text2)}
-.rec-btn.done-active{background:var(--done);color:#fff}.rec-btn.missed-active{background:var(--missed);color:#fff}.rec-btn.pending-active{background:var(--pending);color:#fff}
+.rec-btn.done-active{background:var(--done);color:#fff}.rec-btn.pending-active{background:var(--pending);color:#fff}
 .legend{display:flex;justify-content:center;gap:16px;font-size:.75rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
 .legend-item{display:flex;align-items:center;gap:4px}.legend-dot{width:8px;height:8px;border-radius:50%}
-.legend-dot.done{background:var(--done)}.legend-dot.missed{background:var(--missed)}.legend-dot.pending{background:var(--pending)}
+.legend-dot.done{background:var(--done)}.legend-dot.pending{background:var(--pending)}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:rgba(22,48,58,.92);color:#fff;padding:10px 18px;border-radius:20px;font-size:.85rem;opacity:0;pointer-events:none;transition:var(--t);z-index:2000}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+html[lang=hi] body{font-family:'Noto Sans Devanagari','Poppins',sans-serif}
 html[lang=ar] body{font-family:'Noto Sans Arabic','Poppins',sans-serif}
 html[lang=ur] body{font-family:'Noto Nastaliq Urdu','Noto Sans Arabic',sans-serif;line-height:1.9}
 html[lang=en] body{font-family:'Poppins','Noto Sans Bengali',sans-serif}
@@ -315,3 +317,8 @@ body.dark{--jamaat:#60a5fa;--jamaat-bg:rgba(96,165,250,.2)}
 .rec-btns{flex-wrap:wrap;justify-content:flex-end}
 .rec-btn.jamaat-active{background:var(--jamaat);color:#fff}
 
+/* ===== আইকন সুরক্ষা: CSS ঠিকমতো লোড না হলেও ছবি যেন বড় না হয় ===== */
+.pbar img,.pchip img{width:26px;height:26px;object-fit:contain}
+.nb-icon img{width:28px;height:28px;object-fit:contain}
+.p-circle img{width:24px;height:24px;object-fit:contain}
+.icon-wrap img{width:26px;height:26px;object-fit:contain}
