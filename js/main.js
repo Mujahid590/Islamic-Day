@@ -88,7 +88,7 @@ function legendHtml(){
   return [['jamaat','jamaat'],['done','aloneDone'],['pending','notDone']]
     .map(r=>`<span class="legend-item"><span class="legend-dot ${r[0]}"></span> ${esc(t(r[1]))}</span>`).join('');
 }
-function weekDates(){const n=new Date(),s=new Date(n.getFullYear(),n.getMonth(),n.getDate()-n.getDay());
+function weekDates(){const n=new Date(),s=new Date(n.getFullYear(),n.getMonth(),n.getDate()-((n.getDay()+1)%7)); // সপ্তাহ শনিবার থেকে (ক্যালেন্ডারের মতো)
   return Array.from({length:7},(_,i)=>new Date(s.getFullYear(),s.getMonth(),s.getDate()+i))}
 
 // ===== TIMER =====
