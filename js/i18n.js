@@ -111,10 +111,8 @@ const LANGS={
   "language": "ভাষা",
   "doneOf": "{x} সম্পন্ন",
   "done": "আদায়",
-  "qaza": "কাযা",
   "pending": "বাকি",
   "toastDone": "✅ {p} আদায় হয়েছে",
-  "toastMissed": "❌ {p} কাযা",
   "toastPending": "⭕ {p} বাকি",
   "jumuah": "জুমার নামাজ",
   "dayAyah": "আজকের আয়াত",
@@ -188,7 +186,7 @@ const LANGS={
   "resetD": "মাস বা বছর শেষে নতুন করে শুরু করতে চাইলে সব হিসাব মুছে ফেলুন।",
   "resetBtn": "🔄 সব হিসাব রিসেট করুন",
   "resetQ": "সব হিসাব মুছে ফেলবেন?",
-  "resetM": "এখন পর্যন্ত সব আদায়/কাযার হিসাব মুছে আজ থেকে নতুন করে শুরু হবে। এটি আর ফেরানো যাবে না।",
+  "resetM": "এখন পর্যন্ত সব নামাজের হিসাব মুছে আজ থেকে নতুন করে শুরু হবে। এটি আর ফেরানো যাবে না।",
   "resetOk": "হ্যাঁ, রিসেট করুন",
   "resetDone": "হিসাব নতুন করে শুরু হয়েছে ✓"
  }
@@ -302,10 +300,8 @@ const LANGS={
   "language": "اللغة",
   "doneOf": "{x} مكتملة",
   "done": "أُدّيت",
-  "qaza": "قضاء",
   "pending": "متبقية",
   "toastDone": "✅ تمّت صلاة {p}",
-  "toastMissed": "❌ {p} قضاء",
   "toastPending": "⭕ {p} متبقية",
   "jumuah": "صلاة الجمعة",
   "dayAyah": "آية اليوم",
@@ -379,7 +375,7 @@ const LANGS={
   "resetD": "امسح كل شيء لتبدأ من جديد بعد شهر أو سنة.",
   "resetBtn": "🔄 إعادة ضبط كل السجلات",
   "resetQ": "حذف كل السجلات؟",
-  "resetM": "سيتم حذف جميع سجلات الأداء والقضاء حتى الآن ويبدأ الحساب من جديد اليوم. لا يمكن التراجع.",
+  "resetM": "سيتم حذف جميع سجلات الصلوات حتى الآن ويبدأ الحساب من جديد اليوم. لا يمكن التراجع.",
   "resetOk": "نعم، أعد الضبط",
   "resetDone": "بدأ السجل من جديد ✓"
  }
@@ -493,10 +489,8 @@ const LANGS={
   "language": "زبان",
   "doneOf": "{x} مکمل",
   "done": "ادا",
-  "qaza": "قضا",
   "pending": "باقی",
   "toastDone": "✅ {p} ادا ہوئی",
-  "toastMissed": "❌ {p} قضا",
   "toastPending": "⭕ {p} باقی",
   "jumuah": "نمازِ جمعہ",
   "dayAyah": "آج کی آیت",
@@ -570,7 +564,7 @@ const LANGS={
   "resetD": "مہینے یا سال کے بعد نئے سرے سے شروع کرنے کے لیے سارا حساب مٹا دیں۔",
   "resetBtn": "🔄 سارا حساب ری سیٹ کریں",
   "resetQ": "سارا حساب مٹا دیں؟",
-  "resetM": "اب تک کی ادا/قضا کا سارا حساب مٹ جائے گا اور آج سے نئے سرے سے شروع ہوگا۔ اسے واپس نہیں کیا جا سکتا۔",
+  "resetM": "اب تک کی نمازوں کا سارا حساب مٹ جائے گا اور آج سے نئے سرے سے شروع ہوگا۔ اسے واپس نہیں کیا جا سکتا۔",
   "resetOk": "ہاں، ری سیٹ کریں",
   "resetDone": "حساب نئے سرے سے شروع ہو گیا ✓"
  }
@@ -684,10 +678,8 @@ const LANGS={
   "language": "Language",
   "doneOf": "{x} completed",
   "done": "Prayed",
-  "qaza": "Missed",
   "pending": "Pending",
   "toastDone": "✅ {p} prayed",
-  "toastMissed": "❌ {p} missed",
   "toastPending": "⭕ {p} pending",
   "jumuah": "Jumu'ah Prayer",
   "dayAyah": "Verse of the Day",
@@ -761,7 +753,7 @@ const LANGS={
   "resetD": "Clear everything to start fresh after a month or a year.",
   "resetBtn": "🔄 Reset all records",
   "resetQ": "Clear all records?",
-  "resetM": "All prayed/missed records so far will be deleted and counting starts fresh from today. This cannot be undone.",
+  "resetM": "All prayer records so far will be deleted and counting starts fresh from today. This cannot be undone.",
   "resetOk": "Yes, reset",
   "resetDone": "Record restarted ✓"
  }
@@ -875,10 +867,8 @@ const LANGS={
   "language": "भाषा",
   "doneOf": "{x} पूर्ण",
   "done": "अदा",
-  "qaza": "क़ज़ा",
   "pending": "बाकी",
   "toastDone": "✅ {p} अदा हुई",
-  "toastMissed": "❌ {p} क़ज़ा",
   "toastPending": "⭕ {p} बाकी",
   "jumuah": "जुमे की नमाज़",
   "dayAyah": "आज की आयत",
@@ -952,7 +942,7 @@ const LANGS={
   "resetD": "महीने या साल के बाद नए सिरे से शुरू करने के लिए पूरा हिसाब मिटा दें।",
   "resetBtn": "🔄 पूरा हिसाब रीसेट करें",
   "resetQ": "पूरा हिसाब मिटा दें?",
-  "resetM": "अब तक का सारा अदा/क़ज़ा का हिसाब मिट जाएगा और आज से नए सिरे से शुरू होगा। इसे वापस नहीं किया जा सकता।",
+  "resetM": "अब तक की सारी नमाज़ों का हिसाब मिट जाएगा और आज से नए सिरे से शुरू होगा। इसे वापस नहीं किया जा सकता।",
   "resetOk": "हाँ, रीसेट करें",
   "resetDone": "हिसाब नए सिरे से शुरू हुआ ✓"
  }
